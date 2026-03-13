@@ -1,0 +1,117 @@
+# --------#### NOVA Service Configuration File #### --------
+
+### You can use this file for setting your local properties ###
+nova:
+  etherclient:
+    mock: true
+mock:
+  epsilon:
+    basePath: "C:\\[(${atiSettings.getUuaa().toUpperCase()})]\\Epsilon"
+
+spring:
+  cloud:
+    function:
+      definition: publishSchedulerPlan;publishBatchAudit;publishIssueAudit;subscriberBatchExecutor
+    stream:
+      binders:
+        local_rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                addresses: localhost:5672
+                username: guest
+                password: guest
+      bindings:
+        publishSchedulerPlan-out-0:
+          destination: gkxj_schedulerPlanChannel_v_1
+          binder: local_rabbit
+        publishBatchAudit-out-0:
+          destination: gkxj_batchAuditChannel_v_1
+          binder: local_rabbit
+        publishIssueAudit-out-0:
+          destination: gkxj_issueAuditChannel_v_1
+          binder: local_rabbit
+        subscriberBatchExecutor-in-0:
+          destination: gkxj_batchExecutorChannel_v_1
+          group: [(${atiSettings.getUuaa().toLowerCase()})]_apisetupservice_v_1
+          binder: local_rabbit
+
+[# th:if="${atiSettings.getIsOracleIncluded() or atiSettings.getIsPostgreIncluded()}"]
+  datasource:
+    platform: oracle
+    # DESARROLLO
+    url : urlBBDD
+    username : Username
+    password : Password
+    # PRE-PRODUCCION
+#    url : urlBBDDPRE
+#    username: Username
+#    password: Password
+    driverClassName: oracle.jdbc.OracleDriver
+#    initialize: false
+    testOnBorrow: true
+    validationQuery: SELECT 1 FROM DUAL
+    jpa.properties.hibernate.default_schema: [(${atiSettings.getUuaa().toUpperCase()})]
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration[/]
+
+[# th:if="${atiSettings.getIsMongoIncluded()}"]
+MongoLibrary:
+  password: PASSWORD
+  user: USER
+  hosts: HOST
+  database: BBDD
+
+u5su:
+  mongodbconnectvanilla:
+    configuration:
+      source: library
+    mongodb:
+      password: PASSWORD
+      user: USER
+      hosts: HOST
+      database: BBDD[/]
+
+
+gkxj:
+  schedulerati:
+    delay:
+      update:
+        date: 30000
+        status: 30000
+        config: 30000
+    scheduler:
+      config:
+        file: schedulers.json
+    calendar:
+      config:
+        file: calendars.json
+    release:
+      config:
+        file: release.json
+    criticalissue:
+      path: C:/[(${atiSettings.getUuaa().toUpperCase()})]/outgoing/
+  orchestatorati:
+    orchestator:
+      config:
+        file: batchs.json
+    release:
+      config:
+        file: release.json
+
+  executorati:
+    numThreads: 1
+    executor:
+      config:
+        file: steps.json
+    release:
+      config:
+        file: release.json
+    criticalissue:
+      path: C:/[(${atiSettings.getUuaa().toUpperCase()})]/outgoing/
+
+logging:level:org:
+  hibernate: DEBUG
+  springframework:orm:jpa: DEBUG
+

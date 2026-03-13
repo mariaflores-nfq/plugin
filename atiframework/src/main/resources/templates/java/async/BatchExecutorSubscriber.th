@@ -1,0 +1,89 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async;
+
+import com.bbva.gkxj.asyncapi.broker.BatchExecutorSubscriber.model.BatchExecutorPayload;
+import com.bbva.gkxj.atilibrary.interfaces.batchlauncher.BatchLauncherPayload;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.orchestatorati.callback.IBatchReexecute;
+import com.bbva.gkxj.orchestatorati.callback.IBatchStop;
+import com.bbva.gkxj.schedulerati.callback.IBatchLauncher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import java.util.function.Consumer;
+
+/**
+ * The Class BatchExecutorSubscriber.
+ *
+ * This class is responsible for consuming
+ * messages from the batch executor topic and launch in ATI orchestrator.
+ */
+@Configuration
+public class BatchExecutorSubscriber {
+
+    /**
+     * The logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BatchExecutorSubscriber.class);
+
+    /** The String NEW EXECUTION. */
+    private static final String NEW_EXECUTION = "LAUNCH";
+
+    /** The String STOP EXECUTION. */
+    private static final String STOP_EXECUTION = "STOP";
+
+    /** Inteface to send the launch message */
+    private final IBatchLauncher batchLauncher;
+
+    /** Inteface to send the reexecution message */
+    private final IBatchReexecute batchReexecute;
+
+    /** Inteface to send the stop message */
+    private final IBatchStop batchStopper;
+
+    /** host service UUAA. */
+    private String uuaa;
+
+    public BatchExecutorSubscriber (IBatchLauncher batchLauncher, IBatchReexecute batchReexecute, IBatchStop batchStopper, final @Value("${uuaa}") String uuaa) {
+        super();
+        this.batchLauncher = batchLauncher;
+        this.batchReexecute = batchReexecute;
+        this.batchStopper = batchStopper;
+        this.uuaa = uuaa;
+    }
+
+    /**
+     * Method to consume the new batch audit messages
+     * @return the new batch audit
+     */
+    @Bean
+    Consumer<BatchExecutorPayload> subscriberBatchExecutor() {
+        return message -> {
+            LOGGER.info("Received JSON {}", message);
+            try {
+                if ( uuaa.toLowerCase().equals(message.getUuaa().toLowerCase())) {
+                    if ( NEW_EXECUTION.equals(message.getBatchType()) ) {
+                        BatchLauncherPayload payload = new BatchLauncherPayload();
+                        DeepMirrorMapper.deepCopy(message, payload);
+
+                        this.batchLauncher.launchBatch(payload);
+                    }else if ( STOP_EXECUTION.equals(message.getBatchType()) ) {
+                        com.bbva.gkxj.orchestatorati.apisetup.model.BatchExecutorPayload payload = new com.bbva.gkxj.orchestatorati.apisetup.model.BatchExecutorPayload();
+                        DeepMirrorMapper.deepCopy(message, payload);
+                        this.batchStopper.batchStop(payload);
+                    }else {
+                        com.bbva.gkxj.orchestatorati.apisetup.model.BatchExecutorPayload payload = new com.bbva.gkxj.orchestatorati.apisetup.model.BatchExecutorPayload();
+                        DeepMirrorMapper.deepCopy(message, payload);
+                        payload.getBatchAudit().set_id(message.getBatchAudit().getId());
+                        this.batchReexecute.batchReexecute(payload);
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.error("[**] Unexpected error with batch execution", e);
+            }
+        };
+    }
+}
+
+

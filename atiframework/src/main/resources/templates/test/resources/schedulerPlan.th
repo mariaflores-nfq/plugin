@@ -1,0 +1,17 @@
+{
+  "_id" : "demoAtiScheduler_2025-06-03",
+
+  "description" : "Ejemplo de ejecución de proceso para demo de ATI.",
+  "version" : "V1.0.1",
+  "planCode" : "demoAtiScheduler",
+  "planningDate" : "2025-06-03",
+  "failedTreatmentPlan" : {
+    "level" : "",
+    "technicalCode" : "",
+    "issueCode" : ""
+  },
+  "uuaa" : "exch",
+  "schedulerConfigId" : "67e477eafb5e2d4cda8af2ee",
+  "status" : "PENDING",
+  "_class" : "com.bbva.gkxj.apirestgen.schedulerplanaudit.model.SchedulerPlanAudit"
+}

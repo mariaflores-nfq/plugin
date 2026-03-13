@@ -1,0 +1,862 @@
+---
+swagger: "2.0"
+info:
+  description: "Scheduler Configuration RESTfull service"
+  version: "1.1.2"
+  title: "SchedulerConfig"
+  contact:
+    name: "Utilidad para la Ingesta Transformacion y Exportacion de Datos"
+    url: "https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220"
+    email: "alberto.pina@bbva.com"
+host: "www.bbvaapis.com"
+basePath: "/gkxj/schedulerconfig/1.1.2/schedulerConfig"
+schemes:
+- "http"
+- "https"
+produces:
+- "application/json"
+paths:
+  /{uuaa}/{branchId}:
+    get:
+      description: "get all schedulerConfigs from the db for a UUAA"
+      operationId: "findPlanConfigs"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "commitId"
+        in: "query"
+        description: "Commit identifier associated to the plan"
+        required: false
+        type: "string"
+      - name: "planId"
+        in: "query"
+        description: "Scheduler identifier associated to the plan"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "query"
+        description: "Get a config from a status"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PlanConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /find/{uuaa}/{branchId}:
+    post:
+      description: "get schedulerConfigs from the db for a UUAA with pagination"
+      operationId: "findPlanConfigsPaginated"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Pagination information to find in the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PagePlanConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /{uuaa}/{branchId}/{planCode}:
+    get:
+      description: "get all or specific version from a schedulerConfig from the uuaa and planCode"
+      operationId: "findPlanConfigByVersion"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "planCode"
+        in: "path"
+        description: "Get a schedulers from a planCode"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Get a schedulers from a planCode and version"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PlanConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /save/{uuaa}/{branchId}:
+    post:
+      description: "save or update the configuration in the DDBB"
+      operationId: "savePlanConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Batch Configuration to save in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/PlanConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PlanConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /delete/{uuaa}/{branchId}/{id}:
+    delete:
+      description: "Delete the configuration in the DDBB"
+      operationId: "deletePlanConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Plan Id in Db"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /publish/{uuaa}:
+    post:
+      description: "Publish a Plan Code in DB from _id"
+      operationId: "publishPlanConfigFromHost"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Batch Configuration to publish in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/PlanConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /calendar/{uuaa}/{branchId}:
+    get:
+      description: "get all calendarConfigs from the db for a UUAA"
+      operationId: "findCalendarConfigs"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the calendars"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "commitId"
+        in: "query"
+        description: "Commit identifier associated to the calendar"
+        required: false
+        type: "string"
+      - name: "calendarId"
+        in: "query"
+        description: "Scheduler identifier associated to the calendar"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "query"
+        description: "Get a config from a status"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CalendarConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /calendar/find/{uuaa}/{branchId}:
+    post:
+      description: "get calendarConfigs from the db for a UUAA with pagination"
+      operationId: "findCalendarConfigsPaginated"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the calendars"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Pagination information to find in the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PageCalendarConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /calendar/{uuaa}/{branchId}/{calendarCode}:
+    get:
+      description: "get all or specific version from a calendarConfig from the uuaa and calendarCode"
+      operationId: "findCalendarConfigByVersion"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the calendars"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "calendarCode"
+        in: "path"
+        description: "Get a calendar from a calendarCode"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Get a calendar from a calendarCode and version"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CalendarConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /calendar/save/{uuaa}/{branchId}:
+    post:
+      description: "save or update the configuration in the DDBB"
+      operationId: "saveCalendarConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the calendar"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Calendar Configuration to save in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/CalendarConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/CalendarConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /calendar/delete/{uuaa}/{branchId}/{id}:
+    delete:
+      description: "Delete the configuration in the DDBB"
+      operationId: "deleteCalendarConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the calendar"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Calendar Id in Db"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /calendar/publish/{uuaa}:
+    post:
+      description: "Publish a Calendar Code in DB from _id"
+      operationId: "publishCalendarConfigFromHost"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the calendar"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Calendar Configuration to publish in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/CalendarConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+definitions:
+  PlanConfig:
+    type: "object"
+    required:
+    - "_id"
+    - "batch"
+    - "planCode"
+    - "recordVersion"
+    - "status"
+    - "trigger"
+    - "uuaa"
+    - "version"
+    properties:
+      _id:
+        type: "string"
+      planCode:
+        type: "string"
+      version:
+        type: "string"
+      uuaa:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+      recordVersion:
+        type: "integer"
+      branchCode:
+        type: "string"
+        description: "Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published"
+      branchId:
+        type: "string"
+        description: "Branch Code related with the planconfig, this is only informed when the planconfig is NOT published"
+      checkSum:
+        type: "string"
+        description: "CheckSum related with the planconfig, this is useful to check if the planconfig has been modified"
+      calendarCode:
+        type: "string"
+        description: "Calendar Code related with the planconfig, this is useful to check if today is an Holiday"
+      paramAuditList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ParamAudit"
+      trigger:
+        $ref: "#/definitions/Trigger"
+      batch:
+        $ref: "#/definitions/BatchConfig"
+      batchError:
+        $ref: "#/definitions/BatchConfig"
+      conditionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Condition"
+      failedTreatment:
+        $ref: "#/definitions/FailedTreatment"
+  ParamAudit:
+    type: "object"
+    required:
+    - "audTs"
+    - "audUser"
+    - "comments"
+    - "status"
+    properties:
+      status:
+        type: "string"
+      comments:
+        type: "string"
+      audTs:
+        type: "string"
+        format: "date-time"
+      audUser:
+        type: "string"
+  Trigger:
+    type: "object"
+    required:
+    - "endTs"
+    - "initTs"
+    - "repeat"
+    - "type"
+    properties:
+      type:
+        type: "string"
+        description: "DAILY/WEEKLY/MONTHLY"
+      initTs:
+        type: "string"
+        format: "date-time"
+      endTs:
+        type: "string"
+        format: "date-time"
+      repeat:
+        $ref: "#/definitions/Repeat"
+  Repeat:
+    type: "object"
+    required:
+    - "executionTime"
+    - "maxExecutionTime"
+    properties:
+      executionTime:
+        type: "string"
+        description: "HH:MM:SS"
+      repeatEvery:
+        type: "integer"
+      maxExecutionTime:
+        type: "string"
+        description: "HH:MM:SS"
+      weekDays:
+        type: "array"
+        items:
+          type: "string"
+      monthly:
+        type: "object"
+        properties:
+          months:
+            type: "array"
+            items:
+              type: "string"
+          days:
+            type: "array"
+            items:
+              type: "integer"
+          eventWeek:
+            type: "string"
+          weekDays:
+            type: "array"
+            items:
+              type: "string"
+        required:
+        - "months"
+  BatchConfig:
+    type: "object"
+    required:
+    - "batchCode"
+    properties:
+      batchCode:
+        type: "string"
+      parameterQueryList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Query"
+      jobParameterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/JobParameter"
+  Query:
+    type: "object"
+    required:
+    - "queryCode"
+    properties:
+      queryCode:
+        type: "string"
+      sqlQuery:
+        type: "string"
+      dbSource:
+        type: "string"
+      mongoQuery:
+        $ref: "#/definitions/MongoQuery"
+    description: "DB reading query. May be SQL or MongoDB"
+  MongoQuery:
+    type: "object"
+    required:
+    - "collection"
+    - "filter"
+    properties:
+      collection:
+        type: "string"
+      filter:
+        type: "array"
+        description: "MongoDB Aggregation Pipelines to filter"
+        items:
+          type: "string"
+    description: "mongoDB reading Query"
+  JobParameter:
+    type: "object"
+    required:
+    - "paramName"
+    properties:
+      paramName:
+        type: "string"
+      queryParam:
+        type: "string"
+        description: "name of the field recovered in the parameterQueryList"
+      fixedValue:
+        type: "string"
+      scriptValue:
+        type: "string"
+  Condition:
+    type: "object"
+    required:
+    - "checkEvery"
+    - "forceAtEnd"
+    - "name"
+    properties:
+      name:
+        type: "string"
+      checkEvery:
+        type: "integer"
+        description: "in seconds"
+      forceAtEnd:
+        type: "boolean"
+        description: "if true force the execution even if the condition doesn't match"
+      script:
+        type: "string"
+        description: "to validate the queries with the recovered information"
+      fileWatcher:
+        $ref: "#/definitions/FileWatcher"
+      novaWatcher:
+        $ref: "#/definitions/NovaWatcher"
+      query:
+        $ref: "#/definitions/Query"
+    description: "previous condition to execute the planning"
+  FileWatcher:
+    type: "object"
+    required:
+    - "fileParameterName"
+    - "filePattern"
+    - "path"
+    properties:
+      path:
+        type: "string"
+      filePattern:
+        type: "string"
+      fileParameterName:
+        type: "string"
+  NovaWatcher:
+    type: "object"
+    required:
+    - "fileParameterName"
+    - "filePattern"
+    - "novaTransferName"
+    - "path"
+    properties:
+      path:
+        type: "string"
+      filePattern:
+        type: "string"
+      fileParameterName:
+        type: "string"
+      novaTransferName:
+        type: "string"
+  FailedTreatment:
+    type: "object"
+    required:
+    - "level"
+    properties:
+      level:
+        type: "string"
+      issueCode:
+        type: "string"
+      technicalCode:
+        type: "string"
+  PaginationInfo:
+    type: "object"
+    required:
+    - "limit"
+    - "page"
+    properties:
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      planCode:
+        type: "string"
+      calendarCode:
+        type: "string"
+      version:
+        type: "string"
+      batchCode:
+        type: "string"
+      description:
+        type: "string"
+      includeArchived:
+        type: "boolean"
+      includeInactive:
+        type: "boolean"
+      sortOrder:
+        type: "string"
+        description: "ASC - DESC"
+      sortBy:
+        type: "string"
+        description: "field name"
+    description: "Request to find Planconfig with Pagination"
+  PagePlanConfig:
+    type: "object"
+    required:
+    - "hasNext"
+    - "hasPrevious"
+    - "limit"
+    - "page"
+    - "total"
+    properties:
+      total:
+        type: "integer"
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      hasPrevious:
+        type: "boolean"
+      hasNext:
+        type: "boolean"
+      result:
+        type: "array"
+        description: "PlanCodes which complish the filter"
+        items:
+          $ref: "#/definitions/PlanConfig"
+    description: "Response to find Planconfig with Pagination"
+  CalendarConfig:
+    type: "object"
+    required:
+    - "_id"
+    - "calendarCode"
+    - "calendarType"
+    - "recordVersion"
+    - "status"
+    - "uuaa"
+    - "version"
+    properties:
+      _id:
+        type: "string"
+      calendarCode:
+        type: "string"
+      version:
+        type: "string"
+      uuaa:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+      recordVersion:
+        type: "integer"
+      branchCode:
+        type: "string"
+        description: "Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published"
+      branchId:
+        type: "string"
+        description: "Branch Code related with the planconfig, this is only informed when the planconfig is NOT published"
+      calendarType:
+        type: "string"
+        description: "Type of calendar, HOLIDAY|WORKDAY"
+      checkSum:
+        type: "string"
+        description: "CheckSum related with the planconfig, this is useful to check if the planconfig has been modified"
+      paramAuditList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ParamAudit"
+      calendarDayList:
+        type: "array"
+        items:
+          type: "string"
+  PageCalendarConfig:
+    type: "object"
+    required:
+    - "hasNext"
+    - "hasPrevious"
+    - "limit"
+    - "page"
+    - "total"
+    properties:
+      total:
+        type: "integer"
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      hasPrevious:
+        type: "boolean"
+      hasNext:
+        type: "boolean"
+      result:
+        type: "array"
+        description: "CalendarCodes which complish the filter"
+        items:
+          $ref: "#/definitions/CalendarConfig"
+    description: "Response to find Planconfig with Pagination"
+  ConfigServiceError:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+    description: "Error messages"
+x-generator-properties:
+  business-unit: "gkxj"

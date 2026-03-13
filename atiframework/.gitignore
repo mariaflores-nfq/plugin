@@ -1,0 +1,24 @@
+# nova
+# .novarc
+
+/target
+/dist
+/spring.log
+
+#do not include your maven settings
+/.settings
+
+# Ignore the API generated code folder
+/api-generated
+/asyncapi-generated
+
+gradle
+.gradle
+.intellijPlatform
+build
+.factorypath
+.classpath
+.project
+*log*
+.idea
+*.iml

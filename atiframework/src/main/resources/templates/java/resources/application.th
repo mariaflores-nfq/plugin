@@ -1,0 +1,36 @@
+# --------#### NOVA Service Configuration File #### --------
+uuaa: [(${atiSettings.getUuaa().toLowerCase()})]
+
+# NOVA Maven Endpoints of the service. Recommended parameter. Optional.
+# Setting this configuration allow your service exposes an end point that showing
+# the maven cordinates information. You can reach this end point in your service as following:
+# http://host:port/info
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    version: "@project.version@"
+    name: "@project.name@"
+    description: "@project.description@"
+
+# Logging configuration
+logging:
+  path: ${LOG_PATH:.}
+  level:
+    ROOT: INFO
+
+# Server port
+server:
+  port: ${NOVA_PORT:8080}
+
+spring:
+    batch:
+      job:
+        enabled: false
+
+nova:
+  etherclient:
+    mock: true
+mock:
+  epsilon:
+    basePath: C:\\[(${atiSettings.getUuaa().toUpperCase()})]\\Epsilon

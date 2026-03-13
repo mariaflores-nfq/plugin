@@ -1,0 +1,653 @@
+---
+swagger: "2.0"
+info:
+  description: "Batch Audit RESTfull service"
+  version: "1.1.2"
+  title: "BatchAudit"
+  contact:
+    name: "Utilidad para la Ingesta Transformacion y Exportacion de Datos"
+    url: "https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220"
+    email: "alberto.pina@bbva.com"
+host: "www.bbvaapis.com"
+basePath: "/gkxj/batchaudit/1.1.2/batchAudit"
+schemes:
+- "http"
+- "https"
+produces:
+- "application/json"
+paths:
+  /{uuaa}:
+    get:
+      description: "get all batchAudit from the db for a UUAA"
+      operationId: "findBatchAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the configs"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BatchAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+
+  /find/{uuaa}:
+    post:
+      description: "get batchAudit from the db for a UUAA with pagination"
+      operationId: "findBatchAuditPaginated"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the configs"
+        required: true
+        type: "string"
+      - name: "paginationInfo"
+        in: "body"
+        required: true
+        description: "Pagination information to find in the DB"
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PageBatchAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+
+  /save/{uuaa}:
+    post:
+      description: "save or update the configuration in the DDBB"
+      operationId: "saveBatchAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the batch audits"
+        required: true
+        type: "string"
+      - name: "batchAudit"
+        in: "body"
+        description: "Batch audit to save in the DDBB"
+        schema:
+          $ref: "#/definitions/BatchAudit"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BatchAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+
+  /findOne/{uuaa}:
+    get:
+      description: "find one configuration in the DDBB by parentExecutionId and parentStepExecutionId"
+      operationId: "findOneBatchConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the config"
+        required: true
+        type: "string"
+      - name: "parentExecutionId"
+        in: "query"
+        description: "Parent execution id"
+        required: true
+        type: "string"
+      - name: "parentStepExecutionId"
+        in: "query"
+        description: "Parent step execution id"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BatchAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+
+  /findExecution/{uuaa}:
+    get:
+      description: "find one configuration in the DDBB by executionId"
+      operationId: "findOneBatchConfigByExecutionId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "executionId"
+        in: "query"
+        description: "Unique execution id of the configuration"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BatchAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/BatchAuditError"
+
+definitions:
+  BatchAudit:
+    type: "object"
+    required:
+    - "_id"
+    - "uuaa"
+    - "executionId"
+    - "executionStatus"
+    - "executionDate"
+    properties:
+      _id:
+        type: "string"
+      executionId:
+        type: "string"
+      uuaa:
+        type: "string"
+      userId:
+        type: "string"
+        description: "UserId who launch/relaunch the Batch"
+      stopUserId:
+        type: "string"
+        description: "UserId who stop the Batch"
+      executionStatus:
+        type: "string"
+      initTs:
+        type: "string"
+        format: "date-time"
+      endTs:
+        type: "string"
+        format: "date-time"
+      parentExecutionId:
+        type: "string"
+      parentStepExecutionId:
+        type: "string"
+      schedulerId:
+        type: "string"
+      stepCounter:
+        type: "integer"
+      batchConfig:
+        $ref: "#/definitions/BatchConfig"
+      batchParameterMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/BatchParameterAuditItem"
+      stepStatementMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/StepStatementItem"
+      stopStatementMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/StepStatementItem"
+      loopStack:
+        type: "array"
+        items:
+          $ref: "#/definitions/LoopContextItem"
+
+  BatchConfig:
+    type: "object"
+    required:
+    - "_id"
+    - "batchCode"
+    - "isActive"
+    - "paramAuditList"
+    properties:
+      _id:
+        type: "string"
+      batchCode:
+        type: "string"
+      version:
+        type: "string"
+      uuaa:
+        type: "string"
+      batchType:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+      recordVersion:
+        type: "integer"
+      branchCode:
+        type: "string"
+        description: "Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published"
+      branchId:
+        type: "string"
+        description: "Branch Identifier related with the batchConfig, this is only informed when the batchConfig is NOT published"
+      checkSum:
+        type: "string"
+        description: "CheckSum related with the batchConfig, this is useful to check if the batchConfig has been modified"
+      paramAuditList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ParamAudit"
+      parameterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/BatchParameter"
+      workflowNodeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/WorkflowNode"
+
+  ParamAudit:
+    type: "object"
+    required:
+    - "audTs"
+    - "audUser"
+    - "status"
+    properties:
+      status:
+        type: "string"
+      comments:
+        type: "string"
+      audTs:
+        type: "string"
+        format: "date-time"
+      audUser:
+        type: "string"
+
+  BatchParameter:
+    type: "object"
+    required:
+    - "isMandatory"
+    - "name"
+    - "type"
+    properties:
+      name:
+        type: "string"
+      schedulerParamName:
+        type: "string"
+      type:
+        type: "string"
+      ioType:
+        type: "string"
+      isMandatory:
+        type: "boolean"
+      description:
+        type: "string"
+      scriptValue:
+        type : "string"
+
+  BatchParameterAudit:
+    type: "object"
+    required:
+    - "isMandatory"
+    - "name"
+    - "type"
+    properties:
+      name:
+        type: "string"
+      schedulerParamName:
+        type: "string"
+      type:
+        type: "string"
+      ioType:
+        type: "string"
+      isMandatory:
+        type: "boolean"
+      description:
+        type: "string"
+      value:
+        type : "string"
+
+  WorkflowNode:
+    type: "object"
+    required:
+    - "type"
+    - "workflowNodeCode"
+    properties:
+      workflowNodeCode:
+        type: "string"
+      type:
+        type: "string"
+        description: "STEP/PARALLEL/INCLUSIVE/EXCLUSIVE/BATCH/LOOP"
+      stepCode:
+        type: "string"
+      batchCode:
+        type: "string"
+      xPosition:
+        type: "integer"
+      yPosition:
+        type: "integer"
+      isCritical:
+        type: "boolean"
+      nextWorkflowNodeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/NextWorkflowNode"
+      wfnParameterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/wfnParameter"
+      joinWorkflowNodeList:
+        type: "array"
+        items:
+          type: "string"
+      initializeScript:
+        type: "string"
+      exitScript:
+        type: "string"
+      incrementScript:
+        type: "string"
+      isEndLoop:
+        type: "boolean"
+
+  wfnParameter:
+    type: "object"
+    required:
+    - "name"
+    - "batchParamName"
+    properties:
+      name:
+        type: "string"
+        description: "Parameter name in the ETL or child batch."
+      batchParamName:
+        type: "string"
+        description: "Parameter name in the Batch"
+      fixedValue:
+        type: "string"
+      scriptValue:
+        type: "string"
+
+  NextWorkflowNode:
+    type: "object"
+    required:
+    - "scriptCondition"
+    - "workflowNodeCode"
+    properties:
+      workflowNodeCode:
+        type: "string"
+      scriptCondition:
+        type: "string"
+        description: "for INCLUSIVE or EXCLUSIVE nodes"
+
+  BatchAuditError:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+    description: "Error messages"
+
+  PaginationInfo:
+    type: "object"
+    required:
+    - "page"
+    - "limit"
+    properties:
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      version:
+        type: "string"
+      batchCode:
+        type: "string"
+      stepCode:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+      initTsFrom:
+        type: "string"
+      initTsTo:
+        type: "string"
+      endTsFrom:
+        type: "string"
+      endTsTo:
+        type: "string"
+      includeChildProcess:
+        type: "boolean"
+      sortOrder:
+        type: "string"
+        description: "ASC - DESC"
+      sortBy:
+        type: "string"
+        description: "field name"
+    description: "Request to find Batch audit with Pagination"
+
+  PageBatchAudit:
+    type: "object"
+    required:
+    - "total"
+    - "page"
+    - "limit"
+    - "hasPrevious"
+    - "hasNext"
+    properties:
+      total:
+        type: "integer"
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      hasPrevious:
+        type: "boolean"
+      hasNext:
+        type: "boolean"
+      result:
+        type: "array"
+        description: "Batch audits which complish the filter"
+        items:
+          $ref: "#/definitions/BatchAudit"
+    description: "Response to find BatchAudit with Pagination"
+
+  StepStatementItem:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        $ref: "#/definitions/StepStatement"
+
+  StepStatement:
+    type: "object"
+    properties:
+      executionId:
+        type: "string"
+      stepExecutionId:
+        type: "string"
+      executionStatus:
+        type: "string"
+      initTs:
+        type: "string"
+        format: "date-time"
+      endTs:
+        type: "string"
+        format: "date-time"
+      batchCode:
+        type: "string"
+      etlStatus:
+        type: "string"
+      batchStatus:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      batchId:
+        type: "string"
+      stepId:
+        type: "string"
+      loopNumber:
+        type: "integer"
+        format: "int64"
+      loopCode:
+        type: "string"
+      iterator:
+        type: "integer"
+        format: "int64"
+      workflowNode:
+        $ref: "#/definitions/WorkflowNode"
+      nextWorkflowNodeList:
+        type: "array"
+        items:
+          type: "string"
+      joinWorkflowNodeList:
+        type: "array"
+        items:
+          type: "string"
+      springBatchStepList:
+        type : "array"
+        items:
+          $ref: "#/definitions/springBatchStep"
+      failureExceptionList:
+        type : "array"
+        items:
+          $ref: "#/definitions/failureException"
+      batchParameterMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/BatchParameterAuditItem"
+      stepParameterMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/StepParameterItem"
+  BatchParameterAuditItem:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        $ref: "#/definitions/BatchParameterAudit"
+  StepParameterItem:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "string"
+  LoopContextItem:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        $ref: "#/definitions/LoopContext"
+  LoopContext:
+    type: "object"
+    properties:
+      loopCode:
+        type: "string"
+      iterator:
+        type: "integer"
+        format: "int64"
+      stepCounter:
+        type: "integer"
+        format: "int64"
+      endStepCounter:
+        type: "integer"
+        format: "int64"
+  springBatchStep:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      status:
+        type: "string"
+      initTs:
+        type: "string"
+        format: "date-time"
+      endTs:
+        type: "string"
+        format: "date-time"
+      readCount:
+        type: "integer"
+      writeCount:
+        type: "integer"
+      skipCount:
+        type: "integer"
+      operation:
+        type: "string"
+      affectedFileList:
+        type : "array"
+        items:
+          $ref: "#/definitions/affectedFile"
+      queryResultList:
+        type : "array"
+        items:
+          $ref: "#/definitions/queryResult"
+
+  affectedFile:
+    type: "object"
+    properties:
+      file:
+        type: "string"
+      affected:
+        type: "boolean"
+
+  queryResult:
+    type: "object"
+    properties:
+      queryCode:
+        type: "string"
+      dbSource:
+        type: "string"
+      updateCount:
+        type: "integer"
+      matchCount:
+        type: "integer"
+      insertCount:
+        type: "integer"
+      deleteCount:
+        type: "integer"
+
+  failureException:
+    type: "object"
+    properties:
+      className:
+        type: "string"
+      message:
+        type: "string"
+x-generator-properties:
+  business-unit: "gkxj"

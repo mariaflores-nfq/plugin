@@ -1,0 +1,31 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.interfaces.batchlauncher.BatchLauncherPayload;
+import com.bbva.gkxj.schedulerati.callback.IBatchLauncher;
+import com.bbva.gkxj.orchestatorati.orchestator.OrchestatorAti;
+
+import org.slf4j.Logger;
+
+
+@Service
+public class BatchLauncherImpl implements IBatchLauncher {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatchLauncherImpl.class);
+
+
+	private final OrchestatorAti orchestator;
+
+	public BatchLauncherImpl(OrchestatorAti orchestator) {
+		super();
+		this.orchestator = orchestator;
+	}
+
+	@Override
+	public void launchBatch(BatchLauncherPayload message) {
+		LOGGER.info("Launch Batch with batchCode:" + message.getBatchCode());
+		this.orchestator.launchBatch(message);
+	}
+}

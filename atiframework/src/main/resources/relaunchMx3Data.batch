@@ -1,0 +1,1834 @@
+{
+  "_id": "68d29d232990c46e8fedefa1",
+  "batchCode": "relaunchMx3data",
+  "description": "Se Descargan los ficheros de entrada de Epsilon de Mx3ToCalcData, se llevan al working directory y se lanza el script de Python.",
+  "version": "V1.0.27",
+  "paramAuditList": [
+    {
+      "audTs": "2025-09-23T15:14:11.435+02:00",
+      "comments": "",
+      "audUser": "",
+      "status": "NOT_PUBLISHED"
+    }
+  ],
+  "recordVersion": 1,
+  "workflowNodeList": [
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 105,
+      "workflowNodeCode": "downloadEpsilonAndUnzipGirrVega",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "fileGirrVega",
+          "fixedValue": "",
+          "scriptValue": "returnValue = fileGirrVega.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 420,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 2310,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtpSt",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrCtpSt",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrCtpSt.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 860,
+      "yPosition": 105,
+      "workflowNodeCode": "Gateway_012pia5",
+      "type": "PARALLEL",
+      "joinWorkflowNodeList": [
+        "downloadEpsilonAndUnzipGirrVega",
+        "downloadEpsilonAndUnzipCsrCtpSt",
+        "downloadEpsilonAndUnzipRraoBBVA",
+        "downloadEpsilonAndUnzipCsrDltSt",
+        "downloadEpsilonAndUnzipCsrNs",
+        "downloadEpsilonAndUnzipEqCurv",
+        "downloadEpsilonAndUnzipDltMx",
+        "downloadEpsilonAndUnzipFxCurv",
+        "downloadEpsilonAndUnzipEqVega",
+        "downloadEpsilonAndUnzipGirrDltInf",
+        "downloadEpsilonAndUnzipGirrDlt",
+        "downloadEpsilonAndUnzipGirrCurv",
+        "downloadEpsilonAndUnzipRiskClass",
+        "downloadEpsilonAndUnzipCsrCtpVega",
+        "downloadEpsilonAndUnzipGirrVegaInf",
+        "downloadEpsilonAndUnzipCsrNctp",
+        "downloadEpsilonAndUnzipCsrCtpCurv",
+        "downloadEpsilonAndUnzipFxDlt",
+        "downloadEpsilonAndUnzipDrcSenior",
+        "downloadEpsilonAndUnzipFxVega",
+        "downloadEpsilonAndUnzipCsrCtp",
+        "downloadEpsilonAndUnzipCsrVega",
+        "downloadEpsilonAndUnzipCsrNctpSt",
+        "downloadEpsilonAndUnzipEqDltRp",
+        "downloadEpsilonAndUnzipEqDltPr"
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "executePython",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 450,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 2210,
+      "workflowNodeCode": "downloadEpsilonAndUnzipRraoBBVA",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileRraoBbvasa",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileRraoBbvasa.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 230,
+      "workflowNodeCode": "downloadEpsilonAndUnzipAux",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/incoming/auxDRC.csv.zip",
+          "scriptValue": ""
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1190,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrDltSt",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrDltSt",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrDltSt.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 1910,
+      "stepCode": "updateControlRecord",
+      "yPosition": 30,
+      "workflowNodeCode": "updateControlRecord",
+      "isCritical": true,
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "Gateway_0byx1dz"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "dataDate",
+          "name": "dataDate",
+          "scriptValue": ""
+        },
+        {
+          "batchParamName": "executionDate",
+          "name": "executionDate",
+          "scriptValue": ""
+        },
+        {
+          "batchParamName": "frequency",
+          "name": "frequency"
+        },
+        {
+          "batchParamName": "entityBranch",
+          "name": "entityBranch"
+        },
+        {
+          "batchParamName": "pythonCode",
+          "name": "pythonCode"
+        },
+        {
+          "name": "status",
+          "fixedValue": "ERROR"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_0lnpcso",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1550,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrNs",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrNs",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrNs.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 810,
+      "workflowNodeCode": "Activity_1m6qw05",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "fixedValue": "/MRRF/incoming/no_drcdummy.csv.zip"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 440,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1980,
+      "workflowNodeCode": "downloadEpsilonAndUnzipEqCurv",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileEqCurv",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileEqCurv.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1070,
+      "workflowNodeCode": "downloadEpsilonAndUnzipDltMx",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrDltMx",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrDltMx.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 710,
+      "workflowNodeCode": "downloadEpsilonAndUnzipFxCurv",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileFxCurv",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileFxCurv.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 440,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1870,
+      "workflowNodeCode": "downloadEpsilonAndUnzipEqVega",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileEqVega",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileEqVega.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": -20,
+      "workflowNodeCode": "downloadEpsilonAndUnzipGirrDltInf",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "fileGirrDltInf",
+          "fixedValue": "",
+          "scriptValue": "returnValue = fileGirrDltInf.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/workingpath/Mx3DataToCalcuData/",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 1720,
+      "yPosition": 105,
+      "workflowNodeCode": "Gateway_0byx1dz",
+      "type": "EXCLUSIVE",
+      "joinWorkflowNodeList": [
+        "cleanWorkingPath"
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "updateControlRecord",
+          "scriptCondition": "shouldBeExecuted = (batchStatus == \"COMPLETED_WITH_ERRORS\");"
+        },
+        {
+          "workflowNodeCode": "Gateway_0lnpcso",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": -130,
+      "workflowNodeCode": "downloadEpsilonAndUnzipGirrDlt",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "fileGirrDlt",
+          "fixedValue": "",
+          "scriptValue": "returnValue = fileGirrDlt.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -610,
+      "batchCode": "",
+      "yPosition": 105,
+      "workflowNodeCode": "StartEvent_1",
+      "type": "INITIAL",
+      "joinWorkflowNodeList": [],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "createControlRecord",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -210,
+      "yPosition": 105,
+      "workflowNodeCode": "Gateway_1uly9jw",
+      "type": "PARALLEL",
+      "joinWorkflowNodeList": [
+        "createControlRecord"
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipDummy",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipEtfIndex",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipLiquida",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipAux",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipNoDivSwaps",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "Activity_0aey681",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "Activity_0gphnob",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "Activity_1csy2ui",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "Activity_1m6qw05",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 2360,
+      "yPosition": 105,
+      "workflowNodeCode": "Event_06d867g",
+      "type": "FINAL",
+      "joinWorkflowNodeList": [
+        "Gateway_0lnpcso"
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 350,
+      "workflowNodeCode": "downloadEpsilonAndUnzipGirrCurv",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "fileGirrCurv",
+          "fixedValue": "",
+          "scriptValue": "returnValue = fileGirrCurv.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": -20,
+      "workflowNodeCode": "downloadEpsilonAndUnzipEtfIndex",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/incoming/etf_to_index.csv.zip",
+          "scriptValue": ""
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 350,
+      "workflowNodeCode": "downloadEpsilonAndUnzipNoDivSwaps",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/incoming/no_divswaps.csv.zip",
+          "scriptValue": ""
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": -240,
+      "workflowNodeCode": "downloadEpsilonAndUnzipRiskClass",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileRiskClass",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileRiskClass.replace(\"workingpath/Mx3DataToCalcuData\", \"incoming/FRTBGestion/COMUN\").replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -430,
+      "stepCode": "createControlRecord",
+      "yPosition": 100,
+      "workflowNodeCode": "createControlRecord",
+      "isCritical": true,
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "StartEvent_1"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "dataDate",
+          "batchParamName": "dataDate",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "executionDate",
+          "batchParamName": "executionDate",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "frequency",
+          "batchParamName": "frequency",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "entityBranch",
+          "batchParamName": "entityBranch",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "pythonCode",
+          "batchParamName": "pythonCode",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "jobParameters",
+          "batchParamName": "",
+          "fixedValue": "",
+          "scriptValue": "returnValue = JSON.stringify(\n    {\n        \"frequency\": frequency , \n        \"entityBranch\": entityBranch , \n        \"pythonCode\": pythonCode , \n        \"fileGirrDlt\": fileGirrDlt , \n        \"fileGirrDltInf\": fileGirrDltInf , \n        \"fileGirrVega\": fileGirrVega , \n        \"fileGirrVegaInf\": fileGirrVegaInf , \n        \"fileGirrCurv\": fileGirrCurv , \n        \"fileFxDlt\": fileFxDlt , \n        \"fileFxVega\": fileFxVega , \n        \"fileFxCurv\": fileFxCurv , \n        \"fileCsrCtp\": fileCsrCtp , \n        \"fileCsrNctp\": fileCsrNctp , \n        \"fileCsrDltMx\": fileCsrDltMx , \n        \"fileCsrDltSt\": fileCsrDltSt , \n        \"fileCsrVega\": fileCsrVega , \n        \"fileCsrCtpCurv\": fileCsrCtpCurv , \n        \"fileCsrNs\": fileCsrNs , \n        \"fileEqDltPr\": fileEqDltPr , \n        \"fileEqDltRp\": fileEqDltRp , \n        \"fileEqVega\": fileEqVega , \n        \"fileEqCurv\": fileEqCurv , \n        \"fileDrcSeniority\": fileDrcSeniority , \n        \"fileRraoBbvasa\": fileRraoBbvasa , \n        \"fileCsrCtpSt\": fileCsrCtpSt , \n        \"fileCsrNctpSt\": fileCsrNctpSt , \n        \"fileCsrCtpVega\": fileCsrCtpVega , \n        \"dataDate\": dataDate , \n        \"executionDate\": executionDate , \n        \"downloadPath\": downloadPath , \n        \"fileRiskClass\": fileRiskClass , \n        \"jobParameters\": [\n            {\"name\":\"exclude_dummies\", \"value\": exclude_dummies, \"type\":\"boolean\"}, \n            {\"name\":\"exclude_div_swap\", \"value\": exclude_div_swap, \"type\":\"boolean\"}, \n            {\"name\":\"etf_to_index\", \"value\": etf_to_index, \"type\":\"boolean\"}, \n            {\"name\":\"etf_fixed_income\", \"value\": etf_fixed_income, \"type\":\"boolean\"}, \n            {\"name\":\"etf_money_market\", \"value\": etf_money_market, \"type\":\"boolean\"},\n            {\"name\":\"fund_abrdnhy\", \"value\":\"true\", \"type\":\"boolean\"}, \n            {\"name\":\"exclude_drcdummy\", \"value\":\"true\", \"type\":\"boolean\"}, \n            {\"name\":\"csr_issuername_with_bucket\", \"value\":\"true\", \"type\":\"boolean\"}, \n            {\"name\":\"exclude_adhoc_corrcred_vegausd\", \"value\":\"true\", \"type\":\"boolean\"}\n        ]\n    }\n )"
+        },
+        {
+          "name": "userCode",
+          "batchParamName": "userCode",
+          "fixedValue": "atiCli",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1uly9jw",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 105,
+      "workflowNodeCode": "downloadEpsilonAndUnzipLiquida",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/incoming/liquida.csv.zip",
+          "scriptValue": ""
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 310,
+      "yPosition": 105,
+      "workflowNodeCode": "Gateway_0irzzut",
+      "type": "PARALLEL",
+      "joinWorkflowNodeList": [
+        "Gateway_1i7rvc4"
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipGirrDlt",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipGirrDltInf",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipGirrVega",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipGirrVegaInf",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipGirrCurv",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipFxDlt",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipFxVega",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipFxCurv",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtp",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrNctp",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipDltMx",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrDltSt",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrVega",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtpCurv",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrNs",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipEqDltPr",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipEqDltRp",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipEqVega",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipEqCurv",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipDrcSenior",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipRraoBBVA",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtpSt",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrNctpSt",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtpVega",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "downloadEpsilonAndUnzipRiskClass",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 230,
+      "yPosition": 105,
+      "workflowNodeCode": "Gateway_1i7rvc4",
+      "type": "PARALLEL",
+      "joinWorkflowNodeList": [
+        "downloadEpsilonAndUnzipAux",
+        "Activity_1m6qw05",
+        "downloadEpsilonAndUnzipEtfIndex",
+        "downloadEpsilonAndUnzipNoDivSwaps",
+        "downloadEpsilonAndUnzipLiquida",
+        "Activity_0gphnob",
+        "Activity_0aey681",
+        "Activity_1csy2ui",
+        "downloadEpsilonAndUnzipDummy"
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_0irzzut",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 2540,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtpVega",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrCtpVega",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrCtpVega.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 230,
+      "workflowNodeCode": "downloadEpsilonAndUnzipGirrVegaInf",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "fileGirrVegaInf",
+          "fixedValue": "",
+          "scriptValue": "returnValue = fileGirrVegaInf.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 580,
+      "workflowNodeCode": "Activity_0gphnob",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "fixedValue": "/MRRF/incoming/etf_money_market.csv.zip"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 950,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrNctp",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrNctp",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrNctp.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 470,
+      "workflowNodeCode": "Activity_0aey681",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/incoming/etf_fixed_income.csv.zip",
+          "scriptValue": ""
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 980,
+      "stepCode": "executePython",
+      "yPosition": 105,
+      "workflowNodeCode": "executePython",
+      "isCritical": false,
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "Gateway_012pia5"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "dataDate",
+          "name": "dataDate",
+          "scriptValue": ""
+        },
+        {
+          "name": "userCode",
+          "fixedValue": "atiCli"
+        },
+        {
+          "batchParamName": "pythonCode",
+          "name": "pythonCode",
+          "fixedValue": ""
+        },
+        {
+          "batchParamName": "jobParameters",
+          "name": "jobParameters",
+          "scriptValue": "returnValue = JSON.stringify(\n       [\n            {\"name\":\"date_t\", \"value\": dataDate},\n            {\"name\":\"exclude_dummies\", \"value\": exclude_dummies}, \n            {\"name\":\"exclude_div_swap\", \"value\": exclude_div_swap}, \n            {\"name\":\"etf_to_index\", \"value\": etf_to_index}, \n            {\"name\":\"etf_fixed_income\", \"value\": etf_fixed_income}, \n            {\"name\":\"etf_money_market\", \"value\": etf_money_market},\n            {\"name\":\"fund_abrdnhy\", \"value\": fund_abrdnhy}, \n            {\"name\":\"exclude_drcdummy\", \"value\": exclude_drcdummy}, \n            {\"name\":\"csr_issuername_with_bucket\", \"value\": csr_issuername_with_bucket}, \n            {\"name\":\"exclude_adhoc_corrcred_vegausd\", \"value\": exclude_adhoc_corrcred_vegausd}\n        ]\n )"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "cleanWorkingPath",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1430,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtpCurv",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrCtpCurv",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrCtpCurv.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 470,
+      "workflowNodeCode": "downloadEpsilonAndUnzipFxDlt",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileFxDlt",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileFxDlt.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 2090,
+      "workflowNodeCode": "downloadEpsilonAndUnzipDrcSenior",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileDrcSeniority",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileDrcSeniority.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 590,
+      "workflowNodeCode": "downloadEpsilonAndUnzipFxVega",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileFxVega",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileFxVega.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": -70,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 690,
+      "workflowNodeCode": "Activity_1csy2ui",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "fixedValue": "/MRRF/incoming/fund_abrdnhy.csv.zip"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 830,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrCtp",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrCtp",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrCtp.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1310,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrVega",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrVega",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrVega.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 2410,
+      "workflowNodeCode": "downloadEpsilonAndUnzipCsrNctpSt",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileCsrNctpSt",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileCsrNctpSt.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1760,
+      "workflowNodeCode": "downloadEpsilonAndUnzipEqDltRp",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileEqDltRp",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileEqDltRp.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 50,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": -130,
+      "workflowNodeCode": "downloadEpsilonAndUnzipDummy",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_1uly9jw"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "objectId",
+          "batchParamName": "",
+          "fixedValue": "/MRRF/incoming/dummy_exclude.csv.zip",
+          "scriptValue": ""
+        },
+        {
+          "name": "targetPath",
+          "batchParamName": "downloadPath",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_1i7rvc4",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 2120,
+      "yPosition": 105,
+      "workflowNodeCode": "Gateway_0lnpcso",
+      "type": "EXCLUSIVE",
+      "joinWorkflowNodeList": [
+        "updateControlRecord",
+        "Gateway_0byx1dz"
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Event_06d867g",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 1130,
+      "stepCode": "cleanWorkingPath",
+      "yPosition": 105,
+      "workflowNodeCode": "cleanWorkingPath",
+      "isCritical": false,
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "executePython"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "downloadPath",
+          "name": "path",
+          "fixedValue": ""
+        },
+        {
+          "name": "fileMask",
+          "fixedValue": "*"
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_0byx1dz",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 430,
+      "batchCode": "downloadEpsilonAndUnzip",
+      "yPosition": 1650,
+      "workflowNodeCode": "downloadEpsilonAndUnzipEqDltPr",
+      "isCritical": false,
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "Gateway_0irzzut"
+      ],
+      "wfnParameterList": [
+        {
+          "batchParamName": "fileEqDltPr",
+          "name": "objectId",
+          "scriptValue": "returnValue = fileEqDltPr.replace(\".csv\", \".csv.zip\");"
+        },
+        {
+          "batchParamName": "downloadPath",
+          "name": "targetPath",
+          "fixedValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Gateway_012pia5",
+          "scriptCondition": ""
+        }
+      ]
+    }
+  ],
+  "uuaa": "mrrf",
+  "parameterList": [
+    {
+      "name": "frequency",
+      "schedulerParamName": "frequency",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "Periodicidad del tratamiento (Daily, Weekly, Monthly).",
+      "scriptValue": ""
+    },
+    {
+      "name": "entityBranch",
+      "schedulerParamName": "entityBranch",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Entidad a la que pertenece el proceso.",
+      "scriptValue": ""
+    },
+    {
+      "name": "pythonCode",
+      "schedulerParamName": "pythonCode",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileGirrDlt",
+      "schedulerParamName": "fileGirrDlt",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_GIRR_DLT_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileGirrDltInf",
+      "schedulerParamName": "fileGirrDltInf",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_GIRR_DLT_INF_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileGirrVega",
+      "schedulerParamName": "fileGirrVega",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_GIRR_VEGA_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileGirrVegaInf",
+      "schedulerParamName": "fileGirrVegaInf",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_GIRR_VEGA_INF_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileGirrCurv",
+      "schedulerParamName": "fileGirrCurv",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_GIRR_CURV_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileFxDlt",
+      "schedulerParamName": "fileFxDlt",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_FX_DLT_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileFxVega",
+      "schedulerParamName": "fileFxVega",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_FX_VEGA_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileFxCurv",
+      "schedulerParamName": "fileFxCurv",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_FX_CURV_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrCtp",
+      "schedulerParamName": "fileCsrCtp",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_CTP_DLT_MX_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrNctp",
+      "schedulerParamName": "fileCsrNctp",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_NCTP_DLT_MX_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrDltMx",
+      "schedulerParamName": "fileCsrDltMx",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_NS_DLT_MX_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrDltSt",
+      "schedulerParamName": "fileCsrDltSt",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_NS_DLT_ST_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrVega",
+      "schedulerParamName": "fileCsrVega",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_NS_VEGA_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrCtpCurv",
+      "schedulerParamName": "fileCsrCtpCurv",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_CTP_CURV_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrNs",
+      "schedulerParamName": "fileCsrNs",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_NS_CURV_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileEqDltPr",
+      "schedulerParamName": "fileEqDltPr",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_EQ_DLT_PR_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileEqDltRp",
+      "schedulerParamName": "fileEqDltRp",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_EQ_DLT_RP_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileEqVega",
+      "schedulerParamName": "fileEqVega",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_EQ_VEGA_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileEqCurv",
+      "schedulerParamName": "fileEqCurv",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_EQ_CURV_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileDrcSeniority",
+      "schedulerParamName": "fileDrcSeniority",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_DRC_SENIORITY_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileRraoBbvasa",
+      "schedulerParamName": "fileRraoBbvasa",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_RRAO_BBVAS).",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrCtpSt",
+      "schedulerParamName": "fileCsrCtpSt",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_CTP_DLT_ST_BBVASA).\nEste fichero solo se subir������ a Epsilon.",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrNctpSt",
+      "schedulerParamName": "fileCsrNctpSt",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_NCTP_DLT_ST_BBVASA).\nEste fichero solo se subir������ a Epsilon.",
+      "scriptValue": ""
+    },
+    {
+      "name": "fileCsrCtpVega",
+      "schedulerParamName": "fileCsrCtpVega",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fichero de carga (SA_SBM_CSR_CTP_VEGA_BBVASA). Este fichero solo se subir������ a Epsilon.",
+      "scriptValue": ""
+    },
+    {
+      "name": "dataDate",
+      "schedulerParamName": "",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "Fecha de dato de los ficheros.",
+      "scriptValue": "var arrayFileName = fileGirrDlt.split(\"_\");\nreturnValue = arrayFileName[5];"
+    },
+    {
+      "name": "executionDate",
+      "schedulerParamName": "",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "Fecha de ejecución del batch.",
+      "scriptValue": "var arrayFileName = fileGirrDlt.split(\"_\");\nreturnValue = arrayFileName[6];"
+    },
+    {
+      "name": "downloadPath",
+      "schedulerParamName": "",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": "returnValue = \"/MRRF/workingpath/\" + pythonCode + \"/\";"
+    },
+    {
+      "name": "fileRiskClass",
+      "schedulerParamName": "fileRiskClass",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": true,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "exclude_dummies",
+      "schedulerParamName": "exclude_dummies",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "exclude_div_swap",
+      "schedulerParamName": "exclude_div_swap",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "etf_to_index",
+      "schedulerParamName": "etf_to_index",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "etf_fixed_income",
+      "schedulerParamName": "etf_fixed_income",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "etf_money_market",
+      "schedulerParamName": "etf_money_market",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "fund_abrdnhy",
+      "schedulerParamName": "fund_abrdnhy",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "exclude_drcdummy",
+      "schedulerParamName": "exclude_drcdummy",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "csr_issuername_with_bucket",
+      "schedulerParamName": "csr_issuername_with_bucket",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    },
+    {
+      "name": "exclude_adhoc_corrcred_vegausd",
+      "schedulerParamName": "exclude_adhoc_corrcred_vegausd",
+      "type": "String",
+      "ioType": "Input",
+      "isMandatory": false,
+      "description": "",
+      "scriptValue": ""
+    }
+  ],
+  "batchType": "SPRING_BATCH",
+  "status": "PUBLISHED",
+  "_class": "com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig"
+}

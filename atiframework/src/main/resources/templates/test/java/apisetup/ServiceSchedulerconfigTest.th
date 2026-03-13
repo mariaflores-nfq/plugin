@@ -1,0 +1,38 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertNotNull;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceSchedulerconfig;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import com.bbva.gkxj.apirestgen.schedulerconfig.client.jaxrs.rest.IRestHandlerSchedulerconfig;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@RunWith(MockitoJUnitRunner.class)
+public class ServiceSchedulerconfigTest {
+
+    @Mock
+    @Qualifier("Schedulerconfig.novaMetadata")
+    private NovaMetadata novaMetadata;
+
+    @Mock
+    @Qualifier("Schedulerconfig.novaRequestconfig")
+    private NovaRequestConfig novaRequestConfig;
+
+    @Mock
+    private IRestHandlerSchedulerconfig restHandlerSchedulerconfig;
+
+    @InjectMocks
+    private ServiceSchedulerconfig serviceSchedulerconfig;
+
+    @Test
+    public void testServiceSchedulerconfigInitialization() {
+        assertNotNull("ServiceSchedulerconfig should not be null", serviceSchedulerconfig);
+    }
+}

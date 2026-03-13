@@ -1,0 +1,58 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertNotNull;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ConfigBranchconfig;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.branchconfig.client.jaxrs.rest.impl.RestHandlerBranchconfig;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@SpringBootTest(classes = {ConfigBranchconfig.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = {
+    "microgateway.hostport.Branchconfig=localhost:24000",
+    "microgateway.timeout.Branchconfig=10000",
+    "release.header.Branchconfig=seguridad"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ConfigBranchconfigTest {
+
+    @MockBean
+    private RestHandlerBranchconfig restHandlerBranchconfig;
+
+    @InjectMocks
+    @Autowired
+    private ConfigBranchconfig configBranchconfig;
+
+    @Test
+    public void testGetRestHandlerBranchconfig() {
+        RestHandlerBranchconfig restHandler = configBranchconfig.getRestHandlerBranchconfig();
+        assertNotNull("RestHandlerBranchconfig should not be null", restHandler);
+    }
+
+    @Test
+    public void testGetNovaMetadata() {
+        NovaMetadata novaMetadata = configBranchconfig.getNovaMetadata();
+        assertNotNull("NovaMetadata should not be null", novaMetadata);
+        assertNotNull("NovaImplicitHeadersOutput should not be null", novaMetadata.getNovaImplicitHeadersOutput());
+    }
+
+    @Test
+    public void testGetConfigRequestSchema() {
+        NovaRequestConfig requestConfig = configBranchconfig.getConfigRequestSchema();
+        assertNotNull("NovaRequestConfig should not be null", requestConfig);
+    }
+}

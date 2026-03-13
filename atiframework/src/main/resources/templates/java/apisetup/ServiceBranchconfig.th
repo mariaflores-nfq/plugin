@@ -1,0 +1,567 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 16:22:52 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+import com.bbva.gkxj.apirestgen.branchconfig.model.PaginationInfo ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.PageCommitConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.BranchConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.PageTagConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.CompareConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.CommitConflicts ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.TagConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.TagRelease ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.PageBranchConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig ;
+import com.bbva.gkxj.apirestgen.branchconfig.client.jaxrs.rest.IRestHandlerBranchconfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.DeleteBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.DeleteBranchConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindBranchConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.DiffCommitBranchesException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.DiffCommitBranchesException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CreateTagConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CreateTagConfigException409 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindCommitConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindCommitConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CommitBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CommitBranchConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.DeleteTagConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.DeleteTagConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CompareBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CompareBranchConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.SaveCommitConfigFromHostException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.SaveCommitConfigFromHostException409 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.ReleaseTagConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.ReleaseTagConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.PrepareMergeBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.PrepareMergeBranchConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CreateBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CreateBranchConfigException409 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindTagConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindTagConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.SaveBranchConfigFromHostException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.SaveBranchConfigFromHostException409 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.SaveTagConfigFromHostException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.SaveTagConfigFromHostException409 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindTagConfigsPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindCommitConfigsPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.FindBranchConfigsPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CompareCommitConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.CompareCommitConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.MergeBranchConfigException400 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.MergeBranchConfigException404 ;
+import com.bbva.gkxj.apirestgen.branchconfig.model.exception.MergeBranchConfigException409 ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class ServiceBranchconfig
+{
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceBranchconfig.class);
+
+    /**
+     * NovaMetadata inserted for sending to the client.
+     */
+    private final NovaMetadata novaMetadata;
+
+    /**
+     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     */
+    private final NovaRequestConfig novaRequestConfig;
+
+    /**
+     * Attribute - Rest Handler
+     */
+    private IRestHandlerBranchconfig restHandlerBranchconfig;
+
+    /**
+     * Dependency injection constructor
+     *
+     * @param novaMetadata with the metadata
+     * @param novaRequestConfig with the request config
+     * @param restHandlerBranchconfig with the rest handler
+     */
+    public ServiceBranchconfig(final @Qualifier("Branchconfig.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Branchconfig.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerBranchconfig restHandlerBranchconfig)
+    {
+        this.novaMetadata = novaMetadata;
+        this.novaRequestConfig = novaRequestConfig;
+        this.restHandlerBranchconfig = restHandlerBranchconfig;
+    }
+
+	/**
+     * @param paginationInfo Information necessary to perform filters and execute a paginated query of the branches.
+     * @param uuaa UUAA associated with the branches to query.
+	 * @return List of paginated branch configurations
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindBranchConfigsPaginatedException400 with an occurred exception
+	 */
+	public PageBranchConfig findBranchConfigsPaginated(final PaginationInfo paginationInfo, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBranchConfigsPaginatedException400
+	{
+		LOG.debug("[ServiceBranchconfig] -> [findBranchConfigsPaginated]");
+
+        LOG.debug("[ServiceBranchconfig] -> [findBranchConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.findBranchConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, uuaa);
+	}
+
+
+	/**
+     * @param commitConflicts value is not set in definition
+     * @param id Identifier of the branch from which the commit will be made.
+     * @param userId User code performing the action.
+     * @param commitCode Code of the commit to be saved in the database.
+     * @param uuaa UUAA associated with the branch.
+     * @param comments Comments associated with the commit.
+	 * @return Updated configuration of the branch
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws CommitBranchConfigException400 with an occurred exception
+     * @throws CommitBranchConfigException404 with an occurred exception
+	 */
+	public BranchConfig commitBranchConfig(final CommitConflicts commitConflicts, final String id, final String userId, final String commitCode, final String uuaa, final String comments) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  CommitBranchConfigException400,  CommitBranchConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [commitBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [commitBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.commitBranchConfig(this.novaRequestConfig, this.novaMetadata, commitConflicts, id, userId, commitCode, uuaa, comments);
+	}
+
+
+	/**
+     * @param compareConfig Object with the details of the comparison of the involved Commits. It is possible to compare a branch (last commit) with any other Commit (directly a commit or the one from another branch or a tag).
+     * @param uuaa UUAA associated with the commits to query.
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws DiffCommitBranchesException400 with an occurred exception
+     * @throws DiffCommitBranchesException404 with an occurred exception
+	 */
+	public CommitConfig[] diffCommitBranches(final CompareConfig compareConfig, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DiffCommitBranchesException400,  DiffCommitBranchesException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [diffCommitBranches]");
+
+        LOG.debug("[ServiceBranchconfig] -> [diffCommitBranches]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.diffCommitBranches(this.novaRequestConfig, this.novaMetadata, compareConfig, uuaa);
+	}
+
+
+	/**
+     * @param config value is not set in definition
+     * @param id Identifier of the branch from which the new branch will be created.
+     * @param userId User code performing the action.
+     * @param uuaa UUAA associated with the branch.
+	 * @return Configuration of the new branch
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws CreateBranchConfigException400 with an occurred exception
+     * @throws CreateBranchConfigException409 with an occurred exception
+	 */
+	public BranchConfig createBranchConfig(final BranchConfig config, final String id, final String userId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  CreateBranchConfigException400,  CreateBranchConfigException409
+	{
+		LOG.debug("[ServiceBranchconfig] -> [createBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [createBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.createBranchConfig(this.novaRequestConfig, this.novaMetadata, config, id, userId, uuaa);
+	}
+
+
+	/**
+     * @param config Configuration of the tag to be created in the database.
+     * @param uuaa UUAA associated with the configuration.
+	 * @return Indicator of whether the save action was performed in the database
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws SaveTagConfigFromHostException400 with an occurred exception
+     * @throws SaveTagConfigFromHostException409 with an occurred exception
+	 */
+	public Boolean saveTagConfigFromHost(final TagConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveTagConfigFromHostException400,  SaveTagConfigFromHostException409
+	{
+		LOG.debug("[ServiceBranchconfig] -> [saveTagConfigFromHost]");
+
+        LOG.debug("[ServiceBranchconfig] -> [saveTagConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.saveTagConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the tag.
+     * @param id Unique identifier of the tag to be download.
+	 * @return Tag configuration
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws ReleaseTagConfigException400 with an occurred exception
+     * @throws ReleaseTagConfigException404 with an occurred exception
+	 */
+	public TagRelease releaseTagConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  ReleaseTagConfigException400,  ReleaseTagConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [releaseTagConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [releaseTagConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.releaseTagConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+     * @param compareConfig Object with the details of the comparison of the involved Commits. It is possible to compare a branch (last commit) with any other Commit (directly a commit or the one from another branch or a tag).
+     * @param uuaa UUAA associated with the branch.
+	 * @return Conflicts between the involved commits
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws CompareCommitConfigException400 with an occurred exception
+     * @throws CompareCommitConfigException404 with an occurred exception
+	 */
+	public CommitConflicts compareCommitConfig(final CompareConfig compareConfig, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  CompareCommitConfigException400,  CompareCommitConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [compareCommitConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [compareCommitConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.compareCommitConfig(this.novaRequestConfig, this.novaMetadata, compareConfig, uuaa);
+	}
+
+
+	/**
+     * @param config Configuration of the Branch to be created in the database.
+     * @param uuaa UUAA associated with the configuration.
+	 * @return Indicator of whether the save action was performed in the database
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws SaveBranchConfigFromHostException400 with an occurred exception
+     * @throws SaveBranchConfigFromHostException409 with an occurred exception
+	 */
+	public Boolean saveBranchConfigFromHost(final BranchConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveBranchConfigFromHostException400,  SaveBranchConfigFromHostException409
+	{
+		LOG.debug("[ServiceBranchconfig] -> [saveBranchConfigFromHost]");
+
+        LOG.debug("[ServiceBranchconfig] -> [saveBranchConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.saveBranchConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the tag to be deleted.
+     * @param id Unique identifier of the tag to be deleted.
+	 * @return Indicator of whether the delete action was performed
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws DeleteTagConfigException400 with an occurred exception
+     * @throws DeleteTagConfigException404 with an occurred exception
+	 */
+	public Boolean deleteTagConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteTagConfigException400,  DeleteTagConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [deleteTagConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [deleteTagConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.deleteTagConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+     * @param paginationInfo Configuration of the tag to be created in the database.
+     * @param uuaa UUAA associated with the tags to query.
+	 * @return List of paginated tag configurations
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindTagConfigsPaginatedException400 with an occurred exception
+	 */
+	public PageTagConfig findTagConfigsPaginated(final PaginationInfo paginationInfo, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindTagConfigsPaginatedException400
+	{
+		LOG.debug("[ServiceBranchconfig] -> [findTagConfigsPaginated]");
+
+        LOG.debug("[ServiceBranchconfig] -> [findTagConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.findTagConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, uuaa);
+	}
+
+
+	/**
+     * @param commitConflict Details of the existing conflicts between the commits and how they have been resolved.
+     * @param sourceId Identifier of the source branch from which the commit will be made.
+     * @param targetId Identifier of the target branch where the new commit will be made.
+     * @param userId User code performing the commit, for auditing purposes.
+     * @param uuaa UUAA associated with the branch.
+     * @param comments Comments associated with the commit.
+	 * @return Updated configuration of the target branch
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws MergeBranchConfigException400 with an occurred exception
+     * @throws MergeBranchConfigException404 with an occurred exception
+     * @throws MergeBranchConfigException409 with an occurred exception
+	 */
+	public BranchConfig mergeBranchConfig(final CommitConflicts commitConflict, final String sourceId, final String targetId, final String userId, final String uuaa, final String comments) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  MergeBranchConfigException400,  MergeBranchConfigException404,  MergeBranchConfigException409
+	{
+		LOG.debug("[ServiceBranchconfig] -> [mergeBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [mergeBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.mergeBranchConfig(this.novaRequestConfig, this.novaMetadata, commitConflict, sourceId, targetId, userId, uuaa, comments);
+	}
+
+
+	/**
+     * @param paginationInfo Object with the details of the comparison of the involved Commits. It is possible to compare a branch (last commit) with any other Commit (directly a commit or the one from another branch or a tag).
+     * @param uuaa UUAA associated with the branches to query.
+	 * @return List of paginated commit configurations
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindCommitConfigsPaginatedException400 with an occurred exception
+	 */
+	public PageCommitConfig findCommitConfigsPaginated(final PaginationInfo paginationInfo, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindCommitConfigsPaginatedException400
+	{
+		LOG.debug("[ServiceBranchconfig] -> [findCommitConfigsPaginated]");
+
+        LOG.debug("[ServiceBranchconfig] -> [findCommitConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.findCommitConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, uuaa);
+	}
+
+
+	/**
+     * @param config Information about the new Tag to be created.
+     * @param id Identifier of the branch from which the new tag will be created.
+     * @param userId User code performing the action.
+     * @param uuaa UUAA associated with the branch or the tag.
+	 * @return Configuration of the new tag
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws CreateTagConfigException400 with an occurred exception
+     * @throws CreateTagConfigException409 with an occurred exception
+	 */
+	public TagConfig createTagConfig(final TagConfig config, final String id, final String userId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  CreateTagConfigException400,  CreateTagConfigException409
+	{
+		LOG.debug("[ServiceBranchconfig] -> [createTagConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [createTagConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.createTagConfig(this.novaRequestConfig, this.novaMetadata, config, id, userId, uuaa);
+	}
+
+
+	/**
+     * @param sourceId Identifier of the source branch from which the commit will be made.
+     * @param targetId Identifier of the target branch where the new commit will be made.
+     * @param uuaa UUAA associated with the branch.
+	 * @return Conflicts between the source and target branches
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws PrepareMergeBranchConfigException400 with an occurred exception
+     * @throws PrepareMergeBranchConfigException404 with an occurred exception
+	 */
+	public CommitConflicts prepareMergeBranchConfig(final String sourceId, final String targetId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  PrepareMergeBranchConfigException400,  PrepareMergeBranchConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [prepareMergeBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [prepareMergeBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.prepareMergeBranchConfig(this.novaRequestConfig, this.novaMetadata, sourceId, targetId, uuaa);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the branch.
+     * @param id Unique identifier of the branch to query.
+	 * @return Branch configuration
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindBranchConfigException400 with an occurred exception
+     * @throws FindBranchConfigException404 with an occurred exception
+	 */
+	public BranchConfig findBranchConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBranchConfigException400,  FindBranchConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [findBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [findBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.findBranchConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the branch.
+     * @param id Unique identifier of the commit to query.
+	 * @return Commit configuration
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindCommitConfigException400 with an occurred exception
+     * @throws FindCommitConfigException404 with an occurred exception
+	 */
+	public CommitConfig findCommitConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindCommitConfigException400,  FindCommitConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [findCommitConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [findCommitConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.findCommitConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+     * @param config Configuration of the commit to be created in the database.
+     * @param uuaa UUAA associated with the configuration.
+	 * @return Indicator of whether the save action was performed in the database
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws SaveCommitConfigFromHostException400 with an occurred exception
+     * @throws SaveCommitConfigFromHostException409 with an occurred exception
+	 */
+	public Boolean saveCommitConfigFromHost(final CommitConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveCommitConfigFromHostException400,  SaveCommitConfigFromHostException409
+	{
+		LOG.debug("[ServiceBranchconfig] -> [saveCommitConfigFromHost]");
+
+        LOG.debug("[ServiceBranchconfig] -> [saveCommitConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.saveCommitConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the branch to be deleted.
+     * @param id Unique identifier of the branch to be deleted.
+	 * @return Indicator of whether the delete action was performed
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws DeleteBranchConfigException400 with an occurred exception
+     * @throws DeleteBranchConfigException404 with an occurred exception
+	 */
+	public Boolean deleteBranchConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteBranchConfigException400,  DeleteBranchConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [deleteBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [deleteBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.deleteBranchConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the tag.
+     * @param id Unique identifier of the tag to query.
+	 * @return Tag configuration
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindTagConfigException400 with an occurred exception
+     * @throws FindTagConfigException404 with an occurred exception
+	 */
+	public TagConfig findTagConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindTagConfigException400,  FindTagConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [findTagConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [findTagConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.findTagConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+     * @param uuaa UUAA associated with the branch.
+     * @param id Identifier of the branch from which the comparison will be made with respect to the last commit.
+	 * @return Conflicts between the current commit and the new changes
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws CompareBranchConfigException400 with an occurred exception
+     * @throws CompareBranchConfigException404 with an occurred exception
+	 */
+	public CommitConflicts compareBranchConfig(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  CompareBranchConfigException400,  CompareBranchConfigException404
+	{
+		LOG.debug("[ServiceBranchconfig] -> [compareBranchConfig]");
+
+        LOG.debug("[ServiceBranchconfig] -> [compareBranchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBranchconfig.compareBranchConfig(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+}

@@ -1,0 +1,70 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceSchedulerconfig;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.WrapperServiceSchedulerConfig;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.PagePlanConfig;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.PlanConfig;
+
+@SpringBootTest(classes = {WrapperServiceSchedulerConfig.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+@RunWith( SpringJUnit4ClassRunner.class )
+class WrapperServiceSchedulerConfigTest {
+	@MockBean
+	private ServiceSchedulerconfig serviceSchedulerConfig;
+
+	@Autowired
+	@InjectMocks
+	private WrapperServiceSchedulerConfig wrapperServiceSchedulerConfig;
+
+	private PlanConfig[] planConfigs;
+	private PlanConfig planConfig;
+	private PagePlanConfig pagePlanConfig;
+
+	@BeforeEach
+	void setUp() {
+		PlanConfig plan1 = new PlanConfig();
+
+		planConfigs = new PlanConfig[]{plan1};
+		planConfig = new PlanConfig();
+		planConfig.set_id("Test");
+		pagePlanConfig = new PagePlanConfig();
+		pagePlanConfig.setResult(planConfigs);
+
+	}
+
+	@Test
+	void publishPlanConfigFromHost() {
+		try {
+			when(serviceSchedulerConfig.publishPlanConfigFromHost(any(PlanConfig.class),anyString())).thenReturn(Boolean.TRUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		com.bbva.gkxj.atilibrary.schedulerconfig.PlanConfig planConfig = new com.bbva.gkxj.atilibrary.schedulerconfig.PlanConfig();
+		Boolean result;
+		result = wrapperServiceSchedulerConfig.publishPlanConfigFromHost(planConfig,"Test");
+
+		assertEquals(result, Boolean.TRUE);
+	}
+
+}

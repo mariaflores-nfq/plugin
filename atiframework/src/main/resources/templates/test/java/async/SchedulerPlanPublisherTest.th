@@ -1,0 +1,64 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].async;
+
+
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import com.bbva.gkxj.asyncapi.broker.SchedulerPlanPublisher.model.SchedulerPlanPayload;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.SchedulerPlanPublisher;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.test.context.TestPropertySource;
+
+import com.bbva.gkxj.schedulerati.planning.SchedulerPlan;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.stream.bindings.publishSchedulerPlan-out-0.destination=testChannel"
+})
+public class SchedulerPlanPublisherTest {
+
+    @Value("$${spring.cloud.stream.bindings.publishSchedulerPlan-out-0.destination}")
+    private String channelName;
+
+    @Mock
+    private StreamBridge streamBridge;
+
+    @InjectMocks
+    private SchedulerPlanPublisher publisher;
+
+    @Test
+    public void testPublishSchedulerPlan() throws IOException {
+        File file = new File("src/test/resources/schedulerPlan.json");
+
+        // Convertir el file a string
+        String stringFile = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+        // Deserializar Json
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        SchedulerPlan msg =  mapper.readValue(stringFile, SchedulerPlan.class);
+
+        // Enviar mensaje al broker
+        publisher.publishSchedulerPlan(msg);
+        verify(streamBridge, atLeastOnce())
+                .send(ArgumentMatchers.eq(channelName), ArgumentMatchers.any(SchedulerPlanPayload.class));
+    }
+
+}

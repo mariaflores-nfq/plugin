@@ -1,0 +1,105 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.BranchConfig;
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.CommitConfig;
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.IWrapperServiceBranchConfig;
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.TagConfig;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+
+/**
+ * Clase que envuelve las llamadas al API Rest de ReleaseConfig.
+ */
+@Service
+public class WrapperServiceBranchConfig implements IWrapperServiceBranchConfig {
+
+	/** Logger for this class. */
+	private static final Logger LOGGER = LoggerFactory.getLogger(WrapperServiceBranchConfig.class);
+
+	/** REST client service used to access the BranchConfig API. */
+	private ServiceBranchconfig serviceBranchConfig;
+
+	/**
+	 * Constructor with dependency injection.
+	 *
+	 * @param serviceBranchConfig Spring-managed service for invoking the BranchConfig REST API.
+	 */
+	public WrapperServiceBranchConfig(ServiceBranchconfig serviceBranchConfig) {
+		super();
+		this.serviceBranchConfig = serviceBranchConfig;
+	}
+
+	/**
+	 * Saves a {@link TagConfig} to the BranchConfig API from the host context.
+	 * This method transforms the given {@link TagConfig} into its API representation,
+	 * attaches the corresponding {@link CommitConfig} reference, and delegates the save operation
+	 * to the REST service.
+	 *
+	 * @param config The {@link TagConfig} to be saved.
+	 * @param uuaa   The functional unit identifier (UUAA).
+	 * @return {@code true} if the operation was successful; {@code false} otherwise.
+	 */
+	@Override
+	public Boolean saveTagConfigFromHost(TagConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.branchconfig.model.TagConfig tagConfig = new com.bbva.gkxj.apirestgen.branchconfig.model.TagConfig();
+		com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig commitConfig = new com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, tagConfig);
+			commitConfig.set_id(config.getCommitId());
+			tagConfig.setCommit(commitConfig);
+			returnValue = this.serviceBranchConfig.saveTagConfigFromHost(tagConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceBranchConfig] -> Error to save TagConfig from Host in API rest", e.getMessage());
+		}
+		return returnValue;
+	}
+
+	/**
+	 * Saves a {@link BranchConfig} to the BranchConfig API from the host context.
+	 * The method transforms the input model, attaches the associated {@link CommitConfig},
+	 * and sends it to the remote service via {@link ServiceBranchconfig}.
+	 *
+	 * @param config The {@link BranchConfig} to be saved.
+	 * @param uuaa   The UUAA identifier.
+	 * @return {@code true} if the operation was successful; {@code false} otherwise.
+	 */
+	@Override
+	public Boolean saveBranchConfigFromHost(BranchConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.branchconfig.model.BranchConfig branchConfig = new com.bbva.gkxj.apirestgen.branchconfig.model.BranchConfig();
+		com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig commitConfig = new com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, branchConfig);
+			commitConfig.set_id(config.getCommitId());
+			branchConfig.setCommit(commitConfig);
+			returnValue = this.serviceBranchConfig.saveBranchConfigFromHost(branchConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceBranchConfig] -> Error to save BranchConfig from Host in API rest", e.getMessage());
+		}
+		return returnValue;
+	}
+
+	/**
+	 * Saves a {@link CommitConfig} to the BranchConfig API from the host context.
+	 *
+	 * @param config The {@link CommitConfig} object to be persisted.
+	 * @param uuaa   The UUAA identifier.
+	 * @return {@code true} if the commit was saved successfully; {@code false} otherwise.
+	 */
+	@Override
+	public Boolean saveCommitConfigFromHost(CommitConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig commitConfig = new com.bbva.gkxj.apirestgen.branchconfig.model.CommitConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, commitConfig);
+			returnValue = this.serviceBranchConfig.saveCommitConfigFromHost(commitConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceBranchConfig] -> Error to save CommitConfig from Host in API rest", e.getMessage());
+		}
+		return returnValue;
+	}
+}

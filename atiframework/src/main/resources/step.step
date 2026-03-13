@@ -1,0 +1,53 @@
+{
+  "stepCode": "pruebaAti",
+  "version": "V1.0.0",
+  "status": "PUBLISHED",
+  "stepType": "CHUNK",
+  "description": "Ejemplo de proceso de datos leídos mediante CSV.",
+  "stepParameterList": [],
+  "IssueTreatments": [
+    {
+      "exceptionClass": "",
+      "exceptionMethod": "NewIssue",
+      "exceptionCodeMethod": "",
+      "skippable": false,
+      "skipLimit": 0,
+      "issueCode": "",
+      "technicalCode": "",
+      "exceptionCodes": []
+    }
+  ],
+  "criticalIssue": {
+    "level": "No level",
+    "issueCode": "",
+    "technicalCode": ""
+  },
+  "reader": {
+    "queries": [
+      {
+        "queryCode": "NewQuery",
+        "sqlQuery": "",
+        "dbSource": "Oracle_Dev"
+      }
+    ]
+  },
+  "writer": {
+    "mongoQueryList": [
+      {
+        "queryCode": "NewQuery",
+        "type": "Mongo Query",
+        "operation": "Update",
+        "parameters": [],
+        "dbSource": "Config",
+        "collection": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "options": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "deleteParameters": [],
+        "filterParameters": [],
+        "updateParameters": [],
+        "insertParameters": [],
+        "filter": "",
+        "update": ""
+      }
+    ]
+  }
+}

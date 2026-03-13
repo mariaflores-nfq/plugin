@@ -1,0 +1,192 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 16:29:51 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit ;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
+import com.bbva.gkxj.apirestgen.batchaudit.model.PaginationInfo ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.PageBatchAudit ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.BatchAudit ;
+import com.bbva.gkxj.apirestgen.batchaudit.client.jaxrs.rest.IRestHandlerBatchaudit ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindOneBatchConfigByExecutionIdException400 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindOneBatchConfigByExecutionIdException500 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindBatchAuditException400 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindBatchAuditException500 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindBatchAuditPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindBatchAuditPaginatedException500 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.SaveBatchAuditException400 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.SaveBatchAuditException500 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindOneBatchConfigException400 ;
+import com.bbva.gkxj.apirestgen.batchaudit.model.exception.FindOneBatchConfigException500 ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class ServiceBatchaudit
+{
+	/**
+	 * Logger
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(ServiceBatchaudit.class);
+
+	/**
+	 * NovaMetadata inserted for sending to the client.
+	 */
+	private final NovaMetadata novaMetadata;
+
+	/**
+	 * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+	 */
+	private final NovaRequestConfig novaRequestConfig;
+
+	/**
+	 * Attribute - Rest Handler
+	 */
+	private IRestHandlerBatchaudit restHandlerBatchaudit;
+
+	/**
+	 * Dependency injection constructor
+	 *
+	 * @param novaMetadata with the metadata
+	 * @param novaRequestConfig with the request config
+	 * @param restHandlerBatchaudit with the rest handler
+	 */
+	public ServiceBatchaudit(final @Qualifier("Batchaudit.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Batchaudit.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerBatchaudit restHandlerBatchaudit)
+	{
+		this.novaMetadata = novaMetadata;
+		this.novaRequestConfig = novaRequestConfig;
+		this.restHandlerBatchaudit = restHandlerBatchaudit;
+	}
+
+	/**
+	 * @param paginationInfo Pagination information to find in the DB
+	 * @param uuaa UUAA code associated to the configs
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindBatchAuditPaginatedException400 with an occurred exception
+	 * @throws FindBatchAuditPaginatedException500 with an occurred exception
+	 */
+	public PageBatchAudit findBatchAuditPaginated(final PaginationInfo paginationInfo, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBatchAuditPaginatedException400,  FindBatchAuditPaginatedException500
+	{
+		LOG.debug("[ServiceBatchaudit] -> [findBatchAuditPaginated]");
+
+		LOG.debug("[ServiceBatchaudit] -> [findBatchAuditPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerBatchaudit.findBatchAuditPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, uuaa);
+	}
+
+
+	/**
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @param executionId Unique execution id of the configuration
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindOneBatchConfigByExecutionIdException400 with an occurred exception
+	 * @throws FindOneBatchConfigByExecutionIdException500 with an occurred exception
+	 */
+	public BatchAudit findOneBatchConfigByExecutionId(final String uuaa, final String executionId) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindOneBatchConfigByExecutionIdException400,  FindOneBatchConfigByExecutionIdException500
+	{
+		LOG.debug("[ServiceBatchaudit] -> [findOneBatchConfigByExecutionId]");
+
+		LOG.debug("[ServiceBatchaudit] -> [findOneBatchConfigByExecutionId]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerBatchaudit.findOneBatchConfigByExecutionId(this.novaRequestConfig, this.novaMetadata, uuaa, executionId);
+	}
+
+
+	/**
+	 * @param uuaa UUAA code associated to the configs
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindBatchAuditException400 with an occurred exception
+	 * @throws FindBatchAuditException500 with an occurred exception
+	 */
+	public BatchAudit[] findBatchAudit(final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBatchAuditException400,  FindBatchAuditException500
+	{
+		LOG.debug("[ServiceBatchaudit] -> [findBatchAudit]");
+
+		LOG.debug("[ServiceBatchaudit] -> [findBatchAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerBatchaudit.findBatchAudit(this.novaRequestConfig, this.novaMetadata, uuaa);
+	}
+
+
+	/**
+	 * @param batchAudit Batch audit to save in the DDBB
+	 * @param uuaa UUAA code associated to the batch audits
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws SaveBatchAuditException400 with an occurred exception
+	 * @throws SaveBatchAuditException500 with an occurred exception
+	 */
+	public BatchAudit saveBatchAudit(final BatchAudit batchAudit, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveBatchAuditException400,  SaveBatchAuditException500
+	{
+		LOG.debug("[ServiceBatchaudit] -> [saveBatchAudit]");
+
+		LOG.debug("[ServiceBatchaudit] -> [saveBatchAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerBatchaudit.saveBatchAudit(this.novaRequestConfig, this.novaMetadata, batchAudit, uuaa);
+	}
+
+
+	/**
+	 * @param uuaa UUAA code associated to the config
+	 * @param parentExecutionId Parent execution id
+	 * @param parentStepExecutionId Parent step execution id
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindOneBatchConfigException400 with an occurred exception
+	 * @throws FindOneBatchConfigException500 with an occurred exception
+	 */
+	public BatchAudit findOneBatchConfig(final String uuaa, final String parentExecutionId, final String parentStepExecutionId) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindOneBatchConfigException400,  FindOneBatchConfigException500
+	{
+		LOG.debug("[ServiceBatchaudit] -> [findOneBatchConfig]");
+
+		LOG.debug("[ServiceBatchaudit] -> [findOneBatchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerBatchaudit.findOneBatchConfig(this.novaRequestConfig, this.novaMetadata, uuaa, parentExecutionId, parentStepExecutionId);
+	}
+
+
+}

@@ -1,0 +1,44 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].callback;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback.StepResponseImpl;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+
+import com.bbva.gkxj.atilibrary.interfaces.stepcallback.StepCallbackPayload;
+import com.bbva.gkxj.orchestatorati.orchestator.OrchestatorAti;
+
+
+@SpringBootTest(classes = {StepResponseImpl.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+public class StepResponseImplTest {
+
+	@MockBean
+	private OrchestatorAti orchestator;
+
+	@Autowired
+	@InjectMocks
+	private StepResponseImpl stepResponseImpl;
+
+	private StepCallbackPayload stepCallbackPayload;
+
+
+    @Test
+    void publishStepCompleted() {
+    	stepCallbackPayload = new StepCallbackPayload();
+    	stepResponseImpl.stepCompleted(stepCallbackPayload);
+    	verify(orchestator, times(1)).resumeBatch(any(StepCallbackPayload.class));
+    }
+}

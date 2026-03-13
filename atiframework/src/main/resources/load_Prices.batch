@@ -1,0 +1,109 @@
+{
+  "_id": "682c394902a1df01a4aea71d",
+  "batchCode": "nueva_prueba",
+  "description": "Workflow",
+  "version": "v1.0.6",
+  "paramAuditList": [
+    {
+      "audTs": "2025-05-20T10:11:53.806+02:00",
+      "comments": "",
+      "audUser": "",
+      "status": "NOT_PUBLISHED"
+    }
+  ],
+  "recordVersion": 1,
+  "workflowNodeList": [
+    {
+      "xPosition": 173,
+      "batchCode": "",
+      "yPosition": 102,
+      "workflowNodeCode": "StartEvent_1",
+      "type": "INITIAL",
+      "joinWorkflowNodeList": [],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Activity_0he2fan",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 840,
+      "yPosition": 120,
+      "workflowNodeCode": "Event_0wt6c07",
+      "type": "FINAL",
+      "joinWorkflowNodeList": [
+        "Activity_0he2fan"
+      ]
+    },
+    {
+      "xPosition": 520,
+      "stepCode": "load_Prices",
+      "yPosition": 120,
+      "workflowNodeCode": "Activity_0he2fan",
+      "isCritical": false,
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "StartEvent_1"
+      ],
+      "wfnParameterList": [
+        {
+          "name": "fileName",
+          "batchParamName": "sourceFilePrices",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "auditTime",
+          "batchParamName": "auditTime",
+          "fixedValue": "",
+          "scriptValue": ""
+        },
+        {
+          "name": "historificationPath",
+          "batchParamName": "",
+          "fixedValue": "/N2TR/historification/",
+          "scriptValue": ""
+        },
+        {
+          "name": "referenceDate",
+          "batchParamName": "referenceDate",
+          "fixedValue": "",
+          "scriptValue": ""
+        }
+      ],
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Event_0wt6c07",
+          "scriptCondition": ""
+        }
+      ]
+    }
+  ],
+  "uuaa": "n2tr",
+  "parameterList": [
+    {
+      "ioType": "PARAM_IN",
+      "name": "sourceFilePrices",
+      "schedulerParamName": "sourceFilePrices",
+      "type": "STRING",
+      "isMandatory": false
+    },
+    {
+      "ioType": "PARAM_IN",
+      "name": "auditTime",
+      "schedulerParamName": "auditTime",
+      "type": "STRING",
+      "isMandatory": false
+    },
+    {
+      "ioType": "PARAM_IN",
+      "name": "referenceDate",
+      "type": "STRING",
+      "isMandatory": false
+    }
+  ],
+  "batchType": "SPRING_BATCH",
+  "status": "PUBLISHED",
+  "_class": "com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig"
+}

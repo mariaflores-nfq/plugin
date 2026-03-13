@@ -1,0 +1,216 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 15:57:04 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit ;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.PaginationInfo ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.SchedulerPlanAudit ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.PageSchedulerPlanAudit ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.client.jaxrs.rest.IRestHandlerSchedulerplanaudit ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindSchedulerPlanAuditException400 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindSchedulerPlanAuditException500 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindHoldSchedulerPlanAuditException400 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindHoldSchedulerPlanAuditException500 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.HoldSchedulerPlanAuditException400 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.HoldSchedulerPlanAuditException500 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.SaveSchedulerPlanAuditException400 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.SaveSchedulerPlanAuditException500 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindSchedulerPlanAuditPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindSchedulerPlanAuditPaginatedException500 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindOneSchedulerPlanAuditException400 ;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.exception.FindOneSchedulerPlanAuditException500 ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class ServiceSchedulerplanaudit
+{
+	/**
+	 * Logger
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(ServiceSchedulerplanaudit.class);
+
+	/**
+	 * NovaMetadata inserted for sending to the client.
+	 */
+	private final NovaMetadata novaMetadata;
+
+	/**
+	 * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+	 */
+	private final NovaRequestConfig novaRequestConfig;
+
+	/**
+	 * Attribute - Rest Handler
+	 */
+	private IRestHandlerSchedulerplanaudit restHandlerSchedulerplanaudit;
+
+	/**
+	 * Dependency injection constructor
+	 *
+	 * @param novaMetadata with the metadata
+	 * @param novaRequestConfig with the request config
+	 * @param restHandlerSchedulerplanaudit with the rest handler
+	 */
+	public ServiceSchedulerplanaudit(final @Qualifier("Schedulerplanaudit.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Schedulerplanaudit.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerSchedulerplanaudit restHandlerSchedulerplanaudit)
+	{
+		this.novaMetadata = novaMetadata;
+		this.novaRequestConfig = novaRequestConfig;
+		this.restHandlerSchedulerplanaudit = restHandlerSchedulerplanaudit;
+	}
+
+	/**
+	 * @param paginationInfo Pagination information to find in the DB
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindSchedulerPlanAuditPaginatedException400 with an occurred exception
+	 * @throws FindSchedulerPlanAuditPaginatedException500 with an occurred exception
+	 */
+	public PageSchedulerPlanAudit findSchedulerPlanAuditPaginated(final PaginationInfo paginationInfo, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindSchedulerPlanAuditPaginatedException400,  FindSchedulerPlanAuditPaginatedException500
+	{
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findSchedulerPlanAuditPaginated]");
+
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findSchedulerPlanAuditPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerplanaudit.findSchedulerPlanAuditPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, uuaa);
+	}
+
+
+	/**
+	 * @param uuaa UUAA code associated to the scheduler plan
+	 * @param id Id associated to the scheduler plan
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindOneSchedulerPlanAuditException400 with an occurred exception
+	 * @throws FindOneSchedulerPlanAuditException500 with an occurred exception
+	 */
+	public SchedulerPlanAudit findOneSchedulerPlanAudit(final String uuaa, final String id) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindOneSchedulerPlanAuditException400,  FindOneSchedulerPlanAuditException500
+	{
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findOneSchedulerPlanAudit]");
+
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findOneSchedulerPlanAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerplanaudit.findOneSchedulerPlanAudit(this.novaRequestConfig, this.novaMetadata, uuaa, id);
+	}
+
+
+	/**
+	 * @param planningDate PlanningDate associated to the schedulers, ex: 2023-01-01
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindSchedulerPlanAuditException400 with an occurred exception
+	 * @throws FindSchedulerPlanAuditException500 with an occurred exception
+	 */
+	public SchedulerPlanAudit[] findSchedulerPlanAudit(final String planningDate, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindSchedulerPlanAuditException400,  FindSchedulerPlanAuditException500
+	{
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findSchedulerPlanAudit]");
+
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findSchedulerPlanAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerplanaudit.findSchedulerPlanAudit(this.novaRequestConfig, this.novaMetadata, planningDate, uuaa);
+	}
+
+
+	/**
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @param id id of the scheduler
+	 * @param hold hold or unhold indicator
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws HoldSchedulerPlanAuditException400 with an occurred exception
+	 * @throws HoldSchedulerPlanAuditException500 with an occurred exception
+	 */
+	public SchedulerPlanAudit holdSchedulerPlanAudit(final String uuaa, final String id, final String hold) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  HoldSchedulerPlanAuditException400,  HoldSchedulerPlanAuditException500
+	{
+		LOG.debug("[ServiceSchedulerplanaudit] -> [holdSchedulerPlanAudit]");
+
+		LOG.debug("[ServiceSchedulerplanaudit] -> [holdSchedulerPlanAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerplanaudit.holdSchedulerPlanAudit(this.novaRequestConfig, this.novaMetadata, uuaa, id, hold);
+	}
+
+
+	/**
+	 * @param planningDate PlanningDate associated to the schedulers, ex: 2023-01-01
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws FindHoldSchedulerPlanAuditException400 with an occurred exception
+	 * @throws FindHoldSchedulerPlanAuditException500 with an occurred exception
+	 */
+	public SchedulerPlanAudit[] findHoldSchedulerPlanAudit(final String planningDate, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindHoldSchedulerPlanAuditException400,  FindHoldSchedulerPlanAuditException500
+	{
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findHoldSchedulerPlanAudit]");
+
+		LOG.debug("[ServiceSchedulerplanaudit] -> [findHoldSchedulerPlanAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerplanaudit.findHoldSchedulerPlanAudit(this.novaRequestConfig, this.novaMetadata, planningDate, uuaa);
+	}
+
+
+	/**
+	 * @param schedulerPlan Batch Configuration to save in the DDBB
+	 * @param uuaa UUAA code associated to the scheduler plans
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws Errors with an occurred exception
+	 * @throws SaveSchedulerPlanAuditException400 with an occurred exception
+	 * @throws SaveSchedulerPlanAuditException500 with an occurred exception
+	 */
+	public SchedulerPlanAudit saveSchedulerPlanAudit(final SchedulerPlanAudit schedulerPlan, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveSchedulerPlanAuditException400,  SaveSchedulerPlanAuditException500
+	{
+		LOG.debug("[ServiceSchedulerplanaudit] -> [saveSchedulerPlanAudit]");
+
+		LOG.debug("[ServiceSchedulerplanaudit] -> [saveSchedulerPlanAudit]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerplanaudit.saveSchedulerPlanAudit(this.novaRequestConfig, this.novaMetadata, schedulerPlan, uuaa);
+	}
+
+
+}

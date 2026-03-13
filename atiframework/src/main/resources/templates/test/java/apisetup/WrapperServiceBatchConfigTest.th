@@ -1,0 +1,74 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceBatchconfig;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.WrapperServiceBatchConfig;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig;
+import com.bbva.gkxj.apirestgen.batchconfig.model.PageBatchConfig;
+
+@SpringBootTest(classes = {WrapperServiceBatchConfig.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+@RunWith( SpringJUnit4ClassRunner.class )
+class WrapperServiceBatchConfigTest {
+	@MockBean
+	private ServiceBatchconfig serviceBatchConfig;
+
+	@Autowired
+	@InjectMocks
+	private WrapperServiceBatchConfig wrapperServiceBatchConfig;
+
+	private BatchConfig[] batchConfigs;
+	private BatchConfig batchConfig;
+	private PageBatchConfig pageBatchConfig;
+
+	@BeforeEach
+	void setUp() {
+		BatchConfig batch1 = new BatchConfig();
+
+		batchConfigs = new BatchConfig[]{batch1};
+		batchConfig = new BatchConfig();
+		batchConfig.setUuaa("tcrd");
+		batchConfig.setVersion("version");
+		batchConfig.setStatus("status");
+		batchConfig.setBranchCode("branchCode");
+		batchConfig.set_id("Test");
+		pageBatchConfig = new PageBatchConfig();
+		pageBatchConfig.setResult(batchConfigs);
+
+	}
+
+	@Test
+	void publishBatchConfigFromHost() {
+		try {
+			when(serviceBatchConfig.publishBatchConfigFromHost(any(BatchConfig.class),anyString())).thenReturn(Boolean.TRUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		com.bbva.gkxj.atilibrary.batchconfig.BatchConfig batchConfig = new com.bbva.gkxj.atilibrary.batchconfig.BatchConfig();
+		Boolean result;
+		result = wrapperServiceBatchConfig.publishBatchConfigFromHost(batchConfig,"Test");
+
+		assertEquals(result, Boolean.TRUE);
+	}
+
+}

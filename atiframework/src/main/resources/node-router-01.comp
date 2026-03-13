@@ -1,0 +1,9 @@
+{
+  "workflowCode": "Business_Router",
+  "id": "node-router-01",
+  "componentCode": "Business_Router",
+  "type": "Router",
+  "description": "Enrutador lógico de negocio nuevo adaptacion.",
+  "version": "V1.0.0",
+  "status": "AZUL"
+}

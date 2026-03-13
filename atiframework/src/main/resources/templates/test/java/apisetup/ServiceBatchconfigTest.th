@@ -1,0 +1,124 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceBatchconfig;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import com.bbva.gkxj.apirestgen.batchconfig.client.jaxrs.rest.IRestHandlerBatchconfig;
+import com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@RunWith(MockitoJUnitRunner.class)
+public class ServiceBatchconfigTest {
+
+    @Mock
+    @Qualifier("Batchconfig.novaMetadata")
+    private NovaMetadata novaMetadata;
+
+    @Mock
+    @Qualifier("Batchconfig.novaRequestconfig")
+    private NovaRequestConfig novaRequestConfig;
+
+    @Mock
+    private IRestHandlerBatchconfig restHandlerBatchconfig;
+
+    @InjectMocks
+    private ServiceBatchconfig serviceBatchconfig;
+
+    @Before
+    public void setUp() {
+    }
+
+    @Test
+    public void testServiceBatchconfigInitialization() {
+        assertNotNull("ServiceBatchconfig should not be null", serviceBatchconfig);
+    }
+
+    @Test
+    public void testSaveBatchConfig() throws Exception {
+        BatchConfig config = new BatchConfig();
+        String branchCode = "testBranch";
+        String uuaa = "testUuaa";
+        BatchConfig expectedConfig = new BatchConfig();
+
+        when(restHandlerBatchconfig.saveBatchConfig(any(), any(), any(), anyString(), anyString())).thenReturn(expectedConfig);
+
+        BatchConfig result = serviceBatchconfig.saveBatchConfig(config, branchCode, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedConfig, result);
+    }
+
+    @Test
+    public void testFindBatchConfigs() throws Exception {
+        String branchCode = "testBranch";
+        String uuaa = "testUuaa";
+        String commitId = "testCommitId";
+        String batchId = "testBatchId";
+        String[] status = new String[]{"active"};
+        BatchConfig[] expectedConfigs = new BatchConfig[1];
+        expectedConfigs[0] = new BatchConfig();
+
+        when(restHandlerBatchconfig.findBatchConfigs(any(), any(), anyString(), anyString(), anyString(), anyString(), any())).thenReturn(expectedConfigs);
+
+        BatchConfig[] result = serviceBatchconfig.findBatchConfigs(branchCode, uuaa, commitId, batchId, status);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedConfigs.length, result.length);
+    }
+
+    @Test
+    public void testFindBatchConfigByVersion() throws Exception {
+        String branchCode = "testBranch";
+        String uuaa = "testUuaa";
+        String batchCode = "testBatchCode";
+        String version = "1.0";
+        BatchConfig[] expectedConfigs = new BatchConfig[1];
+        expectedConfigs[0] = new BatchConfig();
+
+        when(restHandlerBatchconfig.findBatchConfigByVersion(any(), any(), anyString(), anyString(), anyString(), anyString())).thenReturn(expectedConfigs);
+
+        BatchConfig[] result = serviceBatchconfig.findBatchConfigByVersion(branchCode, uuaa, batchCode, version);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedConfigs.length, result.length);
+    }
+
+    @Test
+    public void testPublishBatchConfigFromHost() throws Exception {
+        BatchConfig config = new BatchConfig();
+        String uuaa = "testUuaa";
+
+        when(restHandlerBatchconfig.publishBatchConfigFromHost(any(), any(), any(), anyString())).thenReturn(true);
+
+        Boolean result = serviceBatchconfig.publishBatchConfigFromHost(config, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(Boolean.TRUE, result);
+    }
+    @Test
+    public void testDeleteBatchConfig() throws Exception {
+        String branchCode = "testBranch";
+        String id = "testId";
+        String uuaa = "testUuaa";
+
+        when(restHandlerBatchconfig.deleteBatchConfig(any(), any(), anyString(), anyString(), anyString())).thenReturn(true);
+
+        Boolean result = serviceBatchconfig.deleteBatchConfig(branchCode, id, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(Boolean.TRUE, result);
+    }
+}

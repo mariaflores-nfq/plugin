@@ -1,0 +1,461 @@
+---
+swagger: "2.0"
+info:
+  description: "Batch Configuration RESTfull service"
+  version: "1.1.1"
+  title: "BatchConfig"
+  contact:
+    name: "Utilidad para la Ingesta Transformacion y Exportacion de Datos"
+    url: "https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220"
+    email: "alberto.pina@bbva.com"
+host: "www.bbvaapis.com"
+basePath: "/gkxj/batchconfig/1.1.1/batchConfig"
+schemes:
+- "http"
+- "https"
+produces:
+- "application/json"
+paths:
+  /{uuaa}/{branchId}:
+    get:
+      description: "get all batchConfigs from the db for a UUAA"
+      operationId: "findBatchConfigs"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the configs"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "commitId"
+        in: "query"
+        description: "Commit identifier associated to the step"
+        required: false
+        type: "string"
+      - name: "batchId"
+        in: "query"
+        description: "Batch identifier associated to the step"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "query"
+        description: "Get a config from a status"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BatchConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /find/{uuaa}/{branchId}:
+    post:
+      description: "get batchConfigs from the db for a UUAA with pagination"
+      operationId: "findBatchConfigsPaginated"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the configs"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Pagination information to find in the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PageBatchConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /{uuaa}/{branchId}/{batchCode}:
+    get:
+      description: "get batchConfig from the batchCode"
+      operationId: "findBatchConfigByVersion"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "batchCode"
+        in: "path"
+        description: "Unique key of the configuration"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Config specific version"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BatchConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /save/{uuaa}/{branchId}:
+    post:
+      description: "save or update the configuration in the DDBB"
+      operationId: "saveBatchConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Batch Configuration to save in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/BatchConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BatchConfig"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /delete/{uuaa}/{branchId}/{id}:
+    post:
+      description: "Delete from DDBB an specific configuratio by id"
+      operationId: "deleteBatchConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "branchId"
+        in: "path"
+        description: "Branch code where the user is working."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Batch Id in Db"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /publish/{uuaa}:
+    post:
+      description: "Publish a Batch Code in DB from _id"
+      operationId: "publishBatchConfigFromHost"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the config"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Batch Configuration to save in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/BatchConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+definitions:
+  BatchConfig:
+    type: "object"
+    required:
+    - "_id"
+    - "batchCode"
+    - "paramAuditList"
+    properties:
+      _id:
+        type: "string"
+      batchCode:
+        type: "string"
+      version:
+        type: "string"
+      uuaa:
+        type: "string"
+      batchType:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+      recordVersion:
+        type: "integer"
+      branchCode:
+        type: "string"
+        description: "Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published"
+      branchId:
+        type: "string"
+        description: "Branch Identifier related with the batchConfig, this is only informed when the batchConfig is NOT published"
+      checkSum:
+        type: "string"
+        description: "CheckSum related with the batchConfig, this is useful to check if the batchConfig has been modified"
+      paramAuditList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ParamAudit"
+      parameterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Parameter"
+      workflowNodeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/WorkflowNode"
+  ParamAudit:
+    type: "object"
+    required:
+    - "audTs"
+    - "audUser"
+    - "status"
+    properties:
+      status:
+        type: "string"
+      comments:
+        type: "string"
+      audTs:
+        type: "string"
+        format: "date-time"
+      audUser:
+        type: "string"
+  Parameter:
+    type: "object"
+    required:
+    - "isMandatory"
+    - "name"
+    - "type"
+    properties:
+      name:
+        type: "string"
+      schedulerParamName:
+        type: "string"
+      type:
+        type: "string"
+      ioType:
+        type: "string"
+      isMandatory:
+        type: "boolean"
+      description:
+        type: "string"
+      scriptValue:
+        type: "string"
+  WorkflowNode:
+    type: "object"
+    required:
+    - "type"
+    - "workflowNodeCode"
+    properties:
+      workflowNodeCode:
+        type: "string"
+      type:
+        type: "string"
+        description: "STEP/PARALLEL/INCLUSIVE/EXCLUSIVE/BATCH/LOOP"
+      stepCode:
+        type: "string"
+      batchCode:
+        type: "string"
+      xPosition:
+        type: "integer"
+      yPosition:
+        type: "integer"
+      isCritical:
+        type: "boolean"
+      nextWorkflowNodeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/NextWorkflowNode"
+      wfnParameterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/wfnParameter"
+      joinWorkflowNodeList:
+        type: "array"
+        items:
+          type: "string"
+      initializeScript:
+        type: "string"
+      exitScript:
+        type: "string"
+      incrementScript:
+        type: "string"
+      isEndLoop:
+        type: "boolean"
+  wfnParameter:
+    type: "object"
+    required:
+    - "batchParamName"
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "Parameter name in the ETL or child batch."
+      batchParamName:
+        type: "string"
+        description: "Parameter name in the Batch"
+      fixedValue:
+        type: "string"
+      scriptValue:
+        type: "string"
+  NextWorkflowNode:
+    type: "object"
+    required:
+    - "scriptCondition"
+    - "workflowNodeCode"
+    properties:
+      workflowNodeCode:
+        type: "string"
+      scriptCondition:
+        type: "string"
+        description: "for INCLUSIVE or EXCLUSIVE nodes"
+  ConfigServiceError:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+    description: "Error messages"
+  PaginationInfo:
+    type: "object"
+    required:
+    - "limit"
+    - "page"
+    properties:
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      version:
+        type: "string"
+      batchCode:
+        type: "string"
+      stepCode:
+        type: "string"
+      description:
+        type: "string"
+      includeArchived:
+        type: "boolean"
+      includeInactive:
+        type: "boolean"
+      sortOrder:
+        type: "string"
+        description: "ASC - DESC"
+      sortBy:
+        type: "string"
+        description: "field name"
+    description: "Request to find Planconfig with Pagination"
+  PageBatchConfig:
+    type: "object"
+    required:
+    - "hasNext"
+    - "hasPrevious"
+    - "limit"
+    - "page"
+    - "total"
+    properties:
+      total:
+        type: "integer"
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      hasPrevious:
+        type: "boolean"
+      hasNext:
+        type: "boolean"
+      result:
+        type: "array"
+        description: "BatchConfigs which complish the filter"
+        items:
+          $ref: "#/definitions/BatchConfig"
+    description: "Response to find Batchconfig with Pagination"
+x-generator-properties:
+  business-unit: "gkxj"

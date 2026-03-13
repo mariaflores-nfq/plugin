@@ -1,0 +1,81 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].audit;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.SchedulerPlanPublisher;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit.ServiceSchedulerplanaudit;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit.WrapperServiceSchedulerPlanAudit;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.SchedulerPlanAudit;
+import com.bbva.gkxj.schedulerati.planning.SchedulerPlan;
+
+
+@SpringBootTest(classes = {WrapperServiceSchedulerPlanAudit.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+public class WrapperServiceSchedulerPlanAuditTest {
+    @MockBean
+    private ServiceSchedulerplanaudit serviceSchedulerplanaudit;
+
+    @MockBean
+    private SchedulerPlanPublisher schedulerPlanPublisher;
+
+    @Autowired
+    @InjectMocks
+    private WrapperServiceSchedulerPlanAudit wrapperServiceSchedulerPlanAudit;
+
+
+    private SchedulerPlanAudit[] schedulerPlanAudits;
+    private SchedulerPlan schedulerPlan;
+
+
+    @BeforeEach
+    void setUp() {
+        SchedulerPlanAudit plan1 = new SchedulerPlanAudit();
+
+        schedulerPlanAudits = new SchedulerPlanAudit[]{plan1};
+        schedulerPlan = new SchedulerPlan();
+    }
+
+    @Test
+    void find() {
+        try {
+            when(serviceSchedulerplanaudit.findSchedulerPlanAudit(anyString(),anyString())).thenReturn(schedulerPlanAudits);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        com.bbva.gkxj.schedulerati.apiaudit.model.SchedulerPlanAudit[] schedulerPlanAuditsResult;
+        schedulerPlanAuditsResult = wrapperServiceSchedulerPlanAudit.find("Test","Test");
+
+        assertEquals(schedulerPlanAuditsResult[0].getPlanCode(), schedulerPlanAudits[0].getPlanCode());
+    }
+
+    @Test
+    void save() {
+        try {
+            when(serviceSchedulerplanaudit.saveSchedulerPlanAudit(any(SchedulerPlanAudit.class),anyString())).thenReturn(schedulerPlanAudits[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        com.bbva.gkxj.schedulerati.apiaudit.model.SchedulerPlanAudit schedulerPlanAuditsResult;
+        schedulerPlanAuditsResult = wrapperServiceSchedulerPlanAudit.save(schedulerPlan,"Test");
+
+        assertEquals(schedulerPlanAuditsResult.getPlanCode(), schedulerPlan.getPlanCode());
+    }
+}

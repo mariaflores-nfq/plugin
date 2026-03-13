@@ -1,0 +1,22 @@
+### NOVA's Daemon base project
+
+## Pruebas mock del API Rest notes.
+
+Para poder realizar las pruebas en local de la llamada al API rest de notes debemos ejecutar el siguiente comando sobre un terminal con el NOVA CLI debidamente arrancado:
+
+[# th:if="${atiSettings.getAtiVersion() == '1.3.4' }"]
+La versión del ATI es la 1.3.4 y es la estandar para este plugin.
+[/]
+[# th:if="${atiSettings.getAtiVersion() != '1.3.4' }"]
+La versión del ATI NO es la ESPERADA.
+[/]
+
+[# th:if="${atiSettings.getIsNovaTransferIncluded()}"]
+Se inclue en el proyecto NOVA Transfer.
+[/]
+
+```
+nova mock start -n C:\Users\XE24611\git\Web-Documentation_Nfq_base_client\kekpclient\src\main\resources\api-notes-1.1.0.yml -p 35721 -m C:\Users\XE24611\git\Web-Documentation_Nfq_base_client\kekpclient\src\main\resources\mock\mock_mtn.yml
+```
+
+> **Importante**: hay que adaptar los directorios donde se encuentran los ficheros al filesystem de la persona que quiere arrancarlos. Importante debe estar configurado la llamada a la URL siguiente

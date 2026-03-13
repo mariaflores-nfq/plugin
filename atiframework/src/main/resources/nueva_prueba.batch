@@ -1,0 +1,167 @@
+{
+  "_id": "69248a7ca336cf07c1c74f24",
+  "batchCode": "batchPruebaLoop2",
+  "description": "",
+  "version": "V0.0.1",
+  "paramAuditList": [
+    {
+      "audTs": "2025-11-24T17:40:28.020+01:00",
+      "comments": "",
+      "audUser": "T045949",
+      "status": "CREATED"
+    }
+  ],
+  "recordVersion": 3,
+  "workflowNodeList": [
+    {
+      "xPosition": 173,
+      "yPosition": 102,
+      "batchCode": "",
+      "initializeScript": "",
+      "workflowNodeCode": "StartEvent_1",
+      "incrementScript": "",
+      "type": "INITIAL",
+      "joinWorkflowNodeList": [],
+      "exitScript": "",
+      "isEndLoop": false,
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "startLoop",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 310,
+      "yPosition": 120,
+      "initializeScript": "iterator = 0;",
+      "workflowNodeCode": "startLoop",
+      "incrementScript": "iterator += 1;",
+      "type": "LOOP",
+      "joinWorkflowNodeList": [
+        "StartEvent_1"
+      ],
+      "wfnParameterList": [],
+      "exitScript": "shouldBeExecuted = (iterator < 3);",
+      "isEndLoop": false,
+      "isCritical": false,
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "endLoop",
+          "scriptCondition": ""
+        },
+        {
+          "workflowNodeCode": "Activity_0s3oc54",
+          "scriptCondition": ""
+        }
+      ],
+      "initializationScript": ""
+    },
+    {
+      "xPosition": 860,
+      "yPosition": 120,
+      "initializeScript": "",
+      "workflowNodeCode": "endLoop",
+      "incrementScript": "",
+      "type": "LOOP",
+      "joinWorkflowNodeList": [
+        "startLoop",
+        "Activity_1kdeqsl"
+      ],
+      "wfnParameterList": [],
+      "exitScript": "",
+      "isEndLoop": true,
+      "isCritical": false,
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Activity_0sl35ux",
+          "scriptCondition": ""
+        }
+      ],
+      "initializationScript": ""
+    },
+    {
+      "xPosition": 1070,
+      "yPosition": 120,
+      "stepCode": "CreacionCSV",
+      "initializeScript": "",
+      "workflowNodeCode": "Activity_0sl35ux",
+      "incrementScript": "",
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "endLoop"
+      ],
+      "wfnParameterList": [],
+      "exitScript": "",
+      "isEndLoop": false,
+      "isCritical": true,
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Event_1n3qqn9",
+          "scriptCondition": ""
+        }
+      ]
+    },
+    {
+      "xPosition": 1250,
+      "yPosition": 120,
+      "initializeScript": "",
+      "workflowNodeCode": "Event_1n3qqn9",
+      "incrementScript": "",
+      "type": "FINAL",
+      "joinWorkflowNodeList": [
+        "Activity_0sl35ux"
+      ],
+      "exitScript": "",
+      "isEndLoop": false
+    },
+    {
+      "xPosition": 860,
+      "yPosition": 30,
+      "stepCode": "LoopHistorificacion",
+      "initializeScript": "",
+      "workflowNodeCode": "Activity_1kdeqsl",
+      "incrementScript": "",
+      "type": "ETL",
+      "joinWorkflowNodeList": [
+        "Activity_0s3oc54"
+      ],
+      "exitScript": "",
+      "isEndLoop": false,
+      "isCritical": false,
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "endLoop",
+          "scriptCondition": ""
+        }
+      ],
+      "wfnParameterList": []
+    },
+    {
+      "xPosition": 520,
+      "yPosition": 30,
+      "batchCode": "load_Prices",
+      "initializeScript": "",
+      "workflowNodeCode": "Activity_0s3oc54",
+      "incrementScript": "",
+      "type": "BATCH",
+      "joinWorkflowNodeList": [
+        "startLoop"
+      ],
+      "wfnParameterList": [],
+      "exitScript": "",
+      "isEndLoop": false,
+      "isCritical": false,
+      "nextWorkflowNodeList": [
+        {
+          "workflowNodeCode": "Activity_1kdeqsl",
+          "scriptCondition": ""
+        }
+      ]
+    }
+  ],
+  "uuaa": "gkxj",
+  "parameterList": [],
+  "batchType": "SPRING_BATCH",
+  "status": "PUBLISHED"
+}

@@ -1,0 +1,77 @@
+{
+  "workflowCode": "Database_Output",
+  "id": "node-out-01",
+  "componentCode": "Database_Output",
+  "type": "Output Adapter",
+  "subtype": "JMS",
+  "description": "Persistencia final en Oracle.",
+  "queueName": "\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c",
+  "messageType": "ddddddddddddddddddddddd",
+  "version": "",
+  "status": "",
+  "jmsConfig": {
+    "jmsConnection": "Operation",
+    "queueName": "",
+    "javaClassName": "",
+    "messageType": "XML",
+    "isCritical": false,
+    "xmlFields": [
+      {
+        "priority": 1,
+        "fieldType": "DOUBLE"
+      }
+    ],
+    "jsonFields": [
+      {
+        "priority": 1,
+        "fieldType": "LONG",
+        "extractionType": "Fixed Value",
+        "extractionValue": "aa",
+        "fieldFormat": "aaa",
+        "fieldLength": "aaaaa",
+        "regularExpression": "aaa",
+        "decimalDelimiter": "aaaaa",
+        "groupingDelimiter": "aaaa",
+        "script": "fgfhfgh"
+      }
+    ],
+    "csvFields": [
+      {
+        "fieldName": "eeee",
+        "payloadPath": "eeeeee",
+        "priority": 1,
+        "fieldType": "A_INTEGER",
+        "extractionType": "Fixed Value",
+        "extractionValue": "iiiiii",
+        "fieldFormat": "iii",
+        "fieldLength": "iii",
+        "regularExpression": "iiiiii",
+        "decimalDelimiter": "iiii",
+        "groupingDelimiter": "iii",
+        "script": "iiiiiiiii"
+      },
+      {}
+    ]
+  },
+  "asyncApiConfig": {
+    "jmsConnection": "",
+    "queueName": "",
+    "javaClassName": "",
+    "messageType": "XML",
+    "isCritical": false,
+    "xmlFields": [
+      {
+        "priority": 1
+      }
+    ],
+    "jsonFields": [
+      {}
+    ],
+    "csvFields": [
+      {
+        "priority": 1,
+        "fieldType": "A_INTEGER"
+      }
+    ]
+  }
+}

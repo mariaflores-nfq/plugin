@@ -1,0 +1,131 @@
+
+<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+
+<idea-plugin>
+
+    <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
+    <id>com.bbva.gkxj.atiframework.moduletemplate</id>
+
+    <!-- Text to display as name on Settings | Plugin page -->
+    <name>ATI Framework: Client Generator</name>
+    <icon>icons/ati_16.svg</icon>
+
+    <!-- Product and plugin compatibility requirements -->
+    <depends>com.intellij.modules.platform</depends>
+    <!-- Dependencia opcional para integración con GitHub Copilot / AI Assistant -->
+    <depends optional="true" config-file="copilot-tools.xml">com.intellij.modules.ultimate</depends>
+
+    <!-- Text to display as description on Settings | Plugin page -->
+    <description>
+        <![CDATA[
+      Create a new ATI client project fron a Project Wizard<br>Adds <i>ATI Client Generator</i> to <b>File | New | Project...</b>
+      A new file editor for ATI Scheduler <b>*.sch files</b>.
+    ]]>
+    </description>
+    <change-notes>
+        <![CDATA[
+      <ul>
+        <li><b>1.0.0</b> Release 2018.3 and earlier.</li>
+      </ul>
+    ]]>
+    </change-notes>
+
+    <!-- Text to display as company information on Settings | Plugin page -->
+    <vendor url="https://www.nfq.es">BBVA CIB - Nfq</vendor>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <moduleType id="ATI_MODULE_TYPE" implementationClass="com.bbva.gkxj.atiframework.moduletemplate.AtiModuleType"/>
+        <moduleBuilder builderClass="com.bbva.gkxj.atiframework.moduletemplate.AtiModuleBuilder"
+                       id="ATI_STEP"
+                       order="first"/>
+        <fileType name="ATI Scheduler File" implementationClass="com.bbva.gkxj.atiframework.filetype.scheduler.SchFileType" fieldName="INSTANCE"
+                  language="ATI Scheduler" extensions="sch"/>
+        <fileEditorProvider implementation="com.bbva.gkxj.atiframework.filetype.scheduler.editor.SchFileEditorProvider"/>
+        <annotator language="ATI Scheduler"
+                   implementationClass="com.bbva.gkxj.atiframework.filetype.scheduler.SchFileAnnotator"/>
+        <fileType name="ATI Batch File" implementationClass="com.bbva.gkxj.atiframework.filetype.batch.BatchFileType" fieldName="INSTANCE"
+                  language="ATI Batch" extensions="batch"/>
+        <fileEditorProvider implementation="com.bbva.gkxj.atiframework.filetype.batch.editor.BatchFileEditorProvider"/>
+        <projectViewPane implementation="com.bbva.gkxj.atiframework.projectview.ConfigProjectViewPane"/>
+        <fileType name="ATI Step File" implementationClass="com.bbva.gkxj.atiframework.filetype.step.StepFileType" fieldName="INSTANCE"
+                  language="ATI Step" extensions="step"/>
+        <fileEditorProvider implementation="com.bbva.gkxj.atiframework.filetype.step.editor.StepFileEditorProvider"/>
+        <projectViewPane implementation="com.bbva.gkxj.atiframework.projectview.ConfigProjectViewPane"/>
+        <fileEditorProvider implementation="com.bbva.gkxj.atiframework.filetype.component.editor.CmpFileEditorProvider"/>
+        <fileType name="Component File" implementationClass="com.bbva.gkxj.atiframework.filetype.component.CmpFileType" fieldName="INSTANCE"
+                  language="component" extensions="comp"/>
+        <fileEditorProvider implementation="com.bbva.gkxj.atiframework.filetype.workflow.editor.WfFileEditorProvider"/>
+        <fileType name="Workflow File" implementationClass="com.bbva.gkxj.atiframework.filetype.workflow.WfFileType" fieldName="INSTANCE"
+                  language="workflow" extensions="wf"/>
+
+
+        <!-- Integración con Copilot/IA para ficheros .sch -->
+        <editorNotificationProvider implementation="com.bbva.gkxj.atiframework.copilot.AtiSchedulerEditorNotification"/>
+        <intentionAction>
+            <language>JSON</language>
+            <className>com.bbva.gkxj.atiframework.copilot.AtiSchedulerIntentionAction</className>
+            <category>ATI Framework</category>
+        </intentionAction>
+
+        <!-- Servicios de Copilot Instructions empaquetados en el plugin -->
+        <applicationService serviceImplementation="com.bbva.gkxj.atiframework.copilot.AtiCopilotInstructionsProvider"/>
+        <applicationService serviceImplementation="com.bbva.gkxj.atiframework.copilot.AtiSchedulerPromptProvider"/>
+        <applicationService serviceImplementation="com.bbva.gkxj.atiframework.copilot.AtiCopilotRemoteInstructionsService"/>
+
+        <!-- Grupo contenedor en Settings → Tools → ATI Framework -->
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.bbva.gkxj.atiframework.copilot.AtiFrameworkSettingsGroup"
+                id="com.bbva.gkxj.atiframework.settings"
+                displayName="ATI Framework"/>
+
+        <!-- Panel de configuración en Settings → Tools → ATI Framework → Copilot -->
+        <applicationConfigurable
+                parentId="com.bbva.gkxj.atiframework.settings"
+                instance="com.bbva.gkxj.atiframework.copilot.AtiCopilotSettingsConfigurable"
+                id="com.bbva.gkxj.atiframework.copilot.settings"
+                displayName="Copilot"/>
+
+        <!-- Servicio de estado persistente para la configuración ATI (MongoDB) -->
+        <applicationService serviceImplementation="com.bbva.gkxj.atiframework.config.AtiConfigurationState"/>
+        <!-- Servicio de conexión a MongoDB de ATI -->
+        <applicationService serviceImplementation="com.bbva.gkxj.atiframework.config.AtiMongoService"/>
+
+        <!-- Panel de configuración en Settings → Tools → ATI Framework → ATI Configuration -->
+        <applicationConfigurable
+                parentId="com.bbva.gkxj.atiframework.settings"
+                instance="com.bbva.gkxj.atiframework.config.AtiConfigurationConfigurable"
+                id="com.bbva.gkxj.atiframework.config.settings"
+                displayName="ATI Configuration"/>
+
+        <!-- Grupo de notificaciones para ATI Framework -->
+        <notificationGroup id="ATI Framework Notifications" displayType="BALLOON"/>
+    </extensions>
+    <actions>
+        <action id="com.bbva.gkxj.atiframework.filetype.scheduler.create.CreateSchFileAction"
+                class="com.bbva.gkxj.atiframework.filetype.scheduler.create.CreateSchFileAction"
+                text="ATI Scheduler File (.sch)"
+                icon="AtiIcons.ATI_SCH_FILE_ICON"
+                description="Create a new Scheduler File (.sch)">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+
+        <!-- Grupo ATI Framework dentro de Tools -->
+        <group id="com.bbva.gkxj.atiframework.AtiFrameworkToolsGroup"
+               text="ATI Framework"
+               icon="AtiIcons.ATI_default_icon"
+               popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+
+        <!-- Acciones de ATI Copilot -->
+        <action id="com.bbva.gkxj.atiframework.copilot.ExportCopilotInstructionsAction"
+                class="com.bbva.gkxj.atiframework.copilot.ExportCopilotInstructionsAction"
+                text="Exportar Instrucciones Copilot"
+                icon="AtiIcons.COPILOT_ICON"
+                description="Exporta las instrucciones de ATI Framework para Copilot al directorio .github del proyecto">
+            <add-to-group group-id="com.bbva.gkxj.atiframework.AtiFrameworkToolsGroup" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

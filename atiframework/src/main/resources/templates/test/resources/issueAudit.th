@@ -1,0 +1,23 @@
+{
+  "_id" : "683edfaafa6741628fb14af1",
+  "stepExecutionId" : "2_Activity_0hrl3uz",
+  "auditList" : [
+    {
+      "comment" : "",
+      "auditTs" : "2025-06-03T13:42:23.483+02:00",
+      "event" : "ACTIVE"
+    }
+  ],
+  "stepCode" : "demoAtiReadCsv",
+  "issueTypeDetail" : {
+    "technicalCode" : "ETL-010"
+  },
+  "generationTs" : "2025-06-03T13:42:23.481+02:00",
+  "sourceSystem" : "schedulerClient",
+  "executionId" : "77f49b0d-ba38-4e0c-8c22-c8dfa27341db",
+  "targetField" : "amount",
+  "uuaa" : "exch",
+  "issueMessage" : "Field parsing error on reader. The field doesn't contain a well formatted LONG.",
+  "status" : "ACTIVE",
+  "_class" : "com.bbva.gkxj.apirestgen.issueaudit.model.IssueAudit"
+}

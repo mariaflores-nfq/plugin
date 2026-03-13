@@ -1,0 +1,60 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.batchconfig.BatchConfig;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.orchestatorati.apisetup.IWrapperServiceBatchConfig;
+
+/**
+ * Clase que envuelve las llamadas al API Rest de BatchConfig.
+ */
+@Service
+public class WrapperServiceBatchConfig implements IWrapperServiceBatchConfig {
+
+	/**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(WrapperServiceBatchConfig.class);
+
+    /**
+     * ApiRequest Service, para poder llamar a la librería de BatchCofig
+     */
+    private ServiceBatchconfig serviceBatchConfig;
+
+    /**
+     * Constructor por defecto en el que se inyecta el apiRequest
+     * @param serviceBatchConfig servicio Spring para poder llamar al API Rest de BatchConfig
+     */
+	public WrapperServiceBatchConfig(ServiceBatchconfig serviceBatchConfig) {
+		super();
+		this.serviceBatchConfig = serviceBatchConfig;
+	}
+
+	/**
+	 * Publishes a BatchConfig from the host to the API.
+	 *
+	 * @param config The {@link BatchConfig} to publish.
+	 * @param uuaa   UUAA identifier.
+	 * @return {@code true} if the operation succeeded, {@code false} otherwise.
+	 */
+
+	@Override
+	public Boolean publishBatchConfigFromHost(BatchConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig batchConfig =
+				new com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, batchConfig);
+			returnValue = serviceBatchConfig.publishBatchConfigFromHost(batchConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceBatchConfig] -> Error to publish BatchConfig in API rest", e.getMessage());
+		}
+
+		return returnValue;
+	}
+
+
+}

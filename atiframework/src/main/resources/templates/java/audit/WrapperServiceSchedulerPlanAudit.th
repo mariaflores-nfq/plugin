@@ -1,0 +1,94 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit ;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.SchedulerPlanPublisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.schedulerati.apiaudit.IWrapperServiceSchedulerPlanAudit;
+import com.bbva.gkxj.schedulerati.apiaudit.model.SchedulerPlanAudit;
+import com.bbva.gkxj.schedulerati.planning.SchedulerPlan;
+
+
+@Service
+public class WrapperServiceSchedulerPlanAudit implements IWrapperServiceSchedulerPlanAudit{
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(WrapperServiceSchedulerPlanAudit.class);
+
+    /**
+     * ApiRequest Service, para poder llamar a la librería de SchedulerPlanAudit
+     */
+    private ServiceSchedulerplanaudit serviceSchedulerplanaudit;
+
+	/**
+	 * ApiRequest Service, para poder llamar a la librería de SchedulerPlanAudit
+	 */
+	private SchedulerPlanPublisher schedulerPlanPublisher;
+
+	/**
+	 * Constructor por defecto en el que se inyecta el apiRequestService.
+	 *
+	 * @param serviceSchedulerplanaudit servicio de auditoría SchedulerPlan
+	 */
+	public WrapperServiceSchedulerPlanAudit(ServiceSchedulerplanaudit serviceSchedulerplanaudit, SchedulerPlanPublisher schedulerPlanPublisher) {
+		super();
+		this.serviceSchedulerplanaudit = serviceSchedulerplanaudit;
+		this.schedulerPlanPublisher = schedulerPlanPublisher;
+	}
+
+	/**
+	 * Busca todos losSchedulerPlans para la fecha de PlanDate
+	 * @return Success
+	 */
+	@Override
+	public SchedulerPlanAudit[] find(String planningDate, String uuaa) {
+		List<SchedulerPlanAudit> schedulerPlanAudits = new ArrayList<SchedulerPlanAudit>();
+		try {
+			List<com.bbva.gkxj.apirestgen.schedulerplanaudit.model.SchedulerPlanAudit>
+					schedulerPlanAuditList = Arrays.asList(serviceSchedulerplanaudit.findSchedulerPlanAudit(planningDate, uuaa));
+			DeepMirrorMapper.deepListCopy(schedulerPlanAuditList, schedulerPlanAudits, SchedulerPlanAudit.class);
+		} catch (Exception  e) {
+			LOGGER.error("[WrapperServiceSchedulerPlanAudit] -> Error to read from API rest SchedulerPlanAudit", e);
+		}
+		return schedulerPlanAudits.toArray(new SchedulerPlanAudit[schedulerPlanAudits.size()]);
+	}
+
+	/**
+	 * Guarda en base de datos de la librería el scheduler Plan correspondiente.
+	 * @param schedulerPlan objeto a guardar en la BBDD de la librería.
+	 */
+	@Override
+	public SchedulerPlanAudit save(SchedulerPlan schedulerPlan, String uuaa) {
+		SchedulerPlanAudit returnValue = new SchedulerPlanAudit();
+		try {
+			schedulerPlanPublisher.publishSchedulerPlan(schedulerPlan);
+			DeepMirrorMapper.deepCopy(schedulerPlan, returnValue);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceSchedulerPlanAudit] -> Error to save SchedulerPlanAudit in API rest", e);
+		}
+
+		return returnValue;
+	}
+
+	@Override
+	public SchedulerPlanAudit[] findHold(String planningDate, String uuaa) {
+		List<SchedulerPlanAudit> schedulerPlanAudits = new ArrayList<SchedulerPlanAudit>();
+		try {
+			List<com.bbva.gkxj.apirestgen.schedulerplanaudit.model.SchedulerPlanAudit>
+					schedulerPlanAuditList = Arrays.asList(serviceSchedulerplanaudit.findHoldSchedulerPlanAudit(planningDate, uuaa));
+			DeepMirrorMapper.deepListCopy(schedulerPlanAuditList, schedulerPlanAudits, SchedulerPlanAudit.class);
+		} catch (Exception  e) {
+			LOGGER.error("[WrapperServiceSchedulerPlanAudit] -> Error to read from API rest SchedulerPlanAudit", e);
+		}
+		return schedulerPlanAudits.toArray(new SchedulerPlanAudit[schedulerPlanAudits.size()]);
+	}
+
+}

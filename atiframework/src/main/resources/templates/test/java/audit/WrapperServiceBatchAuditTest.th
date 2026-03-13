@@ -1,0 +1,84 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].audit;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.BatchAuditPublisher;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit.ServiceBatchaudit;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit.WrapperServiceBatchAudit;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.batchaudit.model.BatchAudit;
+import com.bbva.gkxj.orchestatorati.model.BatchExecution;
+
+
+
+@SpringBootTest(classes = {WrapperServiceBatchAudit.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+@RunWith( SpringJUnit4ClassRunner.class )
+public class WrapperServiceBatchAuditTest {
+
+	@MockBean
+	private ServiceBatchaudit serviceBatchAudit;
+
+	@MockBean
+	private BatchAuditPublisher batchAuditPublisher;
+
+	@Autowired
+	@InjectMocks
+	private WrapperServiceBatchAudit wrapper;
+
+	private BatchAudit[] batchAuditList;
+	private BatchExecution batchAudit;
+
+
+	@Test
+	public void find() {
+		batchAudit = new BatchExecution();
+		BatchAudit auxBatch = new BatchAudit();
+		batchAuditList = new BatchAudit[] {auxBatch};
+
+		try {
+			when(serviceBatchAudit.findBatchAudit(anyString())).thenReturn(batchAuditList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		com.bbva.gkxj.orchestatorati.apisetup.model.BatchAudit[] bacthAuditList;
+		bacthAuditList = wrapper.find("Test");
+
+		assertEquals(bacthAuditList[0].getSchedulerId(), batchAuditList[0].getSchedulerId());
+
+	}
+
+	@Test
+	public void save() {
+		batchAudit = new BatchExecution();
+		BatchAudit auxBatch = new BatchAudit();
+		batchAuditList = new BatchAudit[] {auxBatch};
+		try {
+			when(serviceBatchAudit.saveBatchAudit(any(BatchAudit.class), anyString())).thenReturn(batchAuditList[0]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		com.bbva.gkxj.orchestatorati.apisetup.model.BatchAudit batchAuditResult;
+		batchAuditResult = wrapper.save(batchAudit, "test");
+
+		assertEquals(batchAuditResult.get_id(), batchAuditList[0].get_id());
+
+	}
+}

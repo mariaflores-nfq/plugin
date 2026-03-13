@@ -1,0 +1,47 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].callback;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback.BatchResponseImpl;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.atilibrary.interfaces.batchcallback.BatchCallbackPayload;
+import com.bbva.gkxj.schedulerati.planning.AtiScheduler;
+
+
+@SpringBootTest(classes = {BatchResponseImpl.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+@RunWith( SpringJUnit4ClassRunner.class )
+public class BatchResponseImplTest {
+
+	@MockBean
+	private AtiScheduler atiScheduler;
+
+	@Autowired
+	@InjectMocks
+	private BatchResponseImpl batchResponseImpl;
+
+	private BatchCallbackPayload payload;
+
+	@Test
+	public void test() {
+		payload = new BatchCallbackPayload();
+		batchResponseImpl.batchCompleted(payload);
+    	verify(atiScheduler, times(1)).batchCompleted(any(BatchCallbackPayload.class));
+	}
+
+}

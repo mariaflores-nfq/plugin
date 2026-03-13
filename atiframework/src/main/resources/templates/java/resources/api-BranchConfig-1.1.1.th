@@ -1,0 +1,1044 @@
+---
+swagger: "2.0"
+info:
+  description: "Branch Configuration RESTful service"
+  version: "1.1.1"
+  title: "BranchConfig"
+  contact:
+    name: "Utilidad para la Ingesta Transformacion y Exportacion de Datos"
+    url: "https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220"
+    email: "alberto.pina@bbva.com"
+host: "www.bbvaapis.com"
+basePath: "/gkxj/branchconfig/1.1.1/branchConfig"
+schemes:
+- "http"
+- "https"
+produces:
+- "application/json"
+paths:
+  /branch/{uuaa}:
+    get:
+      summary: "Get branch configuration"
+      description: "get a branch by Id from the db for a UUAA"
+      operationId: "findBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "query"
+        description: "Unique identifier of the branch to query."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Branch configuration"
+          schema:
+            $ref: "#/definitions/BranchConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Branch not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/find/{uuaa}:
+    post:
+      summary: "Get paginated branch configurations"
+      description: "Get paginated branch configurations"
+      operationId: "findBranchConfigsPaginated"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branches to query."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Information necessary to perform filters and execute a paginated query of the branches."
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "List of paginated branch configurations"
+          schema:
+            $ref: "#/definitions/PageBranchConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/create/{uuaa}/{id}/{userId}:
+    post:
+      summary: "Create a new branch"
+      description: "Create a new branch"
+      operationId: "createBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Identifier of the branch from which the new branch will be created."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User code performing the action."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        required: true
+        schema:
+          $ref: "#/definitions/BranchConfig"
+      responses:
+        "200":
+          description: "Configuration of the new branch"
+          schema:
+            $ref: "#/definitions/BranchConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "409":
+          description: "Conflict creating the branch"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/compare/{uuaa}/{id}:
+    get:
+      summary: "Compare the current commit with the new changes in the branch"
+      description: "Compare the current commit with the new changes in the branch"
+      operationId: "compareBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Identifier of the branch from which the comparison will be made with respect to the last commit."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Conflicts between the current commit and the new changes"
+          schema:
+            $ref: "#/definitions/CommitConflicts"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Branch not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/commit/{uuaa}/{id}/{userId}/{commitCode}:
+    post:
+      summary: "Perform a commit on a branch"
+      description: "Perform a commit on a branch"
+      operationId: "commitBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Identifier of the branch from which the commit will be made."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User code performing the action."
+        required: true
+        type: "string"
+      - name: "commitCode"
+        in: "path"
+        description: "Code of the commit to be saved in the database."
+        required: true
+        type: "string"
+      - name: "comments"
+        in: "query"
+        description: "Comments associated with the commit."
+        required: false
+        type: "string"
+      - in: "body"
+        name: "commitConflicts"
+        required: true
+        schema:
+          $ref: "#/definitions/CommitConflicts"
+      responses:
+        "200":
+          description: "Updated configuration of the branch"
+          schema:
+            $ref: "#/definitions/BranchConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Branch not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/preparemerge/{uuaa}/{sourceId}/{targetId}:
+    get:
+      summary: "Prepare a merge between branches"
+      description: "Prepare a merge between branches"
+      operationId: "prepareMergeBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "sourceId"
+        in: "path"
+        description: "Identifier of the source branch from which the commit will be made."
+        required: true
+        type: "string"
+      - name: "targetId"
+        in: "path"
+        description: "Identifier of the target branch where the new commit will be made."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Conflicts between the source and target branches"
+          schema:
+            $ref: "#/definitions/CommitConflicts"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Branch not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/merge/{uuaa}/{sourceId}/{targetId}/{userId}:
+    post:
+      summary: "Perform a merge between branches"
+      description: "Perform a merge between branches"
+      operationId: "mergeBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "sourceId"
+        in: "path"
+        description: "Identifier of the source branch from which the commit will be made."
+        required: true
+        type: "string"
+      - name: "targetId"
+        in: "path"
+        description: "Identifier of the target branch where the new commit will be made."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User code performing the commit, for auditing purposes."
+        required: true
+        type: "string"
+      - name: "comments"
+        in: "query"
+        description: "Comments associated with the commit."
+        required: false
+        type: "string"
+      - in: "body"
+        name: "commitConflict"
+        description: "Details of the existing conflicts between the commits and how they have been resolved."
+        required: true
+        schema:
+          $ref: "#/definitions/CommitConflicts"
+      responses:
+        "200":
+          description: "Updated configuration of the target branch"
+          schema:
+            $ref: "#/definitions/BranchConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Branch not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "409":
+          description: "Conflict performing the merge"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/save/{uuaa}:
+    post:
+      summary: "Save a branch in the database"
+      description: "Save a branch in the database"
+      operationId: "saveBranchConfigFromHost"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the configuration."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Configuration of the Branch to be created in the database."
+        required: true
+        schema:
+          $ref: "#/definitions/BranchConfig"
+      responses:
+        "200":
+          description: "Indicator of whether the save action was performed in the database"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "409":
+          description: "Conflict saving the branch"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /branch/delete/{uuaa}/{id}:
+    post:
+      summary: "Delete a branch"
+      description: "Delete a branch"
+      operationId: "deleteBranchConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch to be deleted."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Unique identifier of the branch to be deleted."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Indicator of whether the delete action was performed"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Branch not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /commit/{uuaa}/:
+    get:
+      summary: "Get commit configuration"
+      description: "Get commit configuration"
+      operationId: "findCommitConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "query"
+        description: "Unique identifier of the commit to query."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Commit configuration"
+          schema:
+            $ref: "#/definitions/CommitConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Commit not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /commit/find/{uuaa}:
+    post:
+      summary: "Get paginated commit configurations"
+      description: "Get paginated commit configurations"
+      operationId: "findCommitConfigsPaginated"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branches to query."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Object with the details of the comparison of the involved Commits. It is possible to compare a branch (last commit) with any other Commit (directly a commit or the one from another branch or a tag)."
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "List of paginated commit configurations"
+          schema:
+            $ref: "#/definitions/PageCommitConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /commit/diffbranches/{uuaa}:
+    post:
+      summary: "Compare two branches and return the commits differences"
+      description: "Compare two branches and return the commits differences"
+      operationId: "diffCommitBranches"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the commits to query."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "compareConfig"
+        description: "Object with the details of the comparison of the involved Commits. It is possible to compare a branch (last commit) with any other Commit (directly a commit or the one from another branch or a tag)."
+        required: true
+        schema:
+          $ref: "#/definitions/CompareConfig"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CommitConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Commit not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /commit/compare/{uuaa}:
+    post:
+      summary: "Compare two commits"
+      description: "Compare two commits"
+      operationId: "compareCommitConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "compareConfig"
+        description: "Object with the details of the comparison of the involved Commits. It is possible to compare a branch (last commit) with any other Commit (directly a commit or the one from another branch or a tag)."
+        required: true
+        schema:
+          $ref: "#/definitions/CompareConfig"
+      responses:
+        "200":
+          description: "Conflicts between the involved commits"
+          schema:
+            $ref: "#/definitions/CommitConflicts"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Commit not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /commit/save/{uuaa}:
+    post:
+      summary: "Save a commit in the database"
+      description: "Save a commit in the database"
+      operationId: "saveCommitConfigFromHost"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the configuration."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Configuration of the commit to be created in the database."
+        required: true
+        schema:
+          $ref: "#/definitions/CommitConfig"
+      responses:
+        "200":
+          description: "Indicator of whether the save action was performed in the database"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "409":
+          description: "Conflict saving the commit"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /tag/{uuaa}:
+    get:
+      summary: "Get tag configuration"
+      description: "Get tag configuration"
+      operationId: "findTagConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the tag."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "query"
+        description: "Unique identifier of the tag to query."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Tag configuration"
+          schema:
+            $ref: "#/definitions/TagConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Tag not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /tag/find/{uuaa}:
+    post:
+      summary: "Get paginated tag configurations"
+      description: "Get paginated tag configurations"
+      operationId: "findTagConfigsPaginated"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the tags to query."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Configuration of the tag to be created in the database."
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "List of paginated tag configurations"
+          schema:
+            $ref: "#/definitions/PageTagConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /tag/create/{uuaa}/{id}/{userId}:
+    post:
+      summary: "Create a new tag"
+      description: "Create a new tag"
+      operationId: "createTagConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the branch or the tag."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Identifier of the branch from which the new tag will be created."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User code performing the action."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Information about the new Tag to be created."
+        required: true
+        schema:
+          $ref: "#/definitions/TagConfig"
+      responses:
+        "200":
+          description: "Configuration of the new tag"
+          schema:
+            $ref: "#/definitions/TagConfig"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "409":
+          description: "Conflict creating the tag"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /tag/delete/{uuaa}/{id}:
+    post:
+      summary: "Delete a tag"
+      description: "Delete a tag"
+      operationId: "deleteTagConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the tag to be deleted."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Unique identifier of the tag to be deleted."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Indicator of whether the delete action was performed"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Tag not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /tag/save/{uuaa}:
+    post:
+      summary: "Save a tag in the database"
+      description: "Save a tag in the database"
+      operationId: "saveTagConfigFromHost"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the configuration."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "config"
+        description: "Configuration of the tag to be created in the database."
+        required: true
+        schema:
+          $ref: "#/definitions/TagConfig"
+      responses:
+        "200":
+          description: "Indicator of whether the save action was performed in the database"
+          schema:
+            type: "boolean"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "409":
+          description: "Conflict saving the tag"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+  /tag/release/{uuaa}/{id}:
+    get:
+      summary: "Get tag release information"
+      description: "Get tag release information"
+      operationId: "releaseTagConfig"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA associated with the tag."
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Unique identifier of the tag to be download."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Tag configuration"
+          schema:
+            $ref: "#/definitions/TagRelease"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+        "404":
+          description: "Tag not found"
+          schema:
+            $ref: "#/definitions/ConfigServiceError"
+definitions:
+  BranchConfig:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        description: "Unique identifier of the Branch, will be searched in the database by this id."
+      uuaa:
+        type: "string"
+        description: "Uuaa associated with the configurations."
+      description:
+        type: "string"
+        description: "Unique identifier of the Branch."
+      branchCode:
+        type: "string"
+        description: "Name associated with the branch."
+      lastCommitTs:
+        type: "string"
+        format: "date-time"
+        description: "Date of the last commit of the Branch."
+      commit:
+        description: "Information of the last Commit of the branch."
+        $ref: "#/definitions/CommitConfig"
+      userId:
+        type: "string"
+        description: "Identifier of the user who made the last commit."
+  PaginationInfo:
+    type: "object"
+    required:
+    - "limit"
+    - "page"
+    properties:
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      branchCode:
+        type: "string"
+      code:
+        type: "string"
+      userId:
+        type: "string"
+      description:
+        type: "string"
+      dateFrom:
+        type: "string"
+      dateTo:
+        type: "string"
+      sortOrder:
+        type: "string"
+        description: "ASC - DESC"
+      sortBy:
+        type: "string"
+        description: "field name"
+    description: "Request to find Planconfig with Pagination"
+  PageBranchConfig:
+    type: "object"
+    properties:
+      total:
+        type: "integer"
+        description: "Total number of records to retrieve."
+      page:
+        type: "integer"
+        description: "Current page of the query."
+      limit:
+        type: "integer"
+        description: "Maximum number to return in this query."
+      hasPrevious:
+        type: "boolean"
+        description: "Indicates if there are previous elements on a previous page."
+      hasNext:
+        type: "boolean"
+        description: "Indicates if there are subsequent elements on a next page."
+      result:
+        type: "array"
+        description: "List with the result of the current page."
+        items:
+          $ref: "#/definitions/BranchConfig"
+  CommitConfig:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        description: "Unique identifier of the Branch, will be searched in the database by this id."
+      uuaa:
+        type: "string"
+        description: "Uuaa associated with the configurations."
+      comments:
+        type: "string"
+        description: "Description of the commit."
+      commitCode:
+        type: "string"
+        description: "Title of commit."
+      branchCode:
+        type: "string"
+        description: "Code of the branch to which the commit belongs."
+      commitTs:
+        type: "string"
+        format: "date-time"
+        description: "Creation date of the commit."
+      userId:
+        type: "string"
+        description: "Identifier of the user who made the last commit."
+      parentList:
+        type: "array"
+        description: "List with the commits from which this commit was created."
+        items:
+          type: "string"
+      schedulerList:
+        type: "array"
+        description: "List with the codes and IDs of the scheduler configurations."
+        items:
+          $ref: "#/definitions/CodeConfig"
+      batchList:
+        type: "array"
+        description: "List with the codes and IDs of the batch configurations."
+        items:
+          $ref: "#/definitions/CodeConfig"
+      stepList:
+        type: "array"
+        description: "List with the codes and IDs of the step configurations."
+        items:
+          $ref: "#/definitions/CodeConfig"
+      calendarList:
+        type: "array"
+        description: "List with the codes and IDs of the calendar configurations."
+        items:
+          $ref: "#/definitions/CodeConfig"
+  PageCommitConfig:
+    type: "object"
+    properties:
+      total:
+        type: "integer"
+        description: "Total number of records to retrieve."
+      page:
+        type: "integer"
+        description: "Current page of the query."
+      limit:
+        type: "integer"
+        description: "Maximum number to return in this query."
+      hasPrevious:
+        type: "boolean"
+        description: "Indicates if there are previous elements on a previous page."
+      hasNext:
+        type: "boolean"
+        description: "Indicates if there are subsequent elements on a next page."
+      result:
+        type: "array"
+        description: "List with the result of the current page."
+        items:
+          $ref: "#/definitions/CommitConfig"
+  TagConfig:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        description: "Unique identifier of the Branch, will be searched in the database by this id."
+      uuaa:
+        type: "string"
+        description: "Uuaa associated with the configurations."
+      comments:
+        type: "string"
+        description: "Comments of the Tag."
+      tagCode:
+        type: "string"
+        description: "Name associated with the tag."
+      creationTs:
+        type: "string"
+        format: "date-time"
+        description: "Creation date of the tag."
+      commit:
+        description: "Information of the Commit of the tag."
+        $ref: "#/definitions/CommitConfig"
+      userId:
+        type: "string"
+        description: "Identifier of the user who created the tag."
+  PageTagConfig:
+    type: "object"
+    properties:
+      total:
+        type: "integer"
+        description: "Total number of records to retrieve."
+      page:
+        type: "integer"
+        description: "Current page of the query."
+      limit:
+        type: "integer"
+        description: "Maximum number to return in this query."
+      hasPrevious:
+        type: "boolean"
+        description: "Indicates if there are previous elements on a previous page."
+      hasNext:
+        type: "boolean"
+        description: "Indicates if there are subsequent elements on a next page."
+      result:
+        type: "array"
+        description: "List with the result of the current page."
+        items:
+          $ref: "#/definitions/TagConfig"
+  CodeConfig:
+    type: "object"
+    properties:
+      stepCode:
+        type: "string"
+        description: "Code of the Step configuration."
+      batchCode:
+        type: "string"
+        description: "Code of the Batch configuration."
+      planCode:
+        type: "string"
+        description: "Code of the Plan configuration."
+      calendarCode:
+        type: "string"
+        description: "Code of the Calendar configuration."
+      version:
+        type: "string"
+        description: "Version of the configuration."
+      userId:
+        type: "string"
+        description: "User Id who did the last modification in the configuration."
+      _id:
+        type: "string"
+        description: "Unique identifier of the associated configuration."
+  CommitConflicts:
+    type: "object"
+    properties:
+      commitBase:
+        type: "string"
+        description: "Unique identifier of the Branch, will be searched in the database by this id."
+      sourceCommitId:
+        type: "string"
+        description: "Identifier of the source commit."
+      targetCommitId:
+        type: "string"
+        description: "Identifier of the target commit."
+      uuaa:
+        type: "string"
+        description: "Uuaa associated with the configurations."
+      schedulerList:
+        type: "array"
+        description: "List with the conflicts at the scheduler level."
+        items:
+          $ref: "#/definitions/Conflict"
+      batchList:
+        type: "array"
+        description: "List with the conflicts at the batch level."
+        items:
+          $ref: "#/definitions/Conflict"
+      stepList:
+        type: "array"
+        description: "List with the conflicts at the step level."
+        items:
+          $ref: "#/definitions/Conflict"
+      calendarList:
+        type: "array"
+        description: "List with the conflicts at the step level."
+        items:
+          $ref: "#/definitions/Conflict"
+  Conflict:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Code of the configuration."
+      version:
+        type: "string"
+        description: "Version of the configuration."
+      userId:
+        type: "string"
+        description: "User id who modify last version of the configuration."
+      sourceId:
+        type: "string"
+        description: "Unique identifier of the source configuration."
+      targetId:
+        type: "string"
+        description: "Unique identifier of the target configuration."
+      type:
+        type: "string"
+        description: "Type of conflict (OK, NEW, MODIF, DELETE, CONFLICT)."
+      resolveId:
+        type: "string"
+        description: "Identifier that will resolve the conflict in case of conflict."
+  CompareConfig:
+    type: "object"
+    required:
+    - "sourceId"
+    - "sourceType"
+    - "targetId"
+    - "targetType"
+    properties:
+      sourceId:
+        type: "string"
+        description: "Identifier of the source commit."
+      sourceType:
+        type: "string"
+        description: "Type of the source commit (branch, commit, tag)."
+      targetId:
+        type: "string"
+        description: "Identifier of the target commit."
+      targetType:
+        type: "string"
+        description: "Type of the target commit (branch, commit, tag)."
+  TagRelease:
+    type: "object"
+    properties:
+      tagConfig:
+        description: "Information of the Commit of the tag."
+        $ref: "#/definitions/Tag"
+      branchConfig:
+        description: "Information of the Commit of the tag."
+        $ref: "#/definitions/Branch"
+      commitConfig:
+        description: "Information of the Commit of the tag."
+        $ref: "#/definitions/CommitConfig"
+  Tag:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        description: "Unique identifier of the Branch, will be searched in the database by this id."
+      uuaa:
+        type: "string"
+        description: "Uuaa associated with the configurations."
+      comments:
+        type: "string"
+        description: "Comments of the Tag."
+      tagCode:
+        type: "string"
+        description: "Name associated with the tag."
+      creationTs:
+        type: "string"
+        format: "date-time"
+        description: "Creation date of the tag."
+      commitId:
+        type: "string"
+        description: "Information of the Commit of the tag."
+      userId:
+        type: "string"
+        description: "Identifier of the user who created the tag."
+  Branch:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        description: "Unique identifier of the Branch, will be searched in the database by this id."
+      uuaa:
+        type: "string"
+        description: "Uuaa associated with the configurations."
+      description:
+        type: "string"
+        description: "Comments of the Branch."
+      branchId:
+        type: "string"
+        description: "Id associated with the branch."
+      branchCode:
+        type: "string"
+        description: "Name associated with the branch."
+      lastCommitTs:
+        type: "string"
+        format: "date-time"
+        description: "Last commit date of the branch."
+      commitId:
+        type: "string"
+        description: "Information of the Commit of the tag."
+      userId:
+        type: "string"
+        description: "Identifier of the user who created the tag."
+  ConfigServiceError:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+    description: "Error messages"
+x-generator-properties:
+  business-unit: "gkxj"

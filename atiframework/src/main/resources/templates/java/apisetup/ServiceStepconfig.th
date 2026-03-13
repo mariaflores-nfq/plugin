@@ -1,0 +1,223 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 16:22:52 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+import com.bbva.gkxj.apirestgen.stepconfig.model.PaginationInfo ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.StepConfig ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.PageStepConfig ;
+import com.bbva.gkxj.apirestgen.stepconfig.client.jaxrs.rest.IRestHandlerStepconfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.SaveStepConfigException400 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.SaveStepConfigException500 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.FindStepConfigsException400 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.FindStepConfigsException500 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.DeleteStepConfigException400 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.DeleteStepConfigException500 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.FindStepConfigsPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.FindStepConfigsPaginatedException500 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.FindStepConfigByVersionException400 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.FindStepConfigByVersionException500 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.PublishStepConfigFromHostException400 ;
+import com.bbva.gkxj.apirestgen.stepconfig.model.exception.PublishStepConfigFromHostException500 ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class ServiceStepconfig
+{
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceStepconfig.class);
+
+    /**
+     * NovaMetadata inserted for sending to the client.
+     */
+    private final NovaMetadata novaMetadata;
+
+    /**
+     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     */
+    private final NovaRequestConfig novaRequestConfig;
+
+    /**
+     * Attribute - Rest Handler
+     */
+    private IRestHandlerStepconfig restHandlerStepconfig;
+
+    /**
+     * Dependency injection constructor
+     *
+     * @param novaMetadata with the metadata
+     * @param novaRequestConfig with the request config
+     * @param restHandlerStepconfig with the rest handler
+     */
+    public ServiceStepconfig(final @Qualifier("Stepconfig.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Stepconfig.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerStepconfig restHandlerStepconfig)
+    {
+        this.novaMetadata = novaMetadata;
+        this.novaRequestConfig = novaRequestConfig;
+        this.restHandlerStepconfig = restHandlerStepconfig;
+    }
+
+	/**
+     * @param config Step Configuration to save in the DDBB
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the step
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws SaveStepConfigException400 with an occurred exception
+     * @throws SaveStepConfigException500 with an occurred exception
+	 */
+	public StepConfig saveStepConfig(final StepConfig config, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveStepConfigException400,  SaveStepConfigException500
+	{
+		LOG.debug("[ServiceStepconfig] -> [saveStepConfig]");
+
+        LOG.debug("[ServiceStepconfig] -> [saveStepConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerStepconfig.saveStepConfig(this.novaRequestConfig, this.novaMetadata, config, branchId, uuaa);
+	}
+
+
+	/**
+     * @param branchId Branch code where the user is working.
+     * @param stepCode StepCode associated to the step
+     * @param uuaa UUAA code associated to the steps
+     * @param version Version associated to the step
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindStepConfigByVersionException400 with an occurred exception
+     * @throws FindStepConfigByVersionException500 with an occurred exception
+	 */
+	public StepConfig[] findStepConfigByVersion(final String branchId, final String stepCode, final String uuaa, final String version) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindStepConfigByVersionException400,  FindStepConfigByVersionException500
+	{
+		LOG.debug("[ServiceStepconfig] -> [findStepConfigByVersion]");
+
+        LOG.debug("[ServiceStepconfig] -> [findStepConfigByVersion]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerStepconfig.findStepConfigByVersion(this.novaRequestConfig, this.novaMetadata, branchId, stepCode, uuaa, version);
+	}
+
+
+	/**
+     * @param config Step Configuration to save in the DDBB
+     * @param uuaa UUAA code associated to the step
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws PublishStepConfigFromHostException400 with an occurred exception
+     * @throws PublishStepConfigFromHostException500 with an occurred exception
+	 */
+	public Boolean publishStepConfigFromHost(final StepConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  PublishStepConfigFromHostException400,  PublishStepConfigFromHostException500
+	{
+		LOG.debug("[ServiceStepconfig] -> [publishStepConfigFromHost]");
+
+        LOG.debug("[ServiceStepconfig] -> [publishStepConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerStepconfig.publishStepConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the steps
+     * @param stepId Step identifier associated to the step
+     * @param commitId Commit identifier associated to the step
+     * @param status Get a config from a status
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindStepConfigsException400 with an occurred exception
+     * @throws FindStepConfigsException500 with an occurred exception
+	 */
+	public StepConfig[] findStepConfigs(final String branchId, final String uuaa, final String stepId, final String commitId, final String[] status) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindStepConfigsException400,  FindStepConfigsException500
+	{
+		LOG.debug("[ServiceStepconfig] -> [findStepConfigs]");
+
+        LOG.debug("[ServiceStepconfig] -> [findStepConfigs]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerStepconfig.findStepConfigs(this.novaRequestConfig, this.novaMetadata, branchId, uuaa, stepId, commitId, status);
+	}
+
+
+	/**
+     * @param paginationInfo Pagination information to find in the DB
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the steps
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindStepConfigsPaginatedException400 with an occurred exception
+     * @throws FindStepConfigsPaginatedException500 with an occurred exception
+	 */
+	public PageStepConfig findStepConfigsPaginated(final PaginationInfo paginationInfo, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindStepConfigsPaginatedException400,  FindStepConfigsPaginatedException500
+	{
+		LOG.debug("[ServiceStepconfig] -> [findStepConfigsPaginated]");
+
+        LOG.debug("[ServiceStepconfig] -> [findStepConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerStepconfig.findStepConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, branchId, uuaa);
+	}
+
+
+	/**
+     * @param branchId Branch code where the user is working.
+     * @param id Step Id in Db
+     * @param uuaa UUAA code associated to the step
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws DeleteStepConfigException400 with an occurred exception
+     * @throws DeleteStepConfigException500 with an occurred exception
+	 */
+	public Boolean deleteStepConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteStepConfigException400,  DeleteStepConfigException500
+	{
+		LOG.debug("[ServiceStepconfig] -> [deleteStepConfig]");
+
+        LOG.debug("[ServiceStepconfig] -> [deleteStepConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerStepconfig.deleteStepConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+	}
+
+
+}

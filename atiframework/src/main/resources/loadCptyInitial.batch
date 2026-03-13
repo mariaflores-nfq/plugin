@@ -1,0 +1,268 @@
+{
+    "_id" : ObjectId("6926fa6852effd509a88c24c"),
+    "batchCode" : "loadCptyInitial",
+    "description" : "Batch de carga de contrapartidas inicial.",
+    "version" : "V1.1.3",
+    "paramAuditList" : [
+        {
+            "audTs" : "2025-11-26T14:02:32.038+01:00",
+            "comments" : "",
+            "audUser" : "",
+            "status" : "NOT_PUBLISHED"
+        }
+    ],
+    "recordVersion" : 1,
+    "workflowNodeList" : [
+        {
+            "xPosition" : -370,
+            "stepCode" : "",
+            "batchCode" : "",
+            "yPosition" : 110,
+            "workflowNodeCode" : "StartEvent_1",
+            "isCritical" : false,
+            "type" : "INITIAL",
+            "joinWorkflowNodeList" : [],
+            "wfnParameterList" : [],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_0b37z5v",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : 1290,
+            "yPosition" : 110,
+            "workflowNodeCode" : "Event_1bxwkao",
+            "isCritical" : false,
+            "type" : "FINAL",
+            "joinWorkflowNodeList" : [
+                "Activity_0hq2x0q"
+            ]
+        },
+        {
+            "xPosition" : 370,
+            "stepCode" : "loadCptyInitial",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_0z6lez3",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "Activity_065je73"
+            ],
+            "wfnParameterList" : [
+                {
+                    "batchParamName" : "sourceFileCpty",
+                    "name" : "fileName"
+                },
+                {
+                    "batchParamName" : "brokerSource",
+                    "name" : "brokerSourceId",
+                    "fixedValue" : ""
+                },
+                {
+                    "name" : "initTs",
+                    "scriptValue" : "var Date = Java.type('java.util.Date');\nvar TimeZone = Java.type('java.util.TimeZone'); \nvar SimpleDateFormat = Java.type('java.text.SimpleDateFormat'); \nvar currentTime = new Date();\nvar sdf = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss.SSS\");\nsdf.setTimeZone(TimeZone.getTimeZone(\"UTC\"));\nreturnValue = sdf.format(currentTime);"
+                },
+                {
+                    "name" : "sentTs",
+                    "scriptValue" : "var Date = Java.type('java.util.Date');\nvar TimeZone = Java.type('java.util.TimeZone'); \nvar SimpleDateFormat = Java.type('java.text.SimpleDateFormat'); \nvar currentTime = new Date();\nvar sdf = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss.SSS\");\nsdf.setTimeZone(TimeZone.getTimeZone(\"UTC\"));\nreturnValue = sdf.format(currentTime);"
+                },
+                {
+                    "name" : "_class",
+                    "fixedValue" : "com.bbva.n2tr.asyncapi.broker.OriginalMessageSubscriber.model.OriginalMessagePayload"
+                },
+                {
+                    "batchParamName" : "auditTime",
+                    "name" : "auditTime"
+                },
+                {
+                    "batchParamName" : "processDate",
+                    "name" : "processDate"
+                },
+                {
+                    "name" : "source",
+                    "fixedValue" : "BATCH.MESSAGE"
+                },
+                {
+                    "name" : "historificationPath",
+                    "fixedValue" : "/N2TR/historification/"
+                }
+            ],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_0hes5es",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : 580,
+            "stepCode" : "updateCptyStatus",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_0hes5es",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "Activity_0z6lez3"
+            ],
+            "wfnParameterList" : [],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_02i8419",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : 720,
+            "stepCode" : "deleteCptyLoad",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_02i8419",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "Activity_0hes5es"
+            ],
+            "wfnParameterList" : [],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_0hq2x0q",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : -30,
+            "stepCode" : "deleteFileFlags",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_1idgfy9",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "Activity_0b37z5v"
+            ],
+            "wfnParameterList" : [
+                {
+                    "name" : "incomingPath",
+                    "fixedValue" : "/N2TR/incoming/"
+                },
+                {
+                    "batchParamName" : "sourceSystemFlag",
+                    "name" : "flagMask",
+                    "fixedValue" : ""
+                }
+            ],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_065je73",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : -250,
+            "stepCode" : "updateBatchFlag",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_0b37z5v",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "StartEvent_1"
+            ],
+            "wfnParameterList" : [
+                {
+                    "name" : "boolean",
+                    "fixedValue" : "false"
+                },
+                {
+                    "name" : "flagMask",
+                    "fixedValue" : "soporteCPTYN2TRFlag"
+                }
+            ],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_1idgfy9",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : 190,
+            "stepCode" : "deleteCpty",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_065je73",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "Activity_1idgfy9"
+            ],
+            "wfnParameterList" : [],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Activity_0z6lez3",
+                    "scriptCondition" : ""
+                }
+            ]
+        },
+        {
+            "xPosition" : 940,
+            "stepCode" : "updatePyme",
+            "yPosition" : 110,
+            "workflowNodeCode" : "Activity_0hq2x0q",
+            "isCritical" : false,
+            "type" : "ETL",
+            "joinWorkflowNodeList" : [
+                "Activity_02i8419"
+            ],
+            "wfnParameterList" : [],
+            "nextWorkflowNodeList" : [
+                {
+                    "workflowNodeCode" : "Event_1bxwkao",
+                    "scriptCondition" : ""
+                }
+            ]
+        }
+    ],
+    "uuaa" : "n2tr",
+    "parameterList" : [
+        {
+            "ioType" : "PARAM_IN",
+            "name" : "sourceFileCpty",
+            "schedulerParamName" : "sourceFileCpty",
+            "type" : "STRING",
+            "isMandatory" : false
+        },
+        {
+            "ioType" : "PARAM_IN",
+            "name" : "processDate",
+            "schedulerParamName" : "processDate",
+            "type" : "STRING",
+            "isMandatory" : false
+        },
+        {
+            "ioType" : "PARAM_IN",
+            "name" : "auditTime",
+            "schedulerParamName" : "auditTime",
+            "type" : "STRING",
+            "isMandatory" : false
+        },
+        {
+            "ioType" : "PARAM_IN",
+            "name" : "brokerSource",
+            "schedulerParamName" : "brokerSource",
+            "type" : "STRING",
+            "isMandatory" : false
+        },
+        {
+            "ioType" : "PARAM_IN",
+            "name" : "sourceSystemFlag",
+            "schedulerParamName" : "sourceSystemFlag",
+            "type" : "STRING",
+            "isMandatory" : false
+        }
+    ],
+    "batchType" : "SPRING_BATCH",
+    "status" : "PUBLISHED",
+    "_class" : "com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig"
+}

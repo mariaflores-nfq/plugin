@@ -1,0 +1,102 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].audit;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit.ServiceSchedulerplanaudit;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.client.jaxrs.rest.IRestHandlerSchedulerplanaudit;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.PageSchedulerPlanAudit;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.PaginationInfo;
+import com.bbva.gkxj.apirestgen.schedulerplanaudit.model.SchedulerPlanAudit;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@SpringBootTest(classes = {ServiceSchedulerplanaudit.class})
+@RunWith(MockitoJUnitRunner.class)
+public class ServiceSchedulerplanauditTest {
+
+    @Mock
+    private NovaMetadata novaMetadata; // Mock de NovaMetadata
+
+    @Mock
+    private NovaRequestConfig novaRequestConfig; // Mock de NovaRequestConfig
+
+    @Mock
+    private IRestHandlerSchedulerplanaudit restHandlerSchedulerplanaudit; // Mock de IRestHandlerSchedulerplanaudit
+
+    @InjectMocks
+    private ServiceSchedulerplanaudit serviceSchedulerplanaudit; // Clase a probar
+
+    @Before
+    public void setUp() {
+        // Inicializa cualquier configuración necesaria antes de cada prueba
+    }
+
+    @Test
+    public void testServiceSchedulerplanauditInitialization() {
+        assertNotNull("ServiceSchedulerplanaudit should not be null", serviceSchedulerplanaudit);
+    }
+
+    @Test
+    public void testFindSchedulerPlanAuditPaginated() throws Exception {
+        PaginationInfo paginationInfo = new PaginationInfo();
+        String uuaa = "testUuaa";
+        PageSchedulerPlanAudit expectedPage = new PageSchedulerPlanAudit();
+
+        // Simulamos el comportamiento del mock
+        when(restHandlerSchedulerplanaudit.findSchedulerPlanAuditPaginated(any(NovaRequestConfig.class), any(NovaMetadata.class), any(PaginationInfo.class), anyString())).thenReturn(expectedPage);
+
+        // Llamamos al método a probar
+        PageSchedulerPlanAudit result = serviceSchedulerplanaudit.findSchedulerPlanAuditPaginated(paginationInfo, uuaa);
+
+        // Verificamos el resultado
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedPage, result);
+    }
+
+    @Test
+    public void testFindOneSchedulerPlanAudit() throws Exception {
+        String uuaa = "testUuaa";
+        String id = "testId";
+        SchedulerPlanAudit expectedAudit = new SchedulerPlanAudit();
+
+        // Simulamos el comportamiento del mock
+        when(restHandlerSchedulerplanaudit.findOneSchedulerPlanAudit(any(NovaRequestConfig.class), any(NovaMetadata.class), anyString(), anyString())).thenReturn(expectedAudit);
+
+        // Llamamos al método a probar
+        SchedulerPlanAudit result = serviceSchedulerplanaudit.findOneSchedulerPlanAudit(uuaa, id);
+
+        // Verificamos el resultado
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedAudit, result);
+    }
+
+    @Test
+    public void testSaveSchedulerPlanAudit() throws Exception {
+        SchedulerPlanAudit schedulerPlan = new SchedulerPlanAudit();
+        String uuaa = "testUuaa";
+        SchedulerPlanAudit expectedAudit = new SchedulerPlanAudit();
+
+        // Simulamos el comportamiento del mock
+        when(restHandlerSchedulerplanaudit.saveSchedulerPlanAudit(any(NovaRequestConfig.class), any(NovaMetadata.class), any(SchedulerPlanAudit.class), anyString())).thenReturn(expectedAudit);
+
+        // Llamamos al método a probar
+        SchedulerPlanAudit result = serviceSchedulerplanaudit.saveSchedulerPlanAudit(schedulerPlan, uuaa);
+
+        // Verificamos el resultado
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedAudit, result);
+    }
+
+}

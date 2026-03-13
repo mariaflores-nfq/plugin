@@ -1,0 +1,71 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceStepconfig;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.WrapperServiceStepConfig;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.stepconfig.model.PageStepConfig;
+import com.bbva.gkxj.apirestgen.stepconfig.model.StepConfig;
+
+
+@SpringBootTest(classes = {WrapperServiceStepConfig.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+@RunWith( SpringJUnit4ClassRunner.class )
+class WrapperServiceStepConfigTest {
+	@MockBean
+	private ServiceStepconfig serviceStepConfig;
+
+	@Autowired
+	@InjectMocks
+	private WrapperServiceStepConfig wrapperServiceStepConfig;
+
+	private StepConfig[] stepConfigs;
+	private StepConfig stepConfig;
+	private PageStepConfig pageStepConfig;
+
+	@BeforeEach
+	void setUp() {
+		StepConfig step1 = new StepConfig();
+
+		stepConfigs = new StepConfig[]{step1};
+		stepConfig = new StepConfig();
+		stepConfig.set_id("Test");
+		pageStepConfig = new PageStepConfig();
+		pageStepConfig.setResult(stepConfigs);
+
+	}
+
+	@Test
+	void publishStepConfigFromHost() {
+		try {
+			when(serviceStepConfig.publishStepConfigFromHost(any(com.bbva.gkxj.apirestgen.stepconfig.model.StepConfig.class),anyString())).thenReturn(Boolean.TRUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		com.bbva.gkxj.atilibrary.stepconfig.StepConfig stepConfig = new com.bbva.gkxj.atilibrary.stepconfig.StepConfig();
+		Boolean result;
+		result = wrapperServiceStepConfig.publishStepConfigFromHost(stepConfig,"Test");
+
+		assertEquals(result, Boolean.TRUE);
+	}
+
+}

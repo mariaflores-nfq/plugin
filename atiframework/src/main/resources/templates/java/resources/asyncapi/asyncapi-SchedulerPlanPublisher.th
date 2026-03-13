@@ -1,0 +1,327 @@
+asyncapi: '2.0.0'
+info:
+  title: SchedulerPlanPublisher
+  version: '2.0.0'
+  description: Channel frontToBack for saving SchedulerPlan
+  contact:
+    name: Utilidad para la Ingesta Transformacion y Exportacion de Datos
+    url: https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220
+    email: alberto.pina@bbva.com
+  x-business-unit: gkxj
+
+defaultContentType: application/json
+
+channels:
+  schedulerPlanChannel:
+    description: Channel for saving SchedulerPlan
+    publish:
+      summary: Data necessary for saving SchedulerPlan
+      operationId: publishSchedulerPlan
+      message:
+        $ref: '#/components/messages/schedulerPlanMessage'
+
+components:
+
+    messages:
+      schedulerPlanMessage:
+        name: schedulerPlanMessage
+        title: schedulerPlanMessage
+        summary: Data necessary for saving SchedulerPlan
+        payload:
+          $ref: '#/components/schemas/schedulerPlanPayload'
+
+    schemas:
+      schedulerPlanPayload:
+        type: object
+        properties:
+          uuaa:
+            type: string
+            description: UUAA asociated to the audit
+          schedulerPlanAudit:
+            $ref: '#/components/schemas/SchedulerPlanAudit'
+
+      SchedulerPlanAudit:
+        type: object
+        required:
+        - _id
+        - planCode
+        - planningDate
+        - version
+        - uuaa
+        - triggerPlan
+        - batchPlan
+        properties:
+          _id:
+            type: string
+          planCode:
+            type: string
+          planningDate:
+            type: string
+          version:
+            type: string
+          description:
+            type: string
+          status:
+            type: string
+            description: WAITING - PENDING - READY_TO_EXECUTE - DISCARDED
+          holdStatus:
+            type: string
+          uuaa:
+            type: string
+          schedulerConfigId:
+            type: string
+          force:
+            type: boolean
+          enable:
+            type: boolean
+          triggerPlan:
+            $ref: '#/components/schemas/TriggerPlan'
+          batchPlan:
+            $ref: '#/components/schemas/BatchPlan'
+          batchPlanError:
+            $ref: '#/components/schemas/BatchPlan'
+          conditionPlanList:
+            type: array
+            items:
+              $ref: '#/components/schemas/ConditionPlan'
+          executionInfoList:
+            type: array
+            items:
+              $ref: '#/components/schemas/ExecutionInfo'
+          failedTreatmentPlan:
+            $ref: '#/components/schemas/FailedTreatmentPlan'
+
+      TriggerPlan:
+        type: object
+        required:
+        - type
+        - initTs
+        - endTs
+        - repeat
+        properties:
+          executed:
+            type: boolean
+          nextExecution:
+            type: string
+            format: date-time
+          type:
+            type: string
+          initTs:
+            type: string
+            format: date-time
+          endTs:
+            type: string
+            format: date-time
+          maxExecutionTime:
+            type: string
+            format: date-time
+          repeat:
+            $ref: '#/components/schemas/Repeat'
+
+      BatchPlan:
+        type: object
+        required:
+        - batchCode
+        properties:
+          batchCode:
+            type: string
+          parameterQueryList:
+            type: array
+            items:
+              $ref: '#/components/schemas/Query'
+          jobParameterList:
+            type: array
+            items:
+              $ref: '#/components/schemas/JobParameter'
+          item:
+            type: array
+            items:
+              $ref: '#/components/schemas/MapItem'
+          jobParameterMap:
+            type: array
+            items:
+              $ref: '#/components/schemas/MapItem'
+
+      Query:
+        type: object
+        required:
+        - queryCode
+        properties:
+          queryCode:
+            type: string
+          sqlQuery:
+            type: string
+          dbSource:
+            type: string
+          mongoQuery:
+            $ref: '#/components/schemas/MongoQuery'
+        description: DB reading query. May be SQL or MongoDB
+
+      MongoQuery:
+        type: object
+        required:
+        - collection
+        - filter
+        properties:
+          collection:
+            type: string
+          filter:
+            type: array
+            description: MongoDB Aggregation Pipelines to filter
+            items:
+              type: string
+        description: mongoDB reading Query
+
+      JobParameter:
+        type: object
+        required:
+        - paramName
+        properties:
+          paramName:
+            type: string
+          queryParam:
+            type: string
+            description: name of the field recovered in the parameterQueryList
+          fixedValue:
+            type: string
+          scriptValue:
+            type: string
+
+      ConditionPlan:
+        type: object
+        required:
+        - filename
+        - checkEvery
+        - forceAtEnd
+        properties:
+          name:
+            type: string
+          filename:
+            type: string
+          startCondition:
+            type: string
+            format: date-time
+          endCondition:
+            type: string
+            format: date-time
+          nextCheck:
+            type: string
+            format: date-time
+          status:
+            type: string
+          checkEvery:
+            type: integer
+            description: in seconds
+          forceAtEnd:
+            type: boolean
+            description: if true force the execution even if the condition doesn't match
+          script:
+            type: string
+            description: to validate the queries with the recovered information
+          path:
+            type: string
+          filePattern:
+            type: string
+          fileParameterName:
+            type: string
+          novaTransferName:
+            type: "string"
+          extractionQuery:
+            $ref: '#/components/schemas/Query'
+        description: previous condition to execute the planning
+
+      FailedTreatmentPlan:
+        type: object
+        required:
+        - level
+        properties:
+          level:
+            type: string
+          issueCode:
+            type: string
+          technicalCode:
+            type: string
+
+      ExecutionInfo:
+        type: object
+        required:
+        - executionType
+        - executionDate
+        properties:
+          batchCode:
+            type: string
+          executionType:
+            type: string
+          executionDate:
+            type: string
+            format: date-time
+          executionId:
+            type: string
+          status:
+            type: string
+          initTs:
+            type: string
+            format: date-time
+          endTs:
+            type: string
+            format: date-time
+          batchParameterMap:
+            type: array
+            items:
+              $ref: '#/components/schemas/BatchParameter'
+
+      BatchParameter:
+        type: object
+        properties:
+          name:
+            type: string
+          value:
+            type: string
+
+      MapItem:
+        type: object
+        properties:
+          key:
+            type: string
+          value:
+            type: string
+
+      Repeat:
+        type: object
+        required:
+        - executionTime
+        - maxExecutionTime
+        properties:
+          executionTime:
+            type: string
+          repeatEvery:
+            type: integer
+          maxExecutionTime:
+            type: string
+          weekDays:
+            type: array
+            items:
+              type: string
+          monthly:
+            $ref: '#/components/schemas/Monthly'
+
+      Monthly:
+        type: object
+        required:
+        - months
+        properties:
+          months:
+            type: array
+            items:
+              type: string
+          days:
+            type: array
+            items:
+              type: integer
+          eventWeek:
+            type: string
+          weekDays:
+            type: array
+            items:
+              type: string
+

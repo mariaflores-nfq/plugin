@@ -1,0 +1,32 @@
+{
+  "workflowCode": "new_input_839",
+  "id": "4600bb63-ba72-40c3-ad3e-813e02cf696a",
+  "componentCode": "new_input_839",
+  "type": "Input Adapter",
+  "version": "",
+  "status": "",
+  "description": "",
+  "subtype": "JMS",
+  "jmsConfig": {
+    "jmsConnection": "Operation",
+    "queueName": "",
+    "messageType": "JSON",
+    "isCritical": false,
+    "xmlFields": [],
+    "jsonFields": [
+      {
+        "fieldName": "aaaaaaaa",
+        "payloadPath": "aaaaaaaaa",
+        "priority": 1,
+        "fieldType": "STRING",
+        "extractionType": "Fixed Value",
+        "extractionValue": "oooooooooooooo",
+        "fieldFormat": "aaaa",
+        "decimalDelimiter": "vvvvvvvvvvvvvvv",
+        "groupingDelimiter": "ssssssssssssssss",
+        "script": ""
+      }
+    ],
+    "csvFields": []
+  }
+}

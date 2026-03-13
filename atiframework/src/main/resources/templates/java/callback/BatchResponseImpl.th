@@ -1,0 +1,30 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.interfaces.batchcallback.BatchCallbackPayload;
+import com.bbva.gkxj.orchestatorati.callback.IBatchResponse;
+import com.bbva.gkxj.schedulerati.planning.AtiScheduler;
+import com.google.gson.Gson;
+
+@Service
+public class BatchResponseImpl implements IBatchResponse {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatchResponseImpl.class);
+
+	private final AtiScheduler scheduler;
+
+	public BatchResponseImpl(AtiScheduler scheduler) {
+		super();
+		this.scheduler = scheduler;
+	}
+
+
+	@Override
+	public void batchCompleted(BatchCallbackPayload payload) {
+		LOGGER.info("Recibida respuesa de la ejecucion del orchestator {}", new Gson().toJson(payload));
+		this.scheduler.batchCompleted(payload);
+	}
+}

@@ -1,0 +1,123 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit ;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.BatchAuditPublisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.orchestatorati.apiaudit.IWrapperServiceBatchAudit;
+import com.bbva.gkxj.orchestatorati.apisetup.model.BatchAudit;
+import com.bbva.gkxj.orchestatorati.model.BatchExecution;
+import com.bbva.gkxj.orchestatorati.model.StepStatement;
+
+
+@Service
+public class WrapperServiceBatchAudit implements IWrapperServiceBatchAudit {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(WrapperServiceBatchAudit.class);
+
+	/**
+	 * ApiRequest Service, para poder llamar a la librería de SchedulerPlanAudit
+	 */
+	private ServiceBatchaudit serviceBatchaudit;
+
+	/**
+	 * ApiRequest Service, para poder llamar a la librería de SchedulerPlanAudit
+	 */
+	private BatchAuditPublisher batchAuditPublisher;
+
+	/**
+	 * Constructor por defecto en el que se inyecta el apiRequestService.
+	 *
+	 * @param serviceBatchaudit  	servicio para llamar de manera síncrona al BatchAudit.
+	 * @param batchAuditPublisher	servicio para llamar de manera asíncrona al BatchAudit.
+	 */
+	public WrapperServiceBatchAudit(ServiceBatchaudit serviceBatchaudit, BatchAuditPublisher batchAuditPublisher) {
+		super();
+		this.serviceBatchaudit = serviceBatchaudit;
+		this.batchAuditPublisher = batchAuditPublisher;
+	}
+
+	/**
+	 * Busca todos los BatchAudits de una uuaa
+	 * @return Success
+	 */
+	@Override
+	public BatchAudit[] find(String uuaa) {
+		List<BatchAudit> batchAudits = new ArrayList<BatchAudit>();
+		try {
+			List<com.bbva.gkxj.apirestgen.batchaudit.model.BatchAudit>
+					batchAuditList = Arrays.asList(serviceBatchaudit.findBatchAudit(uuaa));
+			DeepMirrorMapper.deepListCopy(batchAuditList, batchAudits, BatchAudit.class);
+		} catch (Exception  e) {
+			LOGGER.error("[WrapperServiceBatchAudit] -> Error to read from API rest SchedulerPlanAudit", e);
+		}
+		return batchAudits.toArray(new BatchAudit[batchAudits.size()]);
+
+	}
+
+	/**
+	 * Guarda en base de datos de la librería el BatchExecution correspondiente.
+	 * @param batchExecution objeto a guardar en la BBDD de la librería.
+	 */
+	@Override
+	public BatchAudit save(BatchExecution batchExecution, String uuaa) {
+		BatchAudit returnValue = new BatchAudit();
+		try {
+			returnValue = mapToBatchAudit(batchExecution);
+			batchAuditPublisher.publishBatchAudit(batchExecution);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceBatchAudit] -> Error to save BatchAudit in API rest", e);
+		}
+
+		return returnValue;
+	}
+
+	/**
+	 *
+	 * @param batchExecution
+	 * @return
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	private BatchAudit mapToBatchAudit(BatchExecution batchExecution)
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException,
+			InstantiationException, InvocationTargetException, NoSuchMethodException {
+		BatchAudit batchAudit = new BatchAudit();
+		DeepMirrorMapper.deepCopy(batchExecution, batchAudit);
+		if(batchAudit.getStepStatementMap() != null) {
+			Map<String, StepStatement> stepStatementMap = batchExecution.getStepStatementMap();
+			for ( Map.Entry<String,StepStatement> item : stepStatementMap.entrySet()) {
+				StepStatement param = stepStatementMap.get(item.getKey());
+				if(param != null) {
+					StepStatement stepStatement = new StepStatement();
+					try {
+						DeepMirrorMapper.deepCopy(param, stepStatement);
+					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+							| IllegalAccessException | InstantiationException | InvocationTargetException
+							| NoSuchMethodException e) {
+						LOGGER.error("[ServiceBatchAudit] -> Error reading the Spring Batch detail in Executor ATI", e);
+					}
+					item.setValue(stepStatement);
+				}
+			}
+		}
+		return batchAudit;
+	}
+
+}

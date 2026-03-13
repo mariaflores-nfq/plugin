@@ -1,0 +1,17 @@
+{
+  "workflowCode": "Security_Filter",
+  "id": "node-filter-01",
+  "componentCode": "Security_Filter",
+  "type": "Filter",
+  "description": "Validador de firma y cabeceras.",
+  "version": "",
+  "status": "",
+  "filterConfig": {
+    "filters": [
+      {
+        "filterCode": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {}
+    ]
+  }
+}

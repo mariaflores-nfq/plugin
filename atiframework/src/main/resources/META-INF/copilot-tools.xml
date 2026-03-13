@@ -1,0 +1,20 @@
+<!--
+    Configuración adicional para integración con GitHub Copilot / AI Assistant.
+    Este archivo se carga condicionalmente cuando está disponible el módulo Ultimate.
+
+    La integración principal se hace mediante:
+    - AtiSchedulerPromptProvider: Provee el conocimiento experto
+    - AtiSchedulerEditorNotification: Notificación en el editor
+    - AtiSchedulerIntentionAction: Acciones en el menú Alt+Enter
+-->
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Proveedor de documentación contextual para ficheros .sch -->
+        <documentationProvider implementation="com.bbva.gkxj.atiframework.copilot.AtiSchedulerDocumentationProvider"/>
+
+        <!-- Servicio singleton para acceder al prompt experto -->
+        <applicationService
+            serviceImplementation="com.bbva.gkxj.atiframework.copilot.AtiSchedulerPromptProvider"/>
+    </extensions>
+</idea-plugin>
+

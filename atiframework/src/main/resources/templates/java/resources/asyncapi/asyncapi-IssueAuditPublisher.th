@@ -1,0 +1,191 @@
+asyncapi: 2.1.0
+info:
+  title: IssueAuditPublisher
+  version: 2.0.0
+  description: Channel frontToBack for saving IssueAudit
+  contact:
+    name: Utilidad para la Ingesta Transformacion y Exportacion de Datos
+    url: https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220
+    email: alberto.pina@bbva.com
+  x-business-unit: gkxj
+
+defaultContentType: application/json
+
+channels:
+  issueAuditChannel:
+    description: Channel for saving IssueAudit
+    publish:
+      summary: Data necessary for saving IssueAudit
+      operationId: publishIssueAudit
+      message:
+        $ref: '#/components/messages/issueAuditMessage'
+
+components:
+    messages:
+      issueAuditMessage:
+        name: issueAuditMessage
+        title: issueAuditMessage
+        summary: Data necessary for saving IssueAudit
+        payload:
+          $ref: '#/components/schemas/issueAuditPayload'
+    schemas:
+      issueAuditPayload:
+        type: object
+        properties:
+          uuaa:
+            type: string
+            description: UUAA asociated to the audit
+          issueAudit:
+            $ref: '#/components/schemas/IssueAudit'
+
+      IssueAudit:
+        description: Issue Audit object returned by the service
+        type: object
+        required:
+        - _id
+        - issueCode
+        - issueDate
+        - issueMessage
+        - issueStatus
+        - issueTechnicalCode
+        properties:
+          _id:
+            type: string
+            description: Unique identifier in db
+          uuaa:
+            type: string
+            description: UUAA code associated to the issue
+          status:
+            type: string
+            description: Status of the issue (OPEN / CLOSED)
+          issueClass:
+            type: string
+            description: 'Class of the issue in runtime, example: NullPointerException'
+          issueMessage:
+            type: string
+            description: Message of the issue in runtime
+          sourceSystem:
+            type: string
+            description: Source system of the issue (Scheduler / Orchestator / Executor)
+          executionId:
+            type: string
+            description: Execution ID associated to the issue
+          stepExecutionId:
+            type: string
+            description: Step Execution ID associated to the issue
+          schedulerId:
+            type: string
+            description: Scheduler ID associated to the issue
+          batchCode:
+            type: string
+            description: Batch code associated to the issue
+          stepCode:
+            type: string
+            description: Step code associated to the issue
+          serviceCode:
+            type: string
+            description: Service code associated to the issue
+          version:
+            type: string
+            description: Version of the issue
+          targetField:
+            type: string
+            description: Target field of the issue
+          targetValue:
+            type: string
+            description: Target value of the issue
+          groupCriteria:
+            type: string
+            description: Group criteria of the issue
+          generationTs:
+            type: string
+            format: date-time
+            description: Date when the issue was generated
+          modificationTs:
+            type: string
+            format: date-time
+            description: Date when the issue was modified
+          infoDataMap:
+            description: Info data map with additional information
+            type: array
+            items:
+              $ref: '#/components/schemas/InfoDataMapItem'
+          auditList:
+            description: List of audits
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit'
+          issueTypeDetail:
+            description: Issue type detail
+            $ref: '#/components/schemas/IssueTypeDetail'
+
+      InfoDataMapItem:
+        description: Info data map item
+        type: object
+        required:
+        - key
+        - value
+        properties:
+          key:
+            description: Key of the info data map
+            type: string
+          value:
+            description: Value with the info
+            type: string
+
+      Audit:
+        description: Audit object returned by the service
+        type: object
+        properties:
+          userId:
+            description: UserId who made the audit action in the issue
+            type: string
+          auditTs:
+            type: string
+            format: date-time
+            description: Date when the audit was made
+          comment:
+            type: string
+            description: Comment of the audit
+          event:
+            type: string
+            description: Event of the audit
+
+      IssueTypeDetail:
+        description: Issue type detail
+        type: object
+        properties:
+          technicalCode:
+            type: string
+            description: Technical code of the issue
+          issueCode:
+            type: string
+            description: Code of the issue
+          issueDescription:
+            type: string
+            description: Description of the issue
+          assignedGroupRole:
+            type: string
+            description: Assigned group role
+          solutionList:
+            description: List of solutions comments
+            type: array
+            items:
+              $ref: '#/components/schemas/Solution'
+
+      Solution:
+        description: Solution object returned by the service
+        type: object
+        properties:
+          userId:
+            type: string
+            description: UserId who made the solution
+          solution:
+            type: string
+            description: Comment of the solution
+          solutionTs:
+            type: string
+            format: date-time
+            description: Date when the solution was made
+
+

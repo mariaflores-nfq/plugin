@@ -1,0 +1,363 @@
+{
+  "workflowCode": "WF-N2TR-STANDARD",
+  "recordVersion": 1,
+  "uuaa": "GKXJ",
+  "status": "DRAFT",
+  "description": "Workflow de referencia siguiendo el documento funcional V.1",
+  "nodeList": [
+    {
+      "id": "node-in-01",
+      "componentCode": "JMS_Receiver_Main",
+      "type": "Input Adapter",
+      "subtype": "JMS",
+      "description": "Adaptador de entrada principal vía colas.",
+      "taskExecutor": "nuevo executor",
+      "x": 30.5,
+      "y": 430.0
+    },
+    {
+      "id": "node-router-01",
+      "componentCode": "Business_Router",
+      "type": "Router",
+      "description": "Enrutador lógico de negocio.",
+      "x": 180.5,
+      "y": 320.0
+    },
+    {
+      "id": "node-filter-01",
+      "componentCode": "Security_Filter",
+      "type": "Filter",
+      "description": "Validador de firma y cabeceras.",
+      "x": 380.5,
+      "y": 320.0
+    },
+    {
+      "id": "node-enricher-01",
+      "componentCode": "Client_Data_Enricher",
+      "type": "Enricher",
+      "subtype": "WorkStatement",
+      "description": "Recupera datos del cliente de la BBDD.",
+      "taskExecutor": "001 Execgvdfv utor",
+      "x": 570.5,
+      "y": 310.0
+    },
+    {
+      "id": "node-splitter-01",
+      "componentCode": "Item_Splitter",
+      "type": "Splitter",
+      "subtype": "RootElement",
+      "description": "Divide el mensaje por cada item del array.",
+      "x": 722.5,
+      "y": 286.0
+    },
+    {
+      "id": "node-out-01",
+      "componentCode": "Database_Output",
+      "type": "Output Adapter",
+      "subtype": "JMS",
+      "description": "Persistencia final en Oracle.",
+      "taskExecutor": "001 Execgvdfv utor",
+      "queueName": "\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c\u003c",
+      "messageType": "ddddddddddddddddddddddd",
+      "x": 1062.5,
+      "y": 350.0
+    },
+    {
+      "id": "27c80ae4-c262-4b22-bfba-fd5688547d3e",
+      "componentCode": "new_filter_122",
+      "type": "Filter",
+      "x": 570.5,
+      "y": 420.0
+    },
+    {
+      "id": "8b1866b9-1ffc-4f14-962e-688f89464725",
+      "componentCode": "node_549",
+      "type": "Router",
+      "x": 230.5,
+      "y": 450.0
+    },
+    {
+      "id": "ea755c65-1826-4bb9-84df-ade4c7ce8996",
+      "componentCode": "new_subworkflow_458",
+      "type": "Subworkflow",
+      "description": "holaaaaaaaa",
+      "x": 720.5,
+      "y": 370.0
+    },
+    {
+      "id": "4600bb63-ba72-40c3-ad3e-813e02cf696a",
+      "componentCode": "new_input_839",
+      "type": "Input",
+      "x": 417.5,
+      "y": 466.0
+    },
+    {
+      "id": "1b0bfdd5-0559-471b-abcf-d5bf62857194",
+      "componentCode": "node_695",
+      "type": "Output",
+      "x": 840.5,
+      "y": 530.0
+    },
+    {
+      "id": "d3065676-2b70-4540-9cd3-3689cf9eae75",
+      "componentCode": "node_280",
+      "type": "Router",
+      "x": 892.5,
+      "y": 392.0
+    },
+    {
+      "id": "0bb4fbbd-5368-4c9e-9425-0691591b0509",
+      "componentCode": "new_input_980",
+      "type": "Input",
+      "x": 30.0,
+      "y": 320.0
+    },
+    {
+      "id": "272ca08c-256c-43bd-b4f5-f2afbb5e40d5",
+      "componentCode": "new_aggregator_129",
+      "type": "Aggregator",
+      "x": 33.0,
+      "y": 215.0
+    }
+  ],
+  "edgeList": [
+    {
+      "sourceId": "node-router-01",
+      "targetId": "node-filter-01",
+      "channelType": "DIRECT",
+      "scriptRouting": "return msg.header.priority \u003e 5;",
+      "sourceType": "Router",
+      "points": [
+        {
+          "x": 344.5,
+          "y": 373.0
+        },
+        {
+          "x": 344.5,
+          "y": 360.0
+        }
+      ]
+    },
+    {
+      "sourceId": "node-filter-01",
+      "targetId": "node-enricher-01",
+      "channelType": "DIRECT",
+      "sourceType": "Filter",
+      "points": [
+        {
+          "x": 473.5,
+          "y": 260.5
+        },
+        {
+          "x": 489.0,
+          "y": 260.5
+        },
+        {
+          "x": 489.0,
+          "y": 260.0
+        },
+        {
+          "x": 610.0,
+          "y": 260.0
+        }
+      ]
+    },
+    {
+      "sourceId": "node-enricher-01",
+      "targetId": "node-splitter-01",
+      "channelType": "QUEUE",
+      "sourceType": "Enricher",
+      "points": [
+        {
+          "x": 706.5,
+          "y": 350.0
+        },
+        {
+          "x": 706.5,
+          "y": 326.0
+        }
+      ]
+    },
+    {
+      "sourceId": "node-splitter-01",
+      "targetId": "node-out-01",
+      "channelType": "DIRECT",
+      "sourceType": "Splitter",
+      "points": [
+        {
+          "x": 854.5,
+          "y": 326.0
+        },
+        {
+          "x": 854.5,
+          "y": 362.0
+        },
+        {
+          "x": 1037.5,
+          "y": 362.0
+        },
+        {
+          "x": 1037.5,
+          "y": 376.0
+        }
+      ]
+    },
+    {
+      "sourceId": "node-in-01",
+      "targetId": "8b1866b9-1ffc-4f14-962e-688f89464725",
+      "channelType": "DIRECT",
+      "sourceType": "Input Adapter",
+      "points": [
+        {
+          "x": 176.5,
+          "y": 483.0
+        },
+        {
+          "x": 176.5,
+          "y": 483.0
+        }
+      ]
+    },
+    {
+      "sourceId": "27c80ae4-c262-4b22-bfba-fd5688547d3e",
+      "targetId": "ea755c65-1826-4bb9-84df-ade4c7ce8996",
+      "channelType": "QUEUE",
+      "sourceType": "Filter",
+      "points": [
+        {
+          "x": 705.5,
+          "y": 460.0
+        },
+        {
+          "x": 705.5,
+          "y": 410.0
+        }
+      ]
+    },
+    {
+      "sourceId": "ea755c65-1826-4bb9-84df-ade4c7ce8996",
+      "targetId": "d3065676-2b70-4540-9cd3-3689cf9eae75",
+      "channelType": "DIRECT",
+      "sourceType": "Subworkflow",
+      "points": [
+        {
+          "x": 854.5,
+          "y": 436.0
+        },
+        {
+          "x": 854.5,
+          "y": 432.0
+        }
+      ]
+    },
+    {
+      "sourceId": "d3065676-2b70-4540-9cd3-3689cf9eae75",
+      "targetId": "node-out-01",
+      "channelType": "DIRECT",
+      "sourceType": "Router",
+      "points": [
+        {
+          "x": 1024.5,
+          "y": 432.0
+        },
+        {
+          "x": 1024.5,
+          "y": 418.0
+        }
+      ]
+    },
+    {
+      "sourceId": "4600bb63-ba72-40c3-ad3e-813e02cf696a",
+      "targetId": "27c80ae4-c262-4b22-bfba-fd5688547d3e",
+      "channelType": "DIRECT",
+      "sourceType": "Input",
+      "points": [
+        {
+          "x": 514.5,
+          "y": 513.0
+        },
+        {
+          "x": 514.5,
+          "y": 482.5
+        }
+      ]
+    },
+    {
+      "sourceId": "0bb4fbbd-5368-4c9e-9425-0691591b0509",
+      "targetId": "node-router-01",
+      "channelType": "DIRECT",
+      "sourceType": "Input",
+      "points": [
+        {
+          "x": 145.5,
+          "y": 367.0
+        },
+        {
+          "x": 145.5,
+          "y": 370.0
+        }
+      ]
+    },
+    {
+      "sourceId": "27c80ae4-c262-4b22-bfba-fd5688547d3e",
+      "targetId": "1b0bfdd5-0559-471b-abcf-d5bf62857194",
+      "channelType": "DISCARD",
+      "sourceType": "Filter",
+      "points": [
+        {
+          "x": 720.0,
+          "y": 480.0
+        },
+        {
+          "x": 720.0,
+          "y": 577.0
+        }
+      ]
+    },
+    {
+      "sourceId": "node-filter-01",
+      "targetId": "27c80ae4-c262-4b22-bfba-fd5688547d3e",
+      "channelType": "DISCARD",
+      "sourceType": "Filter",
+      "points": [
+        {
+          "x": 535.5,
+          "y": 360.0
+        },
+        {
+          "x": 535.5,
+          "y": 460.0
+        }
+      ]
+    }
+  ],
+  "taskExecutors": [
+    {
+      "code": "001 Execgvdfv utor",
+      "namePrefix": "",
+      "description": "",
+      "corePoolSize": "3",
+      "maxPoolSize": "10",
+      "queueCapacity": "50"
+    },
+    {
+      "code": "nuevo executor",
+      "namePrefix": "",
+      "description": "",
+      "corePoolSize": "3",
+      "maxPoolSize": "10",
+      "queueCapacity": "50"
+    }
+  ],
+  "environmentVariables": [
+    {
+      "variableName": "",
+      "type": "String",
+      "regularExpression": "",
+      "fieldLength": "",
+      "description": "",
+      "fixedValue": "",
+      "scriptValue": ""
+    }
+  ]
+}

@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Json Schema de la colección CGKXJ_CFG_SCHEDULER",
+  "description": "Colección con la configuración del planificador de tareas de la parte batch de Librería ATI.",
+  "type": "object",
+  "required": [
+    "_id", "planCode", "version", "status", "uuaa", 
+    "recordVersion", "checkSum", "paramAuditList", "trigger", "batch"
+  ],
+  "properties": {
+    "_id": { "type": "string", "description": "Identificador único del documento generado por MongoDB." },
+    "planCode": { "type": "string", "description": "Nombre de la planificación." },
+    "version": { "type": "string", "description": "Versión de la planificación, importante para mantenimiento de diferentes versiones del Planificador." },
+    "description": { "type": "string", "description": "Descripción de la configuración del plan." },
+    "status": {
+        "type": "string",
+        "description": "Indica el estado de la planificación",
+        "oneOf": [
+            { "const": "NOT_PUBLISHED", "description": "Indica que está active pero no publicado. Se podrá borrar, en caso de hacerlo se deberá restaurar la versión anterior." },
+            { "const": "PUBLISHED", "description": "Publicado, en caso de crearse una nueva versión pasará a INACTIVE, pero si se borrarse la versión anterior debería pasar a PUBLISHED." },
+            { "const": "INACTIVE", "description": "No activo, hay una versión más moderna (publicada o no). Es una baja lógica en BBDD, solo se podrá archivar siempre y cuando dicha versión no exista en ninguna publicación. " },
+            { "const": "ARCHIVED", "description": "Archivado, no se podrá recuperar en ningún caso, es el paso previo a borrar físicamente el registro en BBDD." }
+        ]
+},
+    "uuaa": { "type": "string", "description": "UUAA con la que está asociada la planificación." },
+    "branchId": { "type": "string", "description": "Identificador del branch al que pertenece la configuración. Este campo solo vendrá informado en aquellas configuraciones que estén pendientes de ser commiteadas." },
+    "branchCode": { "type": "string", "description": "Código del branch al que pertenece la configuración. Este campo solo vendrá informado en aquellas configuraciones que estén pendientes de ser commiteadas." },
+    "recordVersion": { "type": "integer", "description": "Número de versión del registro, es útil para eivtar la modificación concurrente desde el Front." },
+    "checkSum": { "type": "string", "description": "Código de comprobación de redundancia, sirve para estar seguro de que la configuración no ha sido modificada manualmente por nadie externo a ATI Framework." },
+    "calendarCode": { "type": "string", "description": "Código del calendario asociado, en caso de que esta planificación tenga un calendario." },
+
+    "paramAuditList": {
+      "description": "Lista de auditoría de las distintos estados por los que se pasa la planificación.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["status", "audTs", "audUser", "comments"],
+        "properties": {
+          "status": { "type": "string", "description": "Indica el cambio de estado de la planificación." },
+          "audTs": { "type": "string", "format": "date-time", "description": "Fecha y hora del cambio de estado." },
+          "audUser": { "type": "string", "description": "Usuario que realizó el cambio de estado." },
+          "comments": { "type": "string", "description": "Comentarios asociados al cambio de estado." }
+        }
+      }
+    },
+
+    "trigger": {
+      "description": "Detalle de la planificación horaria del Plan.",
+      "type": "object",
+      "required": ["type", "repeat"],
+      "properties": {
+        "type": { "type": "string", "enum": ["DAILY", "WEEKLY", "MONTHLY"], "description": "Tipo de desencadenador (DAILY, WEEKLY, MONTHLY)." },
+        "initTs": { "type": "string", "format": "date-time", "description": "Fecha de inicio de la planificación." },
+        "endTs": { "type": "string", "format": "date-time", "description": "Fecha de fin de la planificación." },
+        "repeat": {
+          "description": "Habrá que definir los detalles de cuando se ejecutará, sea cual sea su tipo.",
+          "type": "object",
+          "required": ["executionTime", "maxExecutionTime"],
+          "properties": {
+            "executionTime": { "type": "string", "pattern": "^(([0-1][0-9])|(2[0-3])):[0-5][0-9]:[0-5][0-9]$", "description": "Máxima hora de ejecución en formato HH:MM:SS. Cuando tenemos una tarea repetitiva podemos decidir hasta que hora máxima se va a reejecutar." },
+            "repeatEvery": { "type": "integer", "description": "Se repite la ejecución cada vez que pasen los segundos indicados." },
+            "maxExecutionTime": { "type": "string", "pattern": "^(([0-1][0-9])|(2[0-3])):[0-5][0-9]:[0-5][0-9]$", "description": "Máxima hora de ejecución en formato HH:MM:SS. Cuando tenemos una tarea repetitiva podemos decidir hasta que hora máxima se va a reejecutar." },
+            "weekDays": {
+              "description": "Lista de días de la semana en el que se ejecutará (MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY).",
+              "type": "array",
+              "items": { "enum": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"] }
+            },
+            "monthly": {
+              "description": "Configuración cuando es de tipo MONTHLY.",  
+              "type": "object",
+              "required": ["months"],
+              "properties": {
+                "months": { "type": "array", "items": { "type": "string" }, "description": "Lista de meses (en inglés) en los que tiene sentido la ejecución de la tarea." },
+                "days": { "type": "array", "items": { "type": "integer", "description": "Días del mes en los que se ejecutará la tarea. Por ejemplo: día 1 del mes o día 15 del mes o incluso días 1,7 y 15 del mes." } },
+                "eventWeek": { "type": "string", "enum": ["FIRST", "SECOND", "THIRD", "FOURTH", "LAST"], "description": "Determina el primer, segundo, tercero o cuarto día de la semana de cada mes. Este campo combina con weekDays. Valores posibles (FIRST, SECOND, THIRD, FOURTH, LAST)." },
+                "weekDays": { "type": "array", "items": { "type": "string" }, "description": "Lista de días de la semana en el que se ejecutará (MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)." }
+              }
+            }
+          }
+        }
+      }
+    },
+
+  "batch": {
+  "description": "Información de la ejecución que se va a lanzar para la planificación.",
+  "type": "object",
+  "required": ["batchCode", "parameterQueryList"],
+  "properties": {
+    "batchCode": {
+      "type": "string",
+      "description": "Nombre de la aplicación, puede ser un valor fijo o el resultado de un campo de la consulta. Tipo LauncherParameter (se utilizará en los campos siguientes)."
+    },
+    "parameterQueryList": {
+      "description": "Colección (Array) con las consulta con la que se va a extraer los datos desde la BBDD. Esta consulta serán o contra la BBDD SQL o contra la BBDD Mongo. Estos objetos son del tipo query.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["queryCode"],
+        "properties": {
+          "queryCode": { "type": "string", "description": "Código para identificar de que consulta de extracción se trata. Este código es necesario para las trazas y para la generación de excepciones." },
+          "sqlQuery": { "type": "string", "description": "Consulta SQL que se va a lanzar. Este campo estará presente cuando la consulta se vaya a realizar sobre la BBDD SQL." },
+          "dbSource": { "type": "string", "default": "HSQLDB", "description": "Indicador del tipo de Base de datos (Oracle, Postgre o mongoDb). En caso de que no exista este campo indicará que la base de datos origen es HSQLDB." },
+          "mongoQuery": {
+            "description": "Consulta Aggregate Mongo que se va a lanzar. Este campo estará presente cuando la consulta se vaya a realizar sobre la BBDD Mongo.",
+            "type": "object",
+            "required": ["collection", "filter"],
+            "properties": {
+              "collection": { "type": "string", "description": "Nombre de la colección sobre la que se va a realizar la consulta." },
+              "filter": { "type": "array", "items": { "type": "string" }, "description": "Lista de filtros que se van a realizar sobre la colección de MongoDB." }
+            }
+          }
+        }
+      }
+    },
+    "jobParameterList": {
+      "description": "Lista de parámetros de entrada de las ejecuciones a lanzar.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paramName"],
+        "properties": {
+          "paramName": { 
+            "type": "string", "description": "Nombre del parámetro." },
+          "queryParam": { 
+            "type": "string", "description": "Nombre del campo recuperado de parameterQueryList para pasárselo a este parámetro del Job." },
+          "fixedValue": { 
+            "type": "string", "description": "Valor fijo asignado a este parámetro del Job." },
+          "scriptValue": { 
+            "type": "string", "description": "Script de javascript que permitirá fijar el valor del parámetro." }
+        }
+      }
+    }
+  }
+},
+"batchError": {
+  "description": "Información de la ejecución que se va a lanzar para la planificación.",
+  "type": "object",
+  "required": ["batchCode", "parameterQueryList"],
+  "properties": {
+    "batchCode": {
+      "type": "string",
+      "description": "Nombre de la aplicación, puede ser un valor fijo o el resultado de un campo de la consulta. Tipo LauncherParameter (se utilizará en los campos siguientes)."
+    },
+    "parameterQueryList": {
+      "description": "Colección (Array) con las consulta con la que se va a extraer los datos desde la BBDD. Esta consulta serán o contra la BBDD SQL o contra la BBDD Mongo. Estos objetos son del tipo query.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["queryCode"],
+        "properties": {
+          "queryCode": { "type": "string", "description": "Código para identificar de que consulta de extracción se trata. Este código es necesario para las trazas y para la generación de excepciones." },
+          "sqlQuery": { "type": "string", "description": "Consulta SQL que se va a lanzar. Este campo estará presente cuando la consulta se vaya a realizar sobre la BBDD SQL." },
+          "dbSource": { "type": "string", "default": "HSQLDB", "description": "Indicador del tipo de Base de datos (Oracle, Postgre o mongoDb). En caso de que no exista este campo indicará que la base de datos origen es HSQLDB." },
+          "mongoQuery": {
+            "description": "Consulta Aggregate Mongo que se va a lanzar. Este campo estará presente cuando la consulta se vaya a realizar sobre la BBDD Mongo.",
+            "type": "object",
+            "required": ["collection", "filter"],
+            "properties": {
+              "collection": { "type": "string", "description": "Nombre de la colección sobre la que se va a realizar la consulta." },
+              "filter": { "type": "array", "items": { "type": "string" }, "description": "Lista de filtros que se van a realizar sobre la colección de MongoDB." }
+            }
+          }
+        }
+      }
+    },
+    "jobParameterList": {
+      "description": "Lista de parámetros de entrada de las ejecuciones a lanzar.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paramName"],
+        "properties": {
+          "paramName": { 
+            "type": "string", "description": "Nombre del parámetro." },
+          "queryParam": { 
+            "type": "string", "description": "Nombre del campo recuperado de parameterQueryList para pasárselo a este parámetro del Job." },
+          "fixedValue": { 
+            "type": "string", "description": "Valor fijo asignado a este parámetro del Job." },
+          "scriptValue": { 
+            "type": "string", "description": "Script de javascript que permitirá fijar el valor del parámetro." }
+        }
+      }
+    }
+  }
+},
+"conditionList": {
+  "description": "Lista de condiciones que deberán cumplirse previamente para poder ejecutar la tarea asociada a la planificación.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["name", "query"],
+    "properties": {
+      "name": {"type": "string","description": "Nombre o código de la condición. Para poder identificarla en una lista de condiciones."},
+      "checkEvery": {"type": "integer","description": "Número de segundos cada cuantos se va a hacer la comprobación de sí esta condición se cumple."},
+      "forceAtEnd": { "type": "boolean", "description": "Fuerza la ejecución al final aunque no se haya completado la condición."},
+      "script": {"type": "string", "description": "Script que servirá para validar las consultas sobre BBDD a partir de la información recuperada de dichas consultas."},
+      "fileWatcher": {"type": "object",
+        "description": "Validación de la existencia de un Fichero que cumpla un patrón determinado.",
+        "required": ["path", "filePattern", "fileParameterName"],
+        "properties": {
+          "path": { "type": "string", "description": "Path de búsqueda del Fichero." },
+          "filePattern": { "type": "string", "description": "Patrón que deberá cumplir el fichero." },
+          "fileParameterName": { "type": "string", "description": "Nombre del parámetro de entrada que se va a utilizar para pasarselo al Batch." }
+        }
+      },
+      "query": {
+        "type": "object",
+        "description": "Consulta para comprobar si deja de ejecutarse o no. El resultado de esta consulta se le pasará al script y será este el que validará si se ha cumplido la condición o no. Estos objetos son del tipo query.",
+        "required": ["queryCode"],
+        "properties": {
+          "queryCode": { "type": "string", "description": "Código para identificar de que consulta de extracción se trata. Este código es necesario para las trazas y para la generación de excepciones." },
+          "sqlQuery": { "type": "string", "description": "Consulta SQL que se va a lanzar. Este campo estará presente cunando la consulta se vaya a realizar sobre la BBDD SQL." },
+          "dbSource": { "type": "string", "default": "Oracle",  "description": "Indicador de BBDD (Oracle, Postgre o MongoDB). En caso de que no exista este campo indicará que la base de datos origen es Oracle." 
+          },
+           "mongoQuery": {
+            "description": "Consulta Aggregate Mongo que se va a lanzar. Este campo estará presente cuando la consulta se vaya a realizar sobre la BBDD Mongo.",
+            "type": "object",
+            "required": ["collection", "filter"],
+            "properties": {
+              "collection": { "type": "string", "description": "Nombre de la colección sobre la que se va a realizar la consulta." },
+              "filter": { "type": "array", "items": { "type": "string" }, "description": "Lista de filtros que se van a realizar sobre la colección de MongoDB." }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+
+"failedTreatment": {
+  "description": "En caso de que la operación se descarte sin ejecutar, se generará un criticalIssue indicando que plan de ejecución ha producido el fallo. Las acciones a realizar en estos casos es la generación de un fichero de flag con la información del plan de ejecución y/o la generación automática de una excepción dentro de XVA (reportingIssue).",
+  "type": "object",
+  "properties": {
+    "level": {"type": "string", "description": "Directorio donde se generará el fichero de Flag indicando errores en la planificación."},
+    "issueCode": {"type": "string","description": "IssueCode para el issue a generar al no validar el esquema XSD."},
+    "tecnicalCode": {"type": "string","description": "TecnicalCode para el issue a generar al no validar el esquema XSD." }
+  }
+}    
+  }
+}

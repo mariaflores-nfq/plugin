@@ -1,0 +1,131 @@
+# Service definition
+service:
+  uuaa: [(${atiSettings.getUuaa()})]
+  # Comercial name
+  publicName: [(${atiSettings.getServicePublicName()})]
+  # Short name, cannot contain fancy chars
+  name: [(${atiSettings.getServiceName()})]
+  # Service description
+  description: >
+    [(${atiSettings.getServiceDescription()})]
+  # Service version
+  version: "1.0.0"
+  # Service type: do not touch
+  type: Daemon
+  # Language: do not touch
+  language: Java - Spring boot
+  # language version: do not touch
+  languageVersion: "11.0.11"
+  # jdk: do not touch
+  jdkVersion: "zulu11.48.21"
+  # NOVA Release: do not touch
+  novaVersion: [(${atiSettings.getNovaVersion()})]
+  # NOVA CLI Release: do not touch
+  novaCliVersion: [(${atiSettings.getNovaCliVersion()})]
+
+# Optional
+# APIs definitions
+# contains all APIs used by the service
+apis:
+  # NOTE served: is forbidden for this service type
+
+  # Optional
+  # APIs used by the service itself
+  consumed:
+    - src/main/resources/api-SchedulerPlanAudit-1.1.2.yml
+    - src/main/resources/api-BatchAudit-1.1.2.yml
+    - src/main/resources/api-BranchConfig-1.1.1.yml
+    - src/main/resources/api-SchedulerConfig-1.1.2.yml
+    - src/main/resources/api-BatchConfig-1.1.1.yml
+    - src/main/resources/api-StepConfig-1.1.0.yml
+[# th:if="${atiSettings.getIsNovaTransferIncluded()}"]    - src/main/resources/api-filetransfer-1.3.0.yml[/]
+  # APIs outside NOVA used by any operation
+  # consumedExternal:
+  #   - src/main/resources/external-api-client.yml
+
+asyncapis:
+  # AsyncAPIs used for communication through a message broker
+  backToBack:
+    #   AsyncAPI definition file
+    - src/main/resources/asyncapi/asyncapi-SchedulerPlanPublisher.yml
+    - src/main/resources/asyncapi/asyncapi-BatchAuditPublisher.yml
+    - src/main/resources/asyncapi/asyncapi-IssueAuditPublisher.yml
+    - src/main/resources/asyncapi/asyncapi-BatchExecutorSubscriber.yml
+
+# Optional
+# Service properties definition (config-server)
+properties:
+  # property name/identifier must be unique
+  - name: "service.log"
+    description: "Nivel de log"
+    # type: STRING, JSON, XML
+    type: "STRING"
+    # default value
+    default: "silly"
+      # who is the property owner
+      # SERVICE: any team member can modify this property
+      # ENVIRONMENT: Only environment owner can modify this property
+      # - INT, PRE, PRO: Project support - Product = dev
+      # - INT, PRE: Project support - Product = Maintenance
+    # - PRO: Service support - Product = Maintenance
+    management: "SERVICE"
+    # encrypt property so it's only visible by the owner
+    encrypt: false
+
+  - name: "release.header.Batchaudit"
+    description: "Release del api Batch Audit"
+    type: "STRING"
+    default: "[(${atiSettings.getAtiRelease()})]"
+    management: "SERVICE"
+    encrypt: false
+  - name: "release.header.Schedulerplanaudit"
+    description: "Release del api SchedulerPlan Audit"
+    type: "STRING"
+    default: "[(${atiSettings.getAtiRelease()})]"
+    management: "SERVICE"
+    encrypt: false
+  - name: "release.header.Schedulerconfig"
+    description: "Release del api SchedulerPlan Config"
+    type: "STRING"
+    default: "[(${atiSettings.getAtiRelease()})]"
+    management: "SERVICE"
+    encrypt: false
+  - name: "release.header.Batchconfig"
+    description: "Release del api Batch Config"
+    type: "STRING"
+    default: "[(${atiSettings.getAtiRelease()})]"
+    management: "SERVICE"
+    encrypt: false
+  - name: "release.header.Stepconfig"
+    description: "Release del api Step Config"
+    type: "STRING"
+    default: "[(${atiSettings.getAtiRelease()})]"
+    management: "SERVICE"
+    encrypt: false
+  - name: "release.header.Branchconfig"
+    description: "Release del api Step Config"
+    type: "STRING"
+    default: "[(${atiSettings.getAtiRelease()})]"
+    management: "SERVICE"
+    encrypt: false
+[# th:if="${atiSettings.getIsNovaTransferIncluded()}"]  - name: "release.header.Filetransfer"
+    description: "Release del api File Transfer"
+    type: "STRING"
+    default: "NOVAFileTransferJ11v3"
+    management: "SERVICE"
+    encrypt: false[/]
+
+# Optional
+# dependencies, build order
+# list of project names you depend on
+# those must be in the same subsystem
+# dependencies:
+#  - service-name-001
+#  - service-name-002
+
+libraries:
+  - gkxj-[(${atiSettings.getAtiRelease()})]-schedulerati-[(${atiSettings.getAtiVersion()})]
+  - gkxj-[(${atiSettings.getAtiRelease()})]-orchestatorati-[(${atiSettings.getAtiVersion()})]
+  - gkxj-[(${atiSettings.getAtiRelease()})]-executorati-[(${atiSettings.getAtiVersion()})]
+[# th:if="${atiSettings.getIsEpsilonSupportIncluded()}"]  - lnx8-novaepsilonlibrary-novaepsilon-1.1.1[/]
+[# th:if="${atiSettings.getIsMongoIncluded()}"]  - u5su-percona-mongodbconnectvanilla-2.1.0[/]

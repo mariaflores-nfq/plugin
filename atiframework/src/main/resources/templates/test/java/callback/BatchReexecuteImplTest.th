@@ -1,0 +1,31 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].callback;
+
+import com.bbva.gkxj.orchestatorati.orchestator.OrchestatorAti;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback.BatchReexecuteImpl;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import com.bbva.gkxj.orchestatorati.apisetup.model.BatchExecutorPayload;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+@ExtendWith(MockitoExtension.class)
+class BatchReexecuteImplTest {
+
+    @Mock
+    private OrchestatorAti orchestator;
+
+    @InjectMocks
+    private BatchReexecuteImpl batchReexecute;
+
+    @Test
+    void batchReexecute() {
+        BatchExecutorPayload payload = Mockito.mock(BatchExecutorPayload.class);
+        batchReexecute.batchReexecute(payload);
+        verify(orchestator, times(1)).reexecuteBatch(payload);
+    }
+}

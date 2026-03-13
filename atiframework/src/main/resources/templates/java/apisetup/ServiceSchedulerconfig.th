@@ -1,0 +1,377 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 16:22:52 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.apirestgen.schedulerconfig.client.jaxrs.rest.IRestHandlerSchedulerconfig ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.CalendarConfig;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.PageCalendarConfig;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.PagePlanConfig ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.PaginationInfo ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.PlanConfig ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.DeleteCalendarConfigException400;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.DeleteCalendarConfigException500;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.DeletePlanConfigException400 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.DeletePlanConfigException500 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindCalendarConfigByVersionException400;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindCalendarConfigByVersionException500;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindCalendarConfigsException400;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindCalendarConfigsException500;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindCalendarConfigsPaginatedException400;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindCalendarConfigsPaginatedException500;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindPlanConfigByVersionException400 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindPlanConfigByVersionException500 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindPlanConfigsException400 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindPlanConfigsException500 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindPlanConfigsPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.FindPlanConfigsPaginatedException500 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.PublishCalendarConfigFromHostException400;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.PublishCalendarConfigFromHostException500;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.PublishPlanConfigFromHostException400 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.PublishPlanConfigFromHostException500 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.SaveCalendarConfigException400;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.SaveCalendarConfigException500;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.SavePlanConfigException400 ;
+import com.bbva.gkxj.apirestgen.schedulerconfig.model.exception.SavePlanConfigException500 ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+
+
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class ServiceSchedulerconfig
+{
+	/**
+	 * Logger
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(ServiceSchedulerconfig.class);
+
+	/**
+	 * NovaMetadata inserted for sending to the client.
+	 */
+	private final NovaMetadata novaMetadata;
+
+	/**
+	 * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+	 */
+	private final NovaRequestConfig novaRequestConfig;
+
+	/**
+	 * Attribute - Rest Handler
+	 */
+	private IRestHandlerSchedulerconfig restHandlerSchedulerconfig;
+
+	/**
+	 * Dependency injection constructor
+	 *
+	 * @param novaMetadata with the metadata
+	 * @param novaRequestConfig with the request config
+	 * @param restHandlerSchedulerconfig with the rest handler
+	 */
+	public ServiceSchedulerconfig(final @Qualifier("Schedulerconfig.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Schedulerconfig.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerSchedulerconfig restHandlerSchedulerconfig)
+	{
+		this.novaMetadata = novaMetadata;
+		this.novaRequestConfig = novaRequestConfig;
+		this.restHandlerSchedulerconfig = restHandlerSchedulerconfig;
+	}
+
+	/**
+	 * @param branchId Branch code where the user is working.
+	 * @param id Calendar Id in Db
+	 * @param uuaa UUAA code associated to the calendar
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws DeleteCalendarConfigException400 with an occurred exception
+	 * @throws DeleteCalendarConfigException500 with an occurred exception
+	 */
+	public Boolean deleteCalendarConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteCalendarConfigException400,  DeleteCalendarConfigException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [deleteCalendarConfig]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [deleteCalendarConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.deleteCalendarConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+	}
+
+
+	/**
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @param planCode Get a schedulers from a planCode
+	 * @param version Get a schedulers from a planCode and version
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws FindPlanConfigByVersionException400 with an occurred exception
+	 * @throws FindPlanConfigByVersionException500 with an occurred exception
+	 */
+	public PlanConfig[] findPlanConfigByVersion(final String branchId, final String uuaa, final String planCode, final String version) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindPlanConfigByVersionException400,  FindPlanConfigByVersionException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [findPlanConfigByVersion]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [findPlanConfigByVersion]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.findPlanConfigByVersion(this.novaRequestConfig, this.novaMetadata, branchId, uuaa, planCode, version);
+	}
+
+
+	/**
+	 * @param config Batch Configuration to save in the DDBB
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws SavePlanConfigException400 with an occurred exception
+	 * @throws SavePlanConfigException500 with an occurred exception
+	 */
+	public PlanConfig savePlanConfig(final PlanConfig config, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SavePlanConfigException400,  SavePlanConfigException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [savePlanConfig]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [savePlanConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.savePlanConfig(this.novaRequestConfig, this.novaMetadata, config, branchId, uuaa);
+	}
+
+
+	/**
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the calendars
+	 * @param commitId Commit identifier associated to the calendar
+	 * @param calendarId Scheduler identifier associated to the calendar
+	 * @param status Get a config from a status
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws FindCalendarConfigsException400 with an occurred exception
+	 * @throws FindCalendarConfigsException500 with an occurred exception
+	 */
+	public CalendarConfig[] findCalendarConfigs(final String branchId, final String uuaa, final String commitId, final String calendarId, final String[] status) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindCalendarConfigsException400,  FindCalendarConfigsException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [findCalendarConfigs]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [findCalendarConfigs]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.findCalendarConfigs(this.novaRequestConfig, this.novaMetadata, branchId, uuaa, commitId, calendarId, status);
+	}
+
+
+	/**
+	 * @param calendarCode Get a calendar from a calendarCode
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the calendars
+	 * @param version Get a calendar from a calendarCode and version
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws FindCalendarConfigByVersionException400 with an occurred exception
+	 * @throws FindCalendarConfigByVersionException500 with an occurred exception
+	 */
+	public CalendarConfig[] findCalendarConfigByVersion(final String calendarCode, final String branchId, final String uuaa, final String version) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindCalendarConfigByVersionException400,  FindCalendarConfigByVersionException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [findCalendarConfigByVersion]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [findCalendarConfigByVersion]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.findCalendarConfigByVersion(this.novaRequestConfig, this.novaMetadata, calendarCode, branchId, uuaa, version);
+	}
+
+
+	/**
+	 * @param config Batch Configuration to publish in the DDBB
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws PublishPlanConfigFromHostException400 with an occurred exception
+	 * @throws PublishPlanConfigFromHostException500 with an occurred exception
+	 */
+	public Boolean publishPlanConfigFromHost(final PlanConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  PublishPlanConfigFromHostException400,  PublishPlanConfigFromHostException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [publishPlanConfigFromHost]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [publishPlanConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.publishPlanConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @param planId Scheduler identifier associated to the plan
+	 * @param commitId Commit identifier associated to the plan
+	 * @param status Get a config from a status
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws FindPlanConfigsException400 with an occurred exception
+	 * @throws FindPlanConfigsException500 with an occurred exception
+	 */
+	public PlanConfig[] findPlanConfigs(final String branchId, final String uuaa, final String planId, final String commitId, final String[] status) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindPlanConfigsException400,  FindPlanConfigsException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [findPlanConfigs]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [findPlanConfigs]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.findPlanConfigs(this.novaRequestConfig, this.novaMetadata, branchId, uuaa, planId, commitId, status);
+	}
+
+
+	/**
+	 * @param paginationInfo Pagination information to find in the DB
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws FindPlanConfigsPaginatedException400 with an occurred exception
+	 * @throws FindPlanConfigsPaginatedException500 with an occurred exception
+	 */
+	public PagePlanConfig findPlanConfigsPaginated(final PaginationInfo paginationInfo, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindPlanConfigsPaginatedException400,  FindPlanConfigsPaginatedException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [findPlanConfigsPaginated]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [findPlanConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.findPlanConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, branchId, uuaa);
+	}
+
+
+	/**
+	 * @param branchId Branch code where the user is working.
+	 * @param id Plan Id in Db
+	 * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws DeletePlanConfigException400 with an occurred exception
+	 * @throws DeletePlanConfigException500 with an occurred exception
+	 */
+	public Boolean deletePlanConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeletePlanConfigException400,  DeletePlanConfigException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [deletePlanConfig]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [deletePlanConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.deletePlanConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+	}
+
+
+	/**
+	 * @param config Calendar Configuration to publish in the DDBB
+	 * @param uuaa UUAA code associated to the calendar
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws PublishCalendarConfigFromHostException400 with an occurred exception
+	 * @throws PublishCalendarConfigFromHostException500 with an occurred exception
+	 */
+	public Boolean publishCalendarConfigFromHost(final CalendarConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  PublishCalendarConfigFromHostException400,  PublishCalendarConfigFromHostException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [publishCalendarConfigFromHost]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [publishCalendarConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.publishCalendarConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+	 * @param paginationInfo Pagination information to find in the DB
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the calendars
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws FindCalendarConfigsPaginatedException400 with an occurred exception
+	 * @throws FindCalendarConfigsPaginatedException500 with an occurred exception
+	 */
+	public PageCalendarConfig findCalendarConfigsPaginated(final PaginationInfo paginationInfo, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindCalendarConfigsPaginatedException400,  FindCalendarConfigsPaginatedException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [findCalendarConfigsPaginated]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [findCalendarConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.findCalendarConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, branchId, uuaa);
+	}
+
+
+	/**
+	 * @param config Calendar Configuration to save in the DDBB
+	 * @param branchId Branch code where the user is working.
+	 * @param uuaa UUAA code associated to the calendar
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+	 * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+	 * @throws SaveCalendarConfigException400 with an occurred exception
+	 * @throws SaveCalendarConfigException500 with an occurred exception
+	 */
+	public CalendarConfig saveCalendarConfig(final CalendarConfig config, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveCalendarConfigException400,  SaveCalendarConfigException500
+	{
+		LOG.debug("[ServiceSchedulerconfig] -> [saveCalendarConfig]");
+
+		LOG.debug("[ServiceSchedulerconfig] -> [saveCalendarConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+		// Do the call to endpoint via RestHandler
+		return this.restHandlerSchedulerconfig.saveCalendarConfig(this.novaRequestConfig, this.novaMetadata, config, branchId, uuaa);
+	}
+
+
+}

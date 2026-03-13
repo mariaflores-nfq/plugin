@@ -1,0 +1,16 @@
+{
+  "workflowCode": "new_subworkflow_458",
+  "id": "ea755c65-1826-4bb9-84df-ade4c7ce8996",
+  "componentCode": "new_subworkflow_458",
+  "type": "Subworkflow",
+  "description": "holaaaaaaaa",
+  "nodeList": [
+    {
+      "id": "fb605cc1-f9fb-40c3-9ff9-f5f206607913",
+      "componentCode": "new_aggregator_808",
+      "type": "Aggregator",
+      "x": 88.0,
+      "y": 467.0
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 16:05:16 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import com.bbva.gkxj.apirestgen.branchconfig.client.jaxrs.rest.impl.RestHandlerBranchconfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.headers.NovaImplicitHeadersOutput ;
+import com.bbva.kltt.apirest.generator.lib.commons.uri.NovaSchemesValues ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Configuration
+public class ConfigBranchconfig
+{
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigBranchconfig.class);
+
+    /**
+     * Host:port of the microgateway external output
+     */
+    @Value("${microgateway.hostport.Branchconfig:localhost:24000}")
+    private String microgatewayHostPort;
+
+    /**
+     * Timeout of the microgateway external output connection
+     */
+    @Value("${microgateway.timeout.Branchconfig:10000}")
+    private Integer microgatewayTimeout;
+
+    /**
+     * Release Header
+     */
+    @Value("${release.header.Branchconfig:seguridad}")
+    private String releaseHeader;
+
+    /**
+     * @return a rest handler
+     */
+    @Bean
+    public RestHandlerBranchconfig getRestHandlerBranchconfig()
+    {
+        LOG.info("[ConfigBranchconfig] -> [getRestHandler]: generating new rest handler with host:port: [{}] and timeout: [{}]", this.microgatewayHostPort, this.microgatewayTimeout);
+        return new RestHandlerBranchconfig(this.microgatewayHostPort, this.microgatewayTimeout);
+    }
+
+    /**
+     * Create the NovaMetadata for the Clients API.
+     * The NovaMetadata must almost include the following headers:
+     * --- NovaImplicitHeadersOutput object: Mandatory headers in NOVA Erika versions
+     * --- iv-user: indicate the user that make the call
+     *
+     * @return a default project NovaMetadata
+     */
+    @Bean(name = "Branchconfig.novaMetadata")
+    public NovaMetadata getNovaMetadata()
+    {
+        LOG.debug("[ConfigBranchconfig] -> [getNovaMetadata]: generating  NovaMetadata for the API clients");
+
+        // Generate instance of NovaMetadata
+        final NovaMetadata novaMetadata = new NovaMetadata();
+
+        // Generate instance of Implicit Headers - Output
+        final NovaImplicitHeadersOutput novaImplicitHeadersOutput = new NovaImplicitHeadersOutput();
+
+        // Mandatory. Add the release name as header
+        final List<String> release = new ArrayList<String>();
+        release.add(this.releaseHeader);
+        novaImplicitHeadersOutput.setRawHeaderString("nova-release", release);
+
+        // Set the implicit header output into novaMetadata
+        novaMetadata.setNovaImplicitHeadersOutput(novaImplicitHeadersOutput);
+
+        LOG.info("[ConfigBranchconfig] -> [getnovaMetadata]: generated novaMetadata for release: [{}]", this.releaseHeader);
+
+        return novaMetadata;
+    }
+
+    /**
+     * Create the context request schema to send in the API clients.
+     * By default, in this example always will be generated http schema
+     *
+     * @return a config Schema request HTTP/HTTPS and timeout
+     */
+    @Bean(name = "Branchconfig.novaRequestconfig")
+    public NovaRequestConfig getConfigRequestSchema()
+    {
+        LOG.debug("[ConfigBranchconfig] -> [getConfigRequestSchema]: generating schema");
+
+        // Set one of the "novaSchemes" defined
+		final NovaSchemesValues novaScheme = NovaSchemesValues.http ;
+
+        // Generate instance of NovaRequestConfig
+        final NovaRequestConfig novaRequestConfig = new NovaRequestConfig();
+        novaRequestConfig.setNovaScheme(novaScheme);
+        novaRequestConfig.setTimeout(this.microgatewayTimeout);
+
+        LOG.debug("[ConfigBranchconfig] -> [getConfigRequestSchema]: generated http schema: [{}] with timeout", this.microgatewayTimeout);
+
+        return novaRequestConfig;
+    }
+}

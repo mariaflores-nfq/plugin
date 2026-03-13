@@ -1,0 +1,62 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.stereotype.Component;
+
+import com.bbva.gkxj.asyncapi.broker.SchedulerPlanPublisher.model.SchedulerPlanAudit;
+import com.bbva.gkxj.asyncapi.broker.SchedulerPlanPublisher.model.SchedulerPlanPayload;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.schedulerati.planning.SchedulerPlan;
+
+/**
+ * Generated code with
+ * the @nova-asyncapi/nova-java-spring-cloud-stream-template"
+ */
+@Component
+public class SchedulerPlanPublisher {
+
+	/** The Logger attribute */
+	private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerPlanPublisher.class);
+
+	/** Binding name (spring.cloud.spring.bindings.'bindingName' property) */
+	@Value("${spring.cloud.stream.bindings.publishSchedulerPlan-out-0.destination}")
+	private String channelName;
+
+	/** StreamBridge used to publish events */
+	private final StreamBridge streamBridge;
+
+	/**
+	 * Constructor
+	 *
+	 * @param streamBridge the stream bridge
+	 */
+	public SchedulerPlanPublisher(final StreamBridge streamBridge) {
+		this.streamBridge = streamBridge;
+	}
+
+	/**
+	 * Use StreamBridge to send a message
+	 *
+	 * @param payload the payload to send as SchedulerPlanPayload object
+	 */
+	public void publishSchedulerPlan(final SchedulerPlan schedulerPlan) {
+		try {
+			SchedulerPlanAudit schedulerPlanAudit = new SchedulerPlanAudit();
+			DeepMirrorMapper.deepCopy(schedulerPlan, schedulerPlanAudit);
+
+			schedulerPlanAudit.setId(schedulerPlan.get_id());
+			SchedulerPlanPayload payload = new SchedulerPlanPayload();
+			payload.setSchedulerPlanAudit(schedulerPlanAudit);
+			payload.setUuaa(schedulerPlan.getUuaa());
+
+			streamBridge.send(channelName, payload);
+			LOGGER.info("Published SchedulerPlanPayload: [{}]", payload);
+		} catch (Exception e) {
+			LOGGER.error("[**] Unexpected error with scheduler plan", e);
+		}
+	}
+
+}

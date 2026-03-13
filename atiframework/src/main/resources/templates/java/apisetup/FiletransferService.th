@@ -1,0 +1,119 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Thu Oct 16 15:53:01 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.t4i8.apirestgen.filetransfer.client.jaxrs.rest.IRestHandlerFiletransfer ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.ExecutedFTInstanceStatusDTO ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.FileTransferInstanceStatusDTO ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.NewFileTransferInstanceDTO ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.exception.ExecuteFileTransferInstanceException400 ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.exception.ExecuteFileTransferInstanceException403 ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.exception.ExecuteFileTransferInstanceException404 ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.exception.ExecuteFileTransferInstanceException500 ;
+import com.bbva.t4i8.apirestgen.filetransfer.model.exception.RunFileTransferInstanceException404 ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class FiletransferService
+{
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(FiletransferService.class);
+
+    /**
+     * NovaMetadata inserted for sending to the client.
+     */
+    private final NovaMetadata novaMetadata;
+
+    /**
+     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     */
+    private final NovaRequestConfig novaRequestConfig;
+
+    /**
+     * Attribute - Rest Handler
+     */
+    private IRestHandlerFiletransfer restHandlerFiletransfer;
+
+    /**
+     * Dependency injection constructor
+     *
+     * @param novaMetadata with the metadata
+     * @param novaRequestConfig with the request config
+     * @param restHandlerFiletransfer with the rest handler
+     */
+    public FiletransferService(final @Qualifier("Filetransfer.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Filetransfer.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerFiletransfer restHandlerFiletransfer)
+    {
+        this.novaMetadata = novaMetadata;
+        this.novaRequestConfig = novaRequestConfig;
+        this.restHandlerFiletransfer = restHandlerFiletransfer;
+    }
+
+	/**
+     * @param filetransferinstance value is not set in definition
+     * @param move move file (no copy), deleting it from source when transferred
+	 * @return Executed instance
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws ExecuteFileTransferInstanceException400 with an occurred exception
+     * @throws ExecuteFileTransferInstanceException500 with an occurred exception
+     * @throws ExecuteFileTransferInstanceException403 with an occurred exception
+     * @throws ExecuteFileTransferInstanceException404 with an occurred exception
+	 */
+	public ExecutedFTInstanceStatusDTO executeFileTransferInstance(final NewFileTransferInstanceDTO filetransferinstance, final Boolean move) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  ExecuteFileTransferInstanceException400,  ExecuteFileTransferInstanceException500,  ExecuteFileTransferInstanceException403,  ExecuteFileTransferInstanceException404
+	{
+		LOG.debug("[ServiceFiletransfer] -> [executeFileTransferInstance]");
+
+        LOG.debug("[ServiceFiletransfer] -> [executeFileTransferInstance]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerFiletransfer.executeFileTransferInstance(this.novaRequestConfig, this.novaMetadata, filetransferinstance, move);
+	}
+
+
+	/**
+     * @param filetransferinstance value is not set in definition
+     * @param move move file (no copy), deleting it from source when transferred
+	 * @return Executed instance
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws RunFileTransferInstanceException404 with an occurred exception
+	 */
+	public FileTransferInstanceStatusDTO runFileTransferInstance(final NewFileTransferInstanceDTO filetransferinstance, final Boolean move) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  RunFileTransferInstanceException404
+	{
+		LOG.debug("[ServiceFiletransfer] -> [runFileTransferInstance]");
+
+        LOG.debug("[ServiceFiletransfer] -> [runFileTransferInstance]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerFiletransfer.runFileTransferInstance(this.novaRequestConfig, this.novaMetadata, filetransferinstance, move);
+	}
+
+
+}

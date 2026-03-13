@@ -1,0 +1,123 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].databaseConfiguration;
+
+import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+[# th:if="${atiSettings.getIsMongoIncluded()}"]
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ConnectionString;
+import org.springframework.data.mongodb.core.MongoTemplate;
+[/]
+
+@Configuration
+@EnableBatchProcessing
+@EnableTransactionManagement
+public class DatabaseConfig {
+
+    /** The Logger attribute */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConfig.class);
+[# th:if="${atiSettings.getIsOracleIncluded() or atiSettings.getIsPostgreIncluded()}"]
+    /** The driver. */
+    @Value("${spring.datasource.driverClassName:HSQL}")
+    private String driver;
+
+    /** The user. */
+    @Value("${spring.datasource.username:sa}")
+    private String user;
+
+    /** The password. */
+    @Value("${spring.datasource.password:sa}")
+    private String password;
+
+    /** The url. */
+    @Value("${spring.datasource.url:localhost}")
+    private String url;
+[/][# th:if="${atiSettings.getIsOracleIncluded()}"]
+    @Bean("dataSourceOracle")
+    public DataSource dataSourceOracle() {
+       DataSource dataSource = null;
+       if ("oracle.jdbc.driver.OracleDriver".equals(driver)) {
+          DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
+          dataSourceBuilder.driverClassName(driver);
+          dataSourceBuilder.url(url);
+          dataSourceBuilder.username(user);
+          dataSourceBuilder.password(password);
+          dataSource = dataSourceBuilder.build();
+       } else {
+          EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+          dataSource = builder
+                .setType(EmbeddedDatabaseType.HSQL)
+                .build();
+       }
+       return dataSource;
+    }
+[/][# th:if="${atiSettings.getIsPostgreIncluded()}"]
+    /**
+     * Creates a DataSource bean for PostgreSQL database connection.
+     */
+    @Bean("dataSourcePOSTGRESQL")
+    public DataSource dataSourcePOSTGRESQL() {
+        DataSource dataSource = null;
+        if ("org.postgresql.Driver".equals(driver)) {
+            DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
+            dataSourceBuilder.driverClassName(driver);
+            dataSourceBuilder.url(url);
+            dataSourceBuilder.username(user);
+            dataSourceBuilder.password(password);
+            dataSource = dataSourceBuilder.build();
+        } else {
+            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+            dataSource = builder
+                    .setType(EmbeddedDatabaseType.HSQL)
+                    .addScript("classpath:drop.sql")
+                    .addScript("classpath:create.sql")
+                    .addScript("classpath:insert-data.sql")
+                    .build();
+        }
+        return dataSource;
+    }
+[/][# th:if="${atiSettings.getIsMongoIncluded()}"]
+    /**
+     * Method that creates a {@link MongoClient} bean.
+     */
+    @Bean
+    public MongoClient mongoClientAll(@Value("${MongoLibrary.user:user}") String user,
+                                      @Value("${MongoLibrary.password:pass}") String password,
+                                      @Value("${MongoLibrary.hosts:localhost}") String host,
+                                      @Value("${MongoLibrary.database:test}") String dataBase,
+                                      @Value("${MongoLibrary.options:}") String options) {
+        String connection = "mongodb://" + user + ":" + password +"@" + host + "/" + dataBase;
+        if (options != null && !options.isBlank()) {
+            connection = connection + "?" + options;
+        }
+        LOGGER.info(connection);
+        ConnectionString connectionString = new ConnectionString(connection);
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .applyConnectionString(connectionString)
+                .build();
+
+        return MongoClients.create(mongoClientSettings);
+    }
+
+    /**
+     * Method that creates a {@link MongoTemplate} bean.
+     */
+    @Bean
+    public MongoTemplate mongoTemplateAll(@Qualifier("mongoClientAll") MongoClient mongoClientAll, @Value("${MongoLibrary.database:test}") String dataBase) {
+        return new MongoTemplate(mongoClientAll, dataBase);
+    }
+[/]
+}

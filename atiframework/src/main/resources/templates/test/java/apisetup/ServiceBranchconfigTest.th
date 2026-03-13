@@ -1,0 +1,145 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceBranchconfig;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+
+import com.bbva.gkxj.apirestgen.branchconfig.client.jaxrs.rest.IRestHandlerBranchconfig;
+import com.bbva.gkxj.apirestgen.branchconfig.model.BranchConfig;
+import com.bbva.gkxj.apirestgen.branchconfig.model.CommitConflicts;
+import com.bbva.gkxj.apirestgen.branchconfig.model.CompareConfig;
+import com.bbva.gkxj.apirestgen.branchconfig.model.PageBranchConfig;
+import com.bbva.gkxj.apirestgen.branchconfig.model.PaginationInfo;
+import com.bbva.gkxj.apirestgen.branchconfig.model.TagConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@SpringBootTest(classes = {ServiceBranchconfig.class})
+@DirtiesContext
+@RunWith(MockitoJUnitRunner.class)
+@TestPropertySource(properties = {
+    "microgateway.hostport.Branchconfig=localhost:24000",
+    "microgateway.timeout.Branchconfig=10000",
+    "release.header.Branchconfig=seguridad"
+})
+public class ServiceBranchconfigTest {
+
+    @Mock
+    private IRestHandlerBranchconfig restHandlerBranchconfig;
+
+    @Mock
+    private NovaMetadata novaMetadata;
+
+    @Mock
+    private NovaRequestConfig novaRequestConfig;
+
+    @InjectMocks
+    private ServiceBranchconfig serviceBranchconfig;
+
+    @Test
+    public void testServiceBranchconfigInitialization() {
+        assertNotNull("ServiceBranchconfig should not be null", serviceBranchconfig);
+    }
+
+    @Test
+    public void testFindBranchConfigsPaginated() throws Exception {
+        PaginationInfo paginationInfo = new PaginationInfo();
+        String uuaa = "testUuaa";
+        PageBranchConfig expectedPage = new PageBranchConfig();
+
+        when(restHandlerBranchconfig.findBranchConfigsPaginated(novaRequestConfig, novaMetadata, paginationInfo, uuaa))
+            .thenReturn(expectedPage);
+
+        PageBranchConfig result = serviceBranchconfig.findBranchConfigsPaginated(paginationInfo, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        verify(restHandlerBranchconfig).findBranchConfigsPaginated(novaRequestConfig, novaMetadata, paginationInfo, uuaa);
+    }
+
+    @Test
+    public void testCommitBranchConfig() throws Exception {
+        BranchConfig expectedBranchConfig = new BranchConfig();
+        CommitConflicts commitConflicts = new CommitConflicts();
+        String branchId = "branchId";
+        String userId = "userId";
+        String commitCode = "commitCode";
+        String uuaa = "testUuaa";
+        String comments = "comments";
+
+        when(restHandlerBranchconfig.commitBranchConfig(novaRequestConfig, novaMetadata, commitConflicts, branchId, userId, commitCode, uuaa, comments))
+            .thenReturn(expectedBranchConfig);
+
+        BranchConfig result = serviceBranchconfig.commitBranchConfig(commitConflicts, branchId, userId, commitCode, uuaa, comments);
+
+        assertNotNull("Result should not be null", result);
+        verify(restHandlerBranchconfig).commitBranchConfig(novaRequestConfig, novaMetadata, commitConflicts, branchId, userId, commitCode, uuaa, comments);
+    }
+    @Test
+    public void testSaveTagConfigFromHost() throws Exception {
+        TagConfig tagConfig = new TagConfig(); // Crea una instancia de TagConfig
+        String uuaa = "testUuaa";
+
+        when(restHandlerBranchconfig.saveTagConfigFromHost(novaRequestConfig, novaMetadata, tagConfig, uuaa)).thenReturn(true);
+
+        Boolean result = serviceBranchconfig.saveTagConfigFromHost(tagConfig, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        verify(restHandlerBranchconfig).saveTagConfigFromHost(novaRequestConfig, novaMetadata, tagConfig, uuaa);
+    }
+
+    @Test
+    public void testDeleteBranchConfig() throws Exception {
+        String uuaa = "testUuaa";
+        String branchId = "branchId";
+
+        when(restHandlerBranchconfig.deleteBranchConfig(novaRequestConfig, novaMetadata, uuaa, branchId))
+            .thenReturn(true);
+
+        Boolean result = serviceBranchconfig.deleteBranchConfig(uuaa, branchId);
+
+        assertNotNull("Result should not be null", result);
+        verify(restHandlerBranchconfig).deleteBranchConfig(novaRequestConfig, novaMetadata, uuaa, branchId);
+    }
+
+    @Test
+    public void testCreateBranchConfig() throws Exception {
+        BranchConfig inputBranchConfig = new BranchConfig();
+        BranchConfig expectedBranchConfig = new BranchConfig();
+        String branchId = "branchId";
+        String userId = "userId";
+        String uuaa = "testUuaa";
+
+        when(restHandlerBranchconfig.createBranchConfig(novaRequestConfig, novaMetadata, inputBranchConfig, branchId, userId, uuaa))
+            .thenReturn(expectedBranchConfig);
+
+        BranchConfig result = serviceBranchconfig.createBranchConfig(inputBranchConfig, branchId, userId, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        verify(restHandlerBranchconfig).createBranchConfig(novaRequestConfig, novaMetadata, inputBranchConfig, branchId, userId, uuaa);
+    }
+
+    @Test
+    public void testCompareCommitConfig() throws Exception {
+        CompareConfig compareConfig = new CompareConfig();
+        String uuaa = "testUuaa";
+        CommitConflicts expectedConflicts = new CommitConflicts();
+
+        when(restHandlerBranchconfig.compareCommitConfig(novaRequestConfig, novaMetadata, compareConfig, uuaa))
+            .thenReturn(expectedConflicts);
+
+        CommitConflicts result = serviceBranchconfig.compareCommitConfig(compareConfig, uuaa);
+
+        assertNotNull("Result should not be null", result);
+        verify(restHandlerBranchconfig).compareCommitConfig(novaRequestConfig, novaMetadata, compareConfig, uuaa);
+    }
+}

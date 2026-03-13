@@ -1,0 +1,88 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].audit;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].audit.ServiceBatchaudit;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.bbva.gkxj.apirestgen.batchaudit.client.jaxrs.rest.IRestHandlerBatchaudit;
+import com.bbva.gkxj.apirestgen.batchaudit.model.BatchAudit;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@SpringBootTest(classes = {ServiceBatchaudit.class})
+@RunWith(MockitoJUnitRunner.class)
+public class ServiceBatchauditTest {
+
+    @Mock
+    private NovaMetadata novaMetadata;
+
+    @Mock
+    private NovaRequestConfig novaRequestConfig;
+
+    @Mock
+    private IRestHandlerBatchaudit restHandlerBatchaudit;
+
+    @InjectMocks
+    private ServiceBatchaudit serviceBatchaudit;
+
+    @Before
+    public void setUp() {
+    }
+
+    @Test
+    public void testServiceBatchauditInitialization() {
+        assertNotNull("ServiceBatchaudit should not be null", serviceBatchaudit);
+    }
+    @Test
+    public void testFindOneBatchConfigByExecutionId() throws Exception {
+        String uuaa = "testUuaa";
+        String executionId = "testExecutionId";
+        BatchAudit expectedBatchAudit = new BatchAudit();
+
+        when(restHandlerBatchaudit.findOneBatchConfigByExecutionId(any(), any(), anyString(), anyString())).thenReturn(expectedBatchAudit);
+
+        BatchAudit result = serviceBatchaudit.findOneBatchConfigByExecutionId(uuaa, executionId);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedBatchAudit, result);
+    }
+
+    @Test
+    public void testFindBatchAudit() throws Exception {
+        String uuaa = "testUuaa";
+        BatchAudit[] expectedBatchAudits = new BatchAudit[1];
+        expectedBatchAudits[0] = new BatchAudit();
+
+        when(restHandlerBatchaudit.findBatchAudit(any(), any(), anyString())).thenReturn(expectedBatchAudits);
+
+        BatchAudit[] result = serviceBatchaudit.findBatchAudit(uuaa);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedBatchAudits.length, result.length);
+    }
+    @Test
+    public void testFindOneBatchConfig() throws Exception {
+        String uuaa = "testUuaa";
+        String parentExecutionId = "testParentExecutionId";
+        String parentStepExecutionId = "testParentStepExecutionId";
+        BatchAudit expectedBatchAudit = new BatchAudit();
+
+        when(restHandlerBatchaudit.findOneBatchConfig(any(), any(), anyString(), anyString(), anyString())).thenReturn(expectedBatchAudit);
+
+        BatchAudit result = serviceBatchaudit.findOneBatchConfig(uuaa, parentExecutionId, parentStepExecutionId);
+
+        assertNotNull("Result should not be null", result);
+        assertEquals(expectedBatchAudit, result);
+    }
+}

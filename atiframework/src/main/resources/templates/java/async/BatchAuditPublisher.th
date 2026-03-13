@@ -1,0 +1,86 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.stereotype.Component;
+
+import com.bbva.gkxj.asyncapi.broker.BatchAuditPublisher.model.BatchAudit;
+import com.bbva.gkxj.asyncapi.broker.BatchAuditPublisher.model.BatchAuditPayload;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.orchestatorati.model.BatchExecution;
+import com.bbva.gkxj.orchestatorati.model.StepStatement;
+
+
+/**
+ * Generated code with
+ * the @nova-asyncapi/nova-java-spring-cloud-stream-template"
+ */
+@Component
+public class BatchAuditPublisher {
+
+	/** The Logger attribute */
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatchAuditPublisher.class);
+
+	/** Binding name (spring.cloud.spring.bindings.'bindingName' property) */
+	@Value("${spring.cloud.stream.bindings.publishBatchAudit-out-0.destination}")
+	private String channelName;
+
+	/** StreamBridge used to publish events */
+	private final StreamBridge streamBridge;
+
+	/**
+	 * Public constructor
+	 *
+	 * @param streamBridge the stream bridge
+	 */
+	public BatchAuditPublisher(final StreamBridge streamBridge) {
+		this.streamBridge = streamBridge;
+	}
+
+	/**
+	 * Use StreamBridge to send a message
+	 *
+	 * @param payload the payload to send as BatchAuditPayload object
+	 */
+	public void publishBatchAudit(final BatchExecution batchExecution) {
+		try {
+			BatchAudit batchAudit = new BatchAudit();
+			DeepMirrorMapper.deepCopy(batchExecution, batchAudit);
+			if (batchAudit.getStepStatementMap() != null) {
+				Map<String, StepStatement> stepStatementMap = batchExecution.getStepStatementMap();
+				for (Map.Entry<String, StepStatement> item : stepStatementMap.entrySet()) {
+					StepStatement param = stepStatementMap.get(item.getKey());
+					if (param != null) {
+						StepStatement stepStatement = new StepStatement();
+						try {
+							DeepMirrorMapper.deepCopy(param, stepStatement);
+						} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+								| IllegalAccessException | InstantiationException | InvocationTargetException
+								| NoSuchMethodException e) {
+							LOGGER.error("[ServiceBatchAudit] -> Error reading the Spring Batch detail in Executor ATI",
+									e);
+						}
+						item.setValue(stepStatement);
+					}
+				}
+			}
+
+			BatchAuditPayload payload = new BatchAuditPayload();
+			batchAudit.setId(batchExecution.get_id());
+			payload.setBatchAudit(batchAudit);
+			payload.setUuaa(batchExecution.getUuaa());
+
+			streamBridge.send(channelName, payload);
+			LOGGER.info("Published BatchAuditPayload: [{}]", payload);
+		} catch (Exception e) {
+			LOGGER.error("[**] Unexpected error with batchExecution", e);
+		}
+
+	}
+
+}

@@ -1,0 +1,31 @@
+{
+    "_id" : ObjectId("68e3985d9d30736cadf5bf60"),
+    "recordVersion" : NumberInt(1),
+    "uuaa" : "gkxj",
+    "calendarCode" : "calendar_prueba",
+    "calendarDayList" : [
+        "2025-01-01",
+        "2025-12-26",
+        "2025-10-04",
+        "2025-10-10",
+        "2025-10-02"
+    ],
+    "description" : "nuevas fechas",
+    "calendarType" : "HOLIDAY",
+    "version" : "V1.0.1",
+    "paramAuditList" : [
+        {
+            "audTs" : "2025-10-06T12:22:20.902+02:00",
+            "comments" : "Commit by user T041143",
+            "audUser" : "T041143",
+            "status" : "NOT_PUBLISHED"
+        },
+        {
+            "audTs" : "2025-10-06T12:23:56.596+02:00",
+            "comments" : "Commit by user T041143",
+            "audUser" : "T041143",
+            "status" : "PUBLISHED"
+        }
+    ],
+    "status" : "PUBLISHED",
+}

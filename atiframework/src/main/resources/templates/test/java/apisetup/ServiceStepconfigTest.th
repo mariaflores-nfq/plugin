@@ -1,0 +1,55 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceStepconfig;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.stepconfig.client.jaxrs.rest.IRestHandlerStepconfig;
+import com.bbva.gkxj.apirestgen.stepconfig.model.StepConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ServiceStepconfigTest {
+
+    @InjectMocks
+    private ServiceStepconfig serviceStepconfig;
+
+    @Mock
+    @Qualifier("Stepconfig.novaMetadata")
+    private NovaMetadata novaMetadata;
+
+    @Mock
+    @Qualifier("Stepconfig.novaRequestconfig")
+    private NovaRequestConfig novaRequestConfig;
+
+    @Mock
+    private IRestHandlerStepconfig restHandlerStepconfig;
+
+
+
+    @Test
+    public void testSaveStepConfig() throws Exception {
+        // Arrange
+        StepConfig config = new StepConfig(); // Crea un objeto StepConfig de prueba
+        String branchCode = "branch1";
+        String uuaa = "uuaa1";
+
+        when(restHandlerStepconfig.saveStepConfig(novaRequestConfig, novaMetadata, config, branchCode, uuaa))
+            .thenReturn(config);
+
+        StepConfig result = serviceStepconfig.saveStepConfig(config, branchCode, uuaa);
+
+        assertEquals("The returned StepConfig should match the input", config, result);
+        verify(restHandlerStepconfig, times(1)).saveStepConfig(novaRequestConfig, novaMetadata, config, branchCode, uuaa);
+    }
+}

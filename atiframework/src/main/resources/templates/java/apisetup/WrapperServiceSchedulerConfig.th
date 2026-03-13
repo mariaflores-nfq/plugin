@@ -1,0 +1,71 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import com.bbva.gkxj.atilibrary.schedulerconfig.CalendarConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.schedulerconfig.PlanConfig;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.schedulerati.apisetup.IWrapperServiceSchedulerConfig;
+
+/**
+ * Clase que envuelve las llamadas al API Rest de SchedulerConfig.
+ */
+@Service
+public class WrapperServiceSchedulerConfig implements IWrapperServiceSchedulerConfig {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(WrapperServiceSchedulerConfig.class);
+
+	/**
+	 * ApiRequest Service, para poder llamar a la librería de SchedulerPlanAudit
+	 */
+	private ServiceSchedulerconfig serviceSchedulerConfig;
+
+	/**
+	 * Constructor por defecto en el que se inyecta el apiRequestService.
+	 *
+	 * @param apiRequestService contexto de spring
+	 * @param serviceName
+	 * @param apiVersion
+	 * @param basePath
+	 * @param timeout
+	 */
+	public WrapperServiceSchedulerConfig(ServiceSchedulerconfig serviceSchedulerConfig) {
+		super();
+		this.serviceSchedulerConfig = serviceSchedulerConfig;
+	}
+
+	@Override
+	public Boolean publishPlanConfigFromHost(PlanConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.schedulerconfig.model.PlanConfig planConfig =
+				new com.bbva.gkxj.apirestgen.schedulerconfig.model.PlanConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, planConfig);
+			returnValue = serviceSchedulerConfig.publishPlanConfigFromHost(planConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceReleaseConfig] -> Error to publish ReleaseConfig in API rest", e.getMessage());
+		}
+
+		return returnValue;
+	}
+
+	@Override
+	public Boolean publishCalendarConfigFromHost(CalendarConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.schedulerconfig.model.CalendarConfig calendarConfig =
+				new com.bbva.gkxj.apirestgen.schedulerconfig.model.CalendarConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, calendarConfig);
+			returnValue = serviceSchedulerConfig.publishCalendarConfigFromHost(calendarConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceReleaseConfig] -> Error to publish ReleaseConfig in API rest", e.getMessage());
+		}
+
+		return returnValue;
+	}
+}

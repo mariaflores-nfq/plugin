@@ -1,0 +1,93 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ServiceBranchconfig;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.WrapperServiceBranchConfig;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.BranchConfig;
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.CommitConfig;
+import com.bbva.gkxj.atilibrary.apisetup.branchconfig.TagConfig;
+
+
+@SpringBootTest(classes = {WrapperServiceBranchConfig.class})
+@RunWith(MockitoJUnitRunner.class)
+public class WrapperServiceBranchConfigTest {
+
+    @Mock
+    private ServiceBranchconfig serviceBranchConfig; // Mock de ServiceBranchconfig
+
+    @InjectMocks
+    private WrapperServiceBranchConfig wrapperServiceBranchConfig; // Clase a probar
+
+    @Before
+    public void setUp() {
+        // Inicializa cualquier configuración necesaria antes de cada prueba
+    }
+
+    @Test
+    public void testWrapperServiceBranchConfigInitialization() {
+        assertNotNull("WrapperServiceBranchConfig should not be null", wrapperServiceBranchConfig);
+    }
+
+    @Test
+    public void testSaveTagConfigFromHost() throws Exception {
+        TagConfig tagConfig = new TagConfig();
+        tagConfig.setCommitId("commitId");
+        String uuaa = "testUuaa";
+
+        // Simulamos el comportamiento del mock
+        when(serviceBranchConfig.saveTagConfigFromHost(any(), anyString())).thenReturn(true);
+
+        // Llamamos al método a probar
+        Boolean result = wrapperServiceBranchConfig.saveTagConfigFromHost(tagConfig, uuaa);
+
+        // Verificamos el resultado
+        assertNotNull("Result should not be null", result);
+        assertEquals(Boolean.TRUE, result);
+    }
+
+    @Test
+    public void testSaveBranchConfigFromHost() throws Exception {
+        BranchConfig branchConfig = new BranchConfig();
+        branchConfig.setCommitId("commitId");
+        String uuaa = "testUuaa";
+
+        // Simulamos el comportamiento del mock
+        when(serviceBranchConfig.saveBranchConfigFromHost(any(), anyString())).thenReturn(true);
+
+        // Llamamos al método a probar
+        Boolean result = wrapperServiceBranchConfig.saveBranchConfigFromHost(branchConfig, uuaa);
+
+        // Verificamos el resultado
+        assertNotNull("Result should not be null", result);
+        assertEquals(Boolean.TRUE, result);
+    }
+
+    @Test
+    public void testSaveCommitConfigFromHost() throws Exception {
+        CommitConfig commitConfig = new CommitConfig();
+        String uuaa = "testUuaa";
+
+        // Simulamos el comportamiento del mock
+        when(serviceBranchConfig.saveCommitConfigFromHost(any(), anyString())).thenReturn(true);
+
+        // Llamamos al método a probar
+        Boolean result = wrapperServiceBranchConfig.saveCommitConfigFromHost(commitConfig, uuaa);
+
+        // Verificamos el resultado
+        assertNotNull("Result should not be null", result);
+        assertEquals(Boolean.TRUE, result);
+    }
+}

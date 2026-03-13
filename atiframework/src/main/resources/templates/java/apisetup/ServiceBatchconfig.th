@@ -1,0 +1,224 @@
+/*********************************************************************************************************************************
+ This class has been automatically generated using KLTT-APIRestGenerator project, don't do manual file modifications.
+ Wed Apr 09 16:22:52 CEST 2025
+
+ "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements;
+  and to You under the Apache License, Version 2.0. "
+**********************************************************************************************************************************/
+
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
+import com.bbva.gkxj.apirestgen.batchconfig.model.BatchConfig ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.PaginationInfo ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.PageBatchConfig ;
+import com.bbva.gkxj.apirestgen.batchconfig.client.jaxrs.rest.IRestHandlerBatchconfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.request.NovaApiClientRequestException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.exception.response.NovaApiClientResponseTimeoutException ;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig ;
+import com.bbva.kltt.apirest.generator.lib.commons.exception.Errors ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.FindBatchConfigByVersionException400 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.FindBatchConfigByVersionException500 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.DeleteBatchConfigException400 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.DeleteBatchConfigException500 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.SaveBatchConfigException400 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.SaveBatchConfigException500 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.FindBatchConfigsPaginatedException400 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.FindBatchConfigsPaginatedException500 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.PublishBatchConfigFromHostException400 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.PublishBatchConfigFromHostException500 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.FindBatchConfigsException400 ;
+import com.bbva.gkxj.apirestgen.batchconfig.model.exception.FindBatchConfigsException500 ;
+
+/**
+ * ------------------------------------------------
+ * @author API Rest Generator
+ * ------------------------------------------------
+ */
+@Service
+public class ServiceBatchconfig
+{
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceBatchconfig.class);
+
+    /**
+     * NovaMetadata inserted for sending to the client.
+     */
+    private final NovaMetadata novaMetadata;
+
+    /**
+     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     */
+    private final NovaRequestConfig novaRequestConfig;
+
+    /**
+     * Attribute - Rest Handler
+     */
+    private IRestHandlerBatchconfig restHandlerBatchconfig;
+
+    /**
+     * Dependency injection constructor
+     *
+     * @param novaMetadata with the metadata
+     * @param novaRequestConfig with the request config
+     * @param restHandlerBatchconfig with the rest handler
+     */
+    public ServiceBatchconfig(final @Qualifier("Batchconfig.novaMetadata") NovaMetadata novaMetadata, final @Qualifier("Batchconfig.novaRequestconfig") NovaRequestConfig novaRequestConfig, final IRestHandlerBatchconfig restHandlerBatchconfig)
+    {
+        this.novaMetadata = novaMetadata;
+        this.novaRequestConfig = novaRequestConfig;
+        this.restHandlerBatchconfig = restHandlerBatchconfig;
+    }
+
+	/**
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the schedulers
+     * @param batchCode Unique key of the configuration
+     * @param version Config specific version
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindBatchConfigByVersionException400 with an occurred exception
+     * @throws FindBatchConfigByVersionException500 with an occurred exception
+	 */
+	public BatchConfig[] findBatchConfigByVersion(final String branchId, final String uuaa, final String batchCode, final String version) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBatchConfigByVersionException400,  FindBatchConfigByVersionException500
+	{
+		LOG.debug("[ServiceBatchconfig] -> [findBatchConfigByVersion]");
+
+        LOG.debug("[ServiceBatchconfig] -> [findBatchConfigByVersion]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBatchconfig.findBatchConfigByVersion(this.novaRequestConfig, this.novaMetadata, branchId, uuaa, batchCode, version);
+	}
+
+
+	/**
+     * @param config Batch Configuration to save in the DDBB
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws SaveBatchConfigException400 with an occurred exception
+     * @throws SaveBatchConfigException500 with an occurred exception
+	 */
+	public BatchConfig saveBatchConfig(final BatchConfig config, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  SaveBatchConfigException400,  SaveBatchConfigException500
+	{
+		LOG.debug("[ServiceBatchconfig] -> [saveBatchConfig]");
+
+        LOG.debug("[ServiceBatchconfig] -> [saveBatchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBatchconfig.saveBatchConfig(this.novaRequestConfig, this.novaMetadata, config, branchId, uuaa);
+	}
+
+
+	/**
+     * @param config Batch Configuration to save in the DDBB
+     * @param uuaa UUAA code associated to the config
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws PublishBatchConfigFromHostException400 with an occurred exception
+     * @throws PublishBatchConfigFromHostException500 with an occurred exception
+	 */
+	public Boolean publishBatchConfigFromHost(final BatchConfig config, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  PublishBatchConfigFromHostException400,  PublishBatchConfigFromHostException500
+	{
+		LOG.debug("[ServiceBatchconfig] -> [publishBatchConfigFromHost]");
+
+        LOG.debug("[ServiceBatchconfig] -> [publishBatchConfigFromHost]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBatchconfig.publishBatchConfigFromHost(this.novaRequestConfig, this.novaMetadata, config, uuaa);
+	}
+
+
+	/**
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the configs
+     * @param commitId Commit identifier associated to the step
+     * @param batchId Batch identifier associated to the step
+     * @param status Get a config from a status
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindBatchConfigsException400 with an occurred exception
+     * @throws FindBatchConfigsException500 with an occurred exception
+	 */
+	public BatchConfig[] findBatchConfigs(final String branchId, final String uuaa, final String commitId, final String batchId, final String[] status) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBatchConfigsException400,  FindBatchConfigsException500
+	{
+		LOG.debug("[ServiceBatchconfig] -> [findBatchConfigs]");
+
+        LOG.debug("[ServiceBatchconfig] -> [findBatchConfigs]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBatchconfig.findBatchConfigs(this.novaRequestConfig, this.novaMetadata, branchId, uuaa, commitId, batchId, status);
+	}
+
+
+	/**
+     * @param paginationInfo Pagination information to find in the DB
+     * @param branchId Branch code where the user is working.
+     * @param uuaa UUAA code associated to the configs
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws FindBatchConfigsPaginatedException400 with an occurred exception
+     * @throws FindBatchConfigsPaginatedException500 with an occurred exception
+	 */
+	public PageBatchConfig findBatchConfigsPaginated(final PaginationInfo paginationInfo, final String branchId, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  FindBatchConfigsPaginatedException400,  FindBatchConfigsPaginatedException500
+	{
+		LOG.debug("[ServiceBatchconfig] -> [findBatchConfigsPaginated]");
+
+        LOG.debug("[ServiceBatchconfig] -> [findBatchConfigsPaginated]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBatchconfig.findBatchConfigsPaginated(this.novaRequestConfig, this.novaMetadata, paginationInfo, branchId, uuaa);
+	}
+
+
+	/**
+     * @param branchId Branch code where the user is working.
+     * @param id Batch Id in Db
+     * @param uuaa UUAA code associated to the schedulers
+	 * @return Success
+	 * @throws NovaApiClientRequestException with an API client request exception
+	 * @throws NovaApiClientResponseException with an API client response exception
+	 * @throws NovaApiClientResponseTimeoutException with an API client response timeout exception
+     * @throws com.bbva.kltt.apirest.generator.lib.commons.exception.Errors with an occurred exception
+     * @throws DeleteBatchConfigException400 with an occurred exception
+     * @throws DeleteBatchConfigException500 with an occurred exception
+	 */
+	public Boolean deleteBatchConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteBatchConfigException400,  DeleteBatchConfigException500
+	{
+		LOG.debug("[ServiceBatchconfig] -> [deleteBatchConfig]");
+
+        LOG.debug("[ServiceBatchconfig] -> [deleteBatchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
+
+        // Do the call to endpoint via RestHandler
+        return this.restHandlerBatchconfig.deleteBatchConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+	}
+
+}
+

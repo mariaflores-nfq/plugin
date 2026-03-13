@@ -1,0 +1,50 @@
+{
+  "componentCode": "JMS_Receiver_Main",
+  "version": "dgg",
+  "status": "dsgdsg",
+  "description": "aaaaaaaaaaaaaaaaaaaaaaaaa",
+  "type": "Input Adapter",
+  "subtype": "JMS",
+  "jmsConfig": {
+    "queueName": "",
+    "javaClassName": "",
+    "messageType": "XML",
+    "isCritical": false,
+    "xmlFields": [
+      {
+        "fieldName": "aaaaaaaaaa",
+        "payloadPath": "aaa",
+        "priority": 1,
+        "extractionType": "XPath",
+        "extractionValue": "aaaaa",
+        "fieldLength": "aaa",
+        "regularExpression": "aaaa"
+      }
+    ],
+    "jsonFields": [
+      {}
+    ],
+    "csvFields": []
+  },
+  "asyncApiConfig": {
+    "queueName": "",
+    "javaClassName": "",
+    "messageType": "XML",
+    "isCritical": false,
+    "xmlFields": [
+      {
+        "fieldName": "aaaaaaaaaa",
+        "payloadPath": "aaa",
+        "priority": 1,
+        "extractionType": "XPath",
+        "extractionValue": "aaaaa",
+        "fieldLength": "aaa",
+        "regularExpression": "aaaa"
+      }
+    ],
+    "jsonFields": [
+      {}
+    ],
+    "csvFields": []
+  }
+}

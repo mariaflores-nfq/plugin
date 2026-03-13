@@ -1,0 +1,27 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.interfaces.steplauncher.StepLauncherPayload;
+import com.bbva.gkxj.executorati.executor.AtiExecutor;
+import com.bbva.gkxj.orchestatorati.callback.IStepLauncher;
+
+@Service
+public class StepLauncherImpl implements IStepLauncher {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(StepLauncherImpl.class);
+	private final AtiExecutor atiExecutor;
+
+	public StepLauncherImpl(AtiExecutor atiExecutor) {
+		super();
+		this.atiExecutor = atiExecutor;
+	}
+
+	@Override
+	public void launchStep(StepLauncherPayload message) {
+		LOGGER.info("Launch Step with StepCode:" + message.getStepCode());
+		this.atiExecutor.launchStep(message);
+	}
+}

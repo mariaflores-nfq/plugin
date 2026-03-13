@@ -1,0 +1,50 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].apisetup;
+
+import static org.junit.Assert.assertNotNull;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup.ConfigSchedulerconfig;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bbva.gkxj.apirestgen.schedulerconfig.client.jaxrs.rest.impl.RestHandlerSchedulerconfig;
+import com.bbva.kltt.apirest.generator.lib.commons.client.request.NovaRequestConfig;
+import com.bbva.kltt.apirest.generator.lib.commons.metadata.NovaMetadata;
+
+@SpringBootTest(classes = {ConfigSchedulerconfig.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = {
+    "microgateway.hostport.Schedulerconfig=localhost:24000",
+    "microgateway.timeout.Schedulerconfig=10000",
+    "release.header.Schedulerconfig=seguridad"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ConfigSchedulerconfigTest {
+
+    @MockBean
+    private RestHandlerSchedulerconfig restHandlerSchedulerconfig;
+
+    @InjectMocks
+    private ConfigSchedulerconfig configSchedulerconfig;
+
+
+    @Test
+    public void testGetNovaMetadata() {
+        NovaMetadata novaMetadata = configSchedulerconfig.getNovaMetadata();
+        assertNotNull("NovaMetadata should not be null", novaMetadata);
+    }
+
+    @Test
+    public void testGetConfigRequestSchema() {
+        NovaRequestConfig requestConfig = configSchedulerconfig.getConfigRequestSchema();
+        assertNotNull("NovaRequestConfig should not be null", requestConfig);
+    }
+}

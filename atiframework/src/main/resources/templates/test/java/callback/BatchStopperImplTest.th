@@ -1,0 +1,31 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].callback;
+
+import com.bbva.gkxj.orchestatorati.apisetup.model.BatchExecutorPayload;
+import com.bbva.gkxj.orchestatorati.orchestator.OrchestatorAti;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback.BatchStopperImpl;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+class BatchStopperImplTest {
+
+    @Mock
+    private OrchestatorAti orchestator;
+
+    @InjectMocks
+    private BatchStopperImpl batchStopper;
+
+    @Test
+    void batchStop() {
+        BatchExecutorPayload payload = Mockito.mock(BatchExecutorPayload.class);
+        batchStopper.batchStop(payload);
+        verify(orchestator, times(1)).stopBatch(payload);
+    }
+}

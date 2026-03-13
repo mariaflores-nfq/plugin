@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.bbva.[(${atiSettings.getUuaa().toLowerCase()})]</groupId>
+  <artifactId>[(${atiSettings.getServiceName().toLowerCase()})]</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  <name>[(${atiSettings.getServiceName().toLowerCase()})]</name>
+  <description>[(${atiSettings.getServiceDescription().toLowerCase()})]</description>
+
+  <parent>
+    <groupId>com.bbva.enoa.core</groupId>
+    <artifactId>base</artifactId>
+    <version>9.16.0</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>11</java.version>
+    <nova.jdk.name>amazon-corretto-11.0.11.9.1</nova.jdk.name>
+  </properties>
+
+  <dependencies>
+    <dependency>
+       <groupId>com.bbva.enoa.core</groupId>
+       <artifactId>productclientdirect</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.apirestgen</groupId>
+       <artifactId>GKXJ-SchedulerPlanAudit-client.jaxrs.nova-generated</artifactId>
+       <version>1.1.2</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj</groupId>
+       <artifactId>schedulerati</artifactId>
+       <version>[(${atiSettings.getAtiVersion()})]</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.apirestgen</groupId>
+       <artifactId>GKXJ-BatchAudit-client.jaxrs.nova-generated</artifactId>
+       <version>1.1.2</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj</groupId>
+       <artifactId>orchestatorati</artifactId>
+       <version>[(${atiSettings.getAtiVersion()})]</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj</groupId>
+       <artifactId>executorati</artifactId>
+       <version>[(${atiSettings.getAtiVersion()})]</version>
+    </dependency>
+[# th:if="${atiSettings.getIsEpsilonSupportIncluded()}"]    <dependency>
+        <groupId>com.bbva.lnx8</groupId>
+        <artifactId>novaepsilon</artifactId>
+        <version>1.1.1</version>
+    </dependency>
+[/]    <dependency>
+       <groupId>com.bbva.gkxj.apirestgen</groupId>
+       <artifactId>GKXJ-BranchConfig-client.jaxrs.nova-generated</artifactId>
+       <version>1.1.1</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.apirestgen</groupId>
+       <artifactId>GKXJ-SchedulerConfig-client.jaxrs.nova-generated</artifactId>
+       <version>1.1.2</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.apirestgen</groupId>
+       <artifactId>GKXJ-BatchConfig-client.jaxrs.nova-generated</artifactId>
+       <version>1.1.1</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.apirestgen</groupId>
+       <artifactId>GKXJ-StepConfig-client.jaxrs.nova-generated</artifactId>
+       <version>1.1.0</version>
+    </dependency>
+    <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.springframework.data</groupId>
+       <artifactId>spring-data-jpa</artifactId>
+       <version>2.4.0</version>
+    </dependency>
+    <dependency>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-core</artifactId>
+       <version>5.6.0.Final</version>
+    </dependency>
+
+    <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-test</artifactId>
+       <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>org.mockito</groupId>
+       <artifactId>mockito-inline</artifactId>
+       <version>3.12.4</version>
+    </dependency>
+    <dependency>
+       <groupId>org.mockito</groupId>
+       <artifactId>mockito-junit-jupiter</artifactId>
+       <version>3.12.4</version>
+       <scope>test</scope>
+    </dependency>
+[# th:if="${atiSettings.getIsPostgreIncluded()}"]    <dependency>
+       <groupId>org.postgresql</groupId>
+       <artifactId>postgresql</artifactId>
+       <version>42.6.0</version>
+    </dependency>
+[/][# th:if="${atiSettings.getIsOracleIncluded()}"]    <dependency>
+       <groupId>com.oracle.database.jdbc</groupId>
+       <artifactId>ojdbc8</artifactId>
+       <version>19.7.0.0</version>
+    </dependency>
+[/][# th:if="${atiSettings.getIsNovaTransferIncluded()}"]    <dependency>
+       <groupId>com.bbva.T4I8.apirestgen</groupId>
+       <artifactId>T4I8-filetransfer-client.jaxrs.nova-generated</artifactId>
+       <version>1.3.0</version>
+    </dependency>
+[/][# th:if="${atiSettings.getIsMongoIncluded()}"]    <dependency>
+       <groupId>com.bbva.u5su.percona</groupId>
+       <artifactId>mongodbconnectvanilla</artifactId>
+       <version>2.1.0</version>
+    </dependency>[/]
+
+    <dependency>
+       <groupId>com.bbva.gkxj.asyncapi</groupId>
+       <artifactId>BatchAuditPublisher</artifactId>
+       <version>2.0.1</version>
+    </dependency>
+        <dependency>
+           <groupId>com.bbva.gkxj.asyncapi</groupId>
+           <artifactId>BatchExecutorSubscriber</artifactId>
+           <version>1.1.2</version>
+        </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.asyncapi</groupId>
+       <artifactId>IssueAuditPublisher</artifactId>
+       <version>2.0.0</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.gkxj.asyncapi</groupId>
+       <artifactId>SchedulerPlanPublisher</artifactId>
+       <version>2.0.0</version>
+    </dependency>
+    <dependency>
+       <groupId>com.bbva.enoa.core</groupId>
+       <artifactId>productasyncstarter</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <finalName>${project.groupId}-${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <outputDirectory>./dist</outputDirectory>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>

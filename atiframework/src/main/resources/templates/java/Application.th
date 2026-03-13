@@ -1,0 +1,20 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})];
+
+import com.bbva.enoa.core.productclientdirect.app.AbstractDaemonNovaApp;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+
+
+/**
+ * This is the main entry point to your NOVA daemon service application.
+ *
+ */
+[# th:if="${atiSettings.getIsMongoIncluded()}"]@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})[/]
+public class Application extends AbstractDaemonNovaApp
+{
+    public static void main(String[] args)
+    {
+        SpringApplication.run(Application.class, args);
+    }
+}

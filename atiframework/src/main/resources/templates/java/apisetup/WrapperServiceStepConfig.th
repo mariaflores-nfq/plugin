@@ -1,0 +1,61 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].apisetup ;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.bbva.gkxj.atilibrary.stepconfig.StepConfig;
+import com.bbva.gkxj.atilibrary.utils.DeepMirrorMapper;
+import com.bbva.gkxj.executorati.apisetup.IWrapperServiceStepConfig;
+
+/**
+ * Service wrapper class that handles interactions with the StepConfig REST API.
+ * This class acts as a bridge between internal application models and the external StepConfig API.
+ * It handles data transformation, delegates REST operations to {@link ServiceStepconfig},
+ * and logs any errors during execution.
+ */
+@Service
+public class WrapperServiceStepConfig implements IWrapperServiceStepConfig {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(WrapperServiceStepConfig.class);
+
+	/** Service that interacts with the external StepConfig API Rest. */
+	private ServiceStepconfig serviceStepConfig;
+
+	/**
+	 * Constructor with Spring dependency injection for the StepConfig API service.
+	 *
+	 * @param serviceStepConfig Spring-managed REST client used to access StepConfig operations.
+	 */
+	public WrapperServiceStepConfig(ServiceStepconfig serviceStepConfig) {
+		super();
+		this.serviceStepConfig = serviceStepConfig;
+	}
+
+
+	/**
+	 * Publishes a {@link StepConfig} from the host to the external StepConfig API.
+	 *
+	 * @param config The step configuration to publish.
+	 * @param uuaa   The UUAA code.
+	 * @return {@code true} if successfully published, {@code false} otherwise.
+	 */
+	@Override
+	public Boolean publishStepConfigFromHost(StepConfig config, String uuaa) {
+		Boolean returnValue = Boolean.FALSE;
+		com.bbva.gkxj.apirestgen.stepconfig.model.StepConfig stepConfig =
+				new com.bbva.gkxj.apirestgen.stepconfig.model.StepConfig();
+		try {
+			DeepMirrorMapper.deepCopy(config, stepConfig);
+			returnValue = serviceStepConfig.publishStepConfigFromHost(stepConfig, uuaa);
+		} catch (Exception e) {
+			LOGGER.error("[WrapperServiceStepConfig] -> Error to publish StepConfig in API rest", e.getMessage());
+		}
+
+		return returnValue;
+	}
+
+}

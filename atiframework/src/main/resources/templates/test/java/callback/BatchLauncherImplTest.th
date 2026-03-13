@@ -1,0 +1,47 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].callback;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].callback.BatchLauncherImpl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+
+import com.bbva.gkxj.atilibrary.interfaces.batchlauncher.BatchLauncherPayload;
+import com.bbva.gkxj.orchestatorati.orchestator.OrchestatorAti;
+
+@SpringBootTest(classes = {BatchLauncherImpl.class})
+@DirtiesContext
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "spring.cloud.config.enabled=false")
+public class BatchLauncherImplTest {
+
+		@MockBean
+		private OrchestatorAti orchestator;
+
+		@Autowired
+		@InjectMocks
+		private BatchLauncherImpl batchLauncherImpl;
+
+		private BatchLauncherPayload  batchLauncherPayload;
+
+	    @BeforeEach
+	    void setUp() {
+	    	batchLauncherPayload = new BatchLauncherPayload();
+	    }
+
+	    @Test
+	    void publishBatchLauncher() {
+	    	batchLauncherImpl.launchBatch(batchLauncherPayload);
+	    	verify(orchestator, times(1)).launchBatch(any(BatchLauncherPayload.class));
+	    }
+}

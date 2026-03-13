@@ -1,0 +1,544 @@
+---
+swagger: "2.0"
+info:
+  description: "Scheduler Plan Configuration RESTfull service"
+  version: "1.1.2"
+  title: "SchedulerPlanAudit"
+  contact:
+    name: "Utilidad para la Ingesta Transformacion y Exportacion de Datos"
+    url: "https://novaxmas.cibdesktop.es.igrupobbva/novadashboard/#/products/Utilidad%20para%20la%20Ingesta%20Transformacion%20y%20Exportacion%20de%20Datos/12450220"
+    email: "alberto.pina@bbva.com"
+host: "www.bbvaapis.com"
+basePath: "/gkxj/schedulerplanaudit/1.1.2/schedulerPlanAudit"
+schemes:
+- "http"
+- "https"
+produces:
+- "application/json"
+paths:
+  /{uuaa}:
+    get:
+      description: "find one schedulerPlanAudit from the db for a UUAA"
+      operationId: "findOneSchedulerPlanAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the scheduler plan"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "query"
+        description: "Id associated to the scheduler plan"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+  /{uuaa}/{planningDate}:
+    get:
+      description: "get all schedulerPlanAudit from the db for a UUAA"
+      operationId: "findSchedulerPlanAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "planningDate"
+        in: "path"
+        description: "PlanningDate associated to the schedulers, ex: 2023-01-01"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SchedulerPlanAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+  /find/{uuaa}:
+    post:
+      description: "get schedulerPlanAudit from the db for a UUAA with pagination"
+      operationId: "findSchedulerPlanAuditPaginated"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "paginationInfo"
+        description: "Pagination information to find in the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/PaginationInfo"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PageSchedulerPlanAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+  /save/{uuaa}:
+    post:
+      description: "save or update the configuration in the DDBB"
+      operationId: "saveSchedulerPlanAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the scheduler plans"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "schedulerPlan"
+        description: "Batch Configuration to save in the DDBB"
+        required: false
+        schema:
+          $ref: "#/definitions/SchedulerPlanAudit"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+  /hold/{uuaa}/{id}:
+    get:
+      description: "hold or unhold a scheduler for a UUAA"
+      operationId: "holdSchedulerPlanAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "id of the scheduler"
+        required: true
+        type: "string"
+      - name: "hold"
+        in: "query"
+        description: "hold or unhold indicator"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+  /hold/find/{uuaa}/{planningDate}:
+    get:
+      description: "get all the holded schedulerPlanAudit from the db for a UUAA"
+      operationId: "findHoldSchedulerPlanAudit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "uuaa"
+        in: "path"
+        description: "UUAA code associated to the schedulers"
+        required: true
+        type: "string"
+      - name: "planningDate"
+        in: "path"
+        description: "PlanningDate associated to the schedulers, ex: 2023-01-01"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SchedulerPlanAudit"
+        "400":
+          description: "Error Controled"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+        "500":
+          description: "Unexpected exception"
+          schema:
+            $ref: "#/definitions/SchedulerPlanAuditError"
+definitions:
+  SchedulerPlanAudit:
+    type: "object"
+    required:
+    - "_id"
+    - "batchPlan"
+    - "planCode"
+    - "planningDate"
+    - "triggerPlan"
+    - "uuaa"
+    - "version"
+    properties:
+      _id:
+        type: "string"
+      planCode:
+        type: "string"
+      planningDate:
+        type: "string"
+      version:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+        description: "WAITING - PENDING - READY_TO_EXECUTE - DISCARDED"
+      holdStatus:
+        type: "string"
+      uuaa:
+        type: "string"
+      schedulerConfigId:
+        type: "string"
+      force:
+        type: "boolean"
+      enable:
+        type: "boolean"
+      triggerPlan:
+        $ref: "#/definitions/TriggerPlan"
+      batchPlan:
+        $ref: "#/definitions/BatchPlan"
+      batchPlanError:
+        $ref: "#/definitions/BatchPlan"
+      conditionPlanList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ConditionPlan"
+      executionInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExecutionInfo"
+      failedTreatmentPlan:
+        $ref: "#/definitions/FailedTreatmentPlan"
+  TriggerPlan:
+    type: "object"
+    required:
+    - "endTs"
+    - "initTs"
+    - "repeat"
+    - "type"
+    properties:
+      executed:
+        type: "boolean"
+      nextExecution:
+        type: "string"
+        format: "date-time"
+      type:
+        type: "string"
+      initTs:
+        type: "string"
+        format: "date-time"
+      endTs:
+        type: "string"
+        format: "date-time"
+      maxExecutionTime:
+        type: "string"
+        format: "date-time"
+      repeat:
+        type: "object"
+        properties:
+          executionTime:
+            type: "string"
+          repeatEvery:
+            type: "integer"
+          maxExecutionTime:
+            type: "string"
+          weekDays:
+            type: "array"
+            items:
+              type: "string"
+          monthly:
+            type: "object"
+            properties:
+              months:
+                type: "array"
+                items:
+                  type: "string"
+              days:
+                type: "array"
+                items:
+                  type: "integer"
+              eventWeek:
+                type: "string"
+              weekDays:
+                type: "array"
+                items:
+                  type: "string"
+            required:
+            - "months"
+        required:
+        - "executionTime"
+        - "maxExecutionTime"
+  BatchPlan:
+    type: "object"
+    required:
+    - "batchCode"
+    properties:
+      batchCode:
+        type: "string"
+      parameterQueryList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Query"
+      jobParameterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/JobParameter"
+      item:
+        type: "array"
+        items:
+          $ref: "#/definitions/MapItem"
+      jobParameterMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/MapItem"
+  Query:
+    type: "object"
+    required:
+    - "queryCode"
+    properties:
+      queryCode:
+        type: "string"
+      sqlQuery:
+        type: "string"
+      dbSource:
+        type: "string"
+      mongoQuery:
+        $ref: "#/definitions/MongoQuery"
+    description: "DB reading query. May be SQL or MongoDB"
+  MongoQuery:
+    type: "object"
+    required:
+    - "collection"
+    - "filter"
+    properties:
+      collection:
+        type: "string"
+      filter:
+        type: "array"
+        description: "MongoDB Aggregation Pipelines to filter"
+        items:
+          type: "string"
+    description: "mongoDB reading Query"
+  JobParameter:
+    type: "object"
+    required:
+    - "paramName"
+    properties:
+      paramName:
+        type: "string"
+      queryParam:
+        type: "string"
+        description: "name of the field recovered in the parameterQueryList"
+      fixedValue:
+        type: "string"
+      scriptValue:
+        type: "string"
+  ConditionPlan:
+    type: "object"
+    required:
+    - "checkEvery"
+    - "filename"
+    - "forceAtEnd"
+    properties:
+      name:
+        type: "string"
+      filename:
+        type: "string"
+      startCondition:
+        type: "string"
+        format: "date-time"
+      endCondition:
+        type: "string"
+        format: "date-time"
+      nextCheck:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+      checkEvery:
+        type: "integer"
+        description: "in seconds"
+      forceAtEnd:
+        type: "boolean"
+        description: "if true force the execution even if the condition doesn't match"
+      script:
+        type: "string"
+        description: "to validate the queries with the recovered information"
+      path:
+        type: "string"
+      filePattern:
+        type: "string"
+      fileParameterName:
+        type: "string"
+      novaTransferName:
+        type: "string"
+      extractionQuery:
+        $ref: "#/definitions/Query"
+    description: "previous condition to execute the planning"
+  FailedTreatmentPlan:
+    type: "object"
+    required:
+    - "level"
+    properties:
+      level:
+        type: "string"
+      issueCode:
+        type: "string"
+      technicalCode:
+        type: "string"
+  PaginationInfo:
+    type: "object"
+    required:
+    - "limit"
+    - "page"
+    properties:
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      planCode:
+        type: "string"
+      version:
+        type: "string"
+      batchCode:
+        type: "string"
+      stepCode:
+        type: "string"
+      description:
+        type: "string"
+      fromDate:
+        type: "string"
+      toDate:
+        type: "string"
+      sortOrder:
+        type: "string"
+        description: "ASC - DESC"
+      sortBy:
+        type: "string"
+        description: "field name"
+    description: "Request to find Planconfig with Pagination"
+  PageSchedulerPlanAudit:
+    type: "object"
+    required:
+    - "hasNext"
+    - "hasPrevious"
+    - "limit"
+    - "page"
+    - "total"
+    properties:
+      total:
+        type: "integer"
+      page:
+        type: "integer"
+      limit:
+        type: "integer"
+      hasPrevious:
+        type: "boolean"
+      hasNext:
+        type: "boolean"
+      result:
+        type: "array"
+        description: "Scheduler plans which complish the filter"
+        items:
+          $ref: "#/definitions/SchedulerPlanAudit"
+    description: "Response to find Planconfig with Pagination"
+  ExecutionInfo:
+    type: "object"
+    required:
+    - "executionDate"
+    - "executionType"
+    properties:
+      batchCode:
+        type: "string"
+      executionType:
+        type: "string"
+      executionDate:
+        type: "string"
+        format: "date-time"
+      executionId:
+        type: "string"
+      status:
+        type: "string"
+      initTs:
+        type: "string"
+        format: "date-time"
+      endTs:
+        type: "string"
+        format: "date-time"
+      batchParameterMap:
+        type: "array"
+        items:
+          $ref: "#/definitions/BatchParameter"
+  BatchParameter:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      value:
+        type: "string"
+  MapItem:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "string"
+  SchedulerPlanAuditError:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+    description: "Error messages"
+x-generator-properties:
+  business-unit: "gkxj"

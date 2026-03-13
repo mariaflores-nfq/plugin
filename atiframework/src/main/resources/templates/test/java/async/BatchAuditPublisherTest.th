@@ -1,0 +1,55 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].async;
+
+import com.bbva.gkxj.asyncapi.broker.BatchAuditPublisher.model.BatchAuditPayload;
+import com.bbva.gkxj.orchestatorati.model.BatchExecution;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.BatchAuditPublisher;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.test.context.TestPropertySource;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.stream.bindings.publishBatchAudit-out-0.destination=testChannel"
+})
+public class BatchAuditPublisherTest {
+
+    @Value("${spring.cloud.stream.bindings.publishBatchAudit-out-0.destination}")
+    private String channelName;
+
+    @Mock
+    private StreamBridge streamBridge;
+
+    @InjectMocks
+    private BatchAuditPublisher publisher;
+
+    @Test
+    public void testPublishBatchAudit() throws Exception {
+        File file = new File("src/test/resources/batchAudit.json");
+        String stringFile = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        BatchExecution msg = mapper.readValue(stringFile, BatchExecution.class);
+
+        publisher.publishBatchAudit(msg);
+
+        verify(streamBridge, atLeastOnce())
+                .send(ArgumentMatchers.eq(channelName), ArgumentMatchers.any(BatchAuditPayload.class));
+    }
+}

@@ -1,0 +1,57 @@
+package com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].async;
+
+import com.bbva.gkxj.asyncapi.broker.IssueAuditPublisher.model.IssueAuditPayload;
+import com.bbva.gkxj.atilibrary.issue.Issue;
+import com.bbva.[(${atiSettings.getUuaa().toLowerCase()})].[(${atiSettings.getServiceName().toLowerCase()})].async.IssueAuditPublisher;
+import com.google.gson.Gson;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.test.context.TestPropertySource;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.stream.bindings.publishIssueAudit-out-0.destination=testChannel"
+})
+public class IssueAuditPublisherTest {
+
+    @Value("${spring.cloud.stream.bindings.publishIssueAudit-out-0.destination}")
+    private String channelName;
+
+    @Mock
+    private StreamBridge streamBridge;
+
+    @InjectMocks
+    private IssueAuditPublisher publisher;
+
+    @Test
+    public void testPublishIssueAudit() throws IOException {
+        File file = new File("src/test/resources/issueAudit.json");
+
+        // Convertir el file a string
+        String stringFile = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+        // Deserializar Json
+        Issue msg = new Gson().fromJson(stringFile, Issue.class);
+
+        // Enviar mensaje al broker
+        publisher.publishIssueAudit(msg);
+        verify(streamBridge, atLeastOnce())
+                .send(ArgumentMatchers.eq(channelName), ArgumentMatchers.any(IssueAuditPayload.class));
+    }
+
+}
