@@ -1,6 +1,67 @@
 {
-  "workflowCode": "node_549",
   "id": "8b1866b9-1ffc-4f14-962e-688f89464725",
   "componentCode": "node_549",
-  "type": "Router"
+  "description": "",
+  "status": "",
+  "version": "",
+  "nodeType": "Enricher",
+  "critical": false,
+  "workStatementList": [
+    {
+      "queryCode": "qwd",
+      "dbSource": "MongoDb",
+      "collectionName": "qwd",
+      "mongoAggregatePipelines": [
+        "gyhujgjhjytfjhasd",
+        "asdsdasdasd"
+      ],
+      "cacheInfo": {
+        "name": "sfdsfsdfsdffff",
+        "size": 21312312,
+        "ttl": 3123123
+      },
+      "enrichInputParameters": [
+        {
+          "type": "STRING",
+          "mandatory": false,
+          "fieldName": "efe",
+          "description": "ewfwef",
+          "payloadPath": "ewfef"
+        }
+      ],
+      "enrichScriptList": [],
+      "enricherOutputFields": [
+        {
+          "fieldName": "ytjytjasd",
+          "description": "tyjasd",
+          "payloadPath": "tyjytjasd"
+        }
+      ]
+    },
+    {
+      "queryCode": "qwdqw",
+      "dbSource": "MongoDb",
+      "sqlQuery": "qwdwdwqdqwdqwdqwdqwdqwd\nqwdqwd\n",
+      "mongoAggregatePipelines": [],
+      "cacheInfo": {
+        "name": "qwdqwwdwdqd2",
+        "size": 1111,
+        "ttl": 1
+      },
+      "enrichInputParameters": [],
+      "enrichScriptList": [],
+      "enricherOutputFields": [
+        {
+          "fieldName": "qwdqwd",
+          "description": "qwd",
+          "payloadPath": "qwd"
+        },
+        {
+          "fieldName": "qw",
+          "description": "www",
+          "payloadPath": "eee"
+        }
+      ]
+    }
+  ]
 }

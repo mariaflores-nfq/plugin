@@ -150,12 +150,26 @@ public class WorkStatementDetailView extends JPanel {
         data.enrichInputParameters = inputParamsPanel.getData();
 
         String type = (String) wsTypeCombo.getSelectedItem();
+
         if ("Query".equals(type) || "Query/Script".equals(type)) {
             queryPanel.saveData(data);
         } else {
             // Vaciar campos de base de datos si cambiamos el tipo
-            data.queryCode = null; data.dbSource = null; data.collectionName = null; data.sqlQuery = null;
+            data.queryCode = null;
+            data.dbSource = null;
+            data.collectionName = null;
+            data.sqlQuery = null;
+            data.mongoAggregatePipelines = new ArrayList<>(); // <-- Nuevo
+            data.enricherOutputFields = new ArrayList<>();    // <-- Nuevo
+            data.cacheInfo = null;                            // <-- Nuevo
         }
+
+//        if ("Query".equals(type) || "Query/Script".equals(type)) {
+//            queryPanel.saveData(data);
+//        } else {
+//            // Vaciar campos de base de datos si cambiamos el tipo
+//            data.queryCode = null; data.dbSource = null; data.collectionName = null; data.sqlQuery = null;
+//        }
 
         if ("Script".equals(type) || "Query/Script".equals(type)) {
             data.enrichScriptList = scriptListPanel.getData();
