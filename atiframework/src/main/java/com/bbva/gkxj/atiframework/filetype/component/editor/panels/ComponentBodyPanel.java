@@ -20,29 +20,13 @@ import java.awt.*;
 
 import static com.bbva.gkxj.atiframework.filetype.component.utils.ComponentConstants.*;
 
-/**
- * Panel orquestador principal del editor visual de componentes (.comp).
- * <p>
- * Ensambla la vista global dividida en:
- * 1. Cabecera fija: Detalles generales del componente (ID, Tipo, Subtipo).
- * 2. Cuerpo dinámico: Pestañas de configuración que aparecen/desaparecen según la matriz de tipos.
- * </p>
- */
 public class ComponentBodyPanel extends JPanel {
 
     private final ComponentDetailsController detailsController;
     private final Runnable parentOnFormChanged;
     private JBTabbedPane tabbedPane;
     private JPanel behaviourWrapperPanel;
-    private JsonObject lastLoadedJson;
 
-    /**
-     * Constructor del panel principal.
-     *
-     * @param project       Proyecto activo.
-     * @param virtualFile   Archivo .comp en edición.
-     * @param onFormChanged Callback para notificar cambios de estado al IDE.
-     */
     public ComponentBodyPanel(Project project, VirtualFile virtualFile, Runnable onFormChanged) {
         this.parentOnFormChanged = onFormChanged;
 
@@ -67,14 +51,12 @@ public class ComponentBodyPanel extends JPanel {
         contentPanel.setOpaque(false);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 0));
 
-        // 1. Cabecera de Detalles
         JPanel detailsView = detailsController.getView();
         detailsView.setAlignmentX(Component.LEFT_ALIGNMENT);
         contentPanel.add(detailsView);
 
         contentPanel.add(Box.createVerticalStrut(20));
 
-        // 2. Contenedor de Pestañas
         behaviourWrapperPanel = createBehaviourPanel();
         behaviourWrapperPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         contentPanel.add(behaviourWrapperPanel);
@@ -105,10 +87,6 @@ public class ComponentBodyPanel extends JPanel {
         return wrapper;
     }
 
-    /**
-     * Regenera las pestañas basándose en el Type y Subtype seleccionados en la cabecera.
-     * Limpia controladores antiguos para evitar fugas de memoria o guardados erróneos.
-     */
     public void refreshTabs() {
         SwingUtilities.invokeLater(() -> {
             int selectedIndex = tabbedPane.getSelectedIndex();
@@ -116,7 +94,6 @@ public class ComponentBodyPanel extends JPanel {
 
             tabbedPane.removeAll();
 
-            // Reset de controladores delegados
             detailsController.setAdapterController(null);
             detailsController.setFilterController(null);
             detailsController.setWorkStatementController(null);
@@ -125,32 +102,26 @@ public class ComponentBodyPanel extends JPanel {
             String subtype = detailsController.getCurrentSubtype();
 
             if (type != null && !type.isEmpty()) {
-
-                // Adaptadores (JMS / Async API)
                 if ((TYPE_INPUT_ADAPTER.equals(type) || TYPE_OUTPUT_ADAPTER.equals(type))) {
                     if (SUBTYPE_JMS.equals(subtype)) {
-                        addAdapterTab(type, subtype, "JMS", "jmsConfig");
+                        addAdapterTab(type, subtype, "JMS");
                     } else if (SUBTYPE_ASYNC_API.equals(subtype)) {
-                        addAdapterTab(type, subtype, "Async API", "asyncApiConfig");
+                        addAdapterTab(type, subtype, "Async API");
                     }
                 }
 
-                // Database
                 if (TYPE_OUTPUT_ADAPTER.equals(type) && SUBTYPE_DATABASE.equals(subtype)) {
                     tabbedPane.addTab("Database", createPlaceholderPanel("SQL/MongoDB Queries"));
                 }
 
-                // Filter
                 if (TYPE_FILTER.equals(type)) {
                     addFilterTab();
                 }
 
-                // Enricher (WorkStatement)
                 if (TYPE_ENRICHER.equals(type) && SUBTYPE_WORKSTATEMENT.equals(subtype)) {
                     addWorkStatementTab();
                 }
 
-                // Otros (Placeholders)
                 if (TYPE_SPLITTER.equals(type)) {
                     tabbedPane.addTab("Splitter", createPlaceholderPanel("Split Logic (Java/JS/Root)"));
                 }
@@ -166,40 +137,27 @@ public class ComponentBodyPanel extends JPanel {
         });
     }
 
-    private void addAdapterTab(String type, String subtype, String tabTitle, String jsonKey) {
-        AdapterTabView adapterView = new AdapterTabView(type, subtype);
-        AdapterPropertiesController adapterController = new AdapterPropertiesController(adapterView, parentOnFormChanged);
+    private void addAdapterTab(String type, String subtype, String tabTitle) {
+        AdapterTabView view = new AdapterTabView(type, subtype);
+        AdapterPropertiesController adapterController = new AdapterPropertiesController(view, parentOnFormChanged);
         detailsController.setAdapterController(adapterController);
-
-        if (lastLoadedJson != null && lastLoadedJson.has(jsonKey)) {
-            detailsController.loadAdapterDataFromJson(lastLoadedJson.getAsJsonObject(jsonKey));
-        }
-        tabbedPane.addTab(tabTitle, adapterView);
+        detailsController.loadAdapterData();
+        tabbedPane.addTab(tabTitle, view);
     }
 
     private void addFilterTab() {
         FilterTabView filterView = new FilterTabView();
         FilterPropertiesController filterController = new FilterPropertiesController(filterView, parentOnFormChanged);
         detailsController.setFilterController(filterController);
-
-        if (lastLoadedJson != null && lastLoadedJson.has("filterConfig")) {
-            detailsController.loadFilterDataFromJson(lastLoadedJson.getAsJsonObject("filterConfig"));
-        }
+        detailsController.loadFilterData();
         tabbedPane.addTab("Filter", filterView);
     }
 
-    /**
-     * Añade la pestaña de WorkStatement (Enricher).
-     * Utiliza la vista de pestaña (TabView) que contiene el Splitter maestro.
-     */
     private void addWorkStatementTab() {
         WorkStatementTabView wsView = new WorkStatementTabView();
         WorkStatementPropertiesController wsController = new WorkStatementPropertiesController(wsView, parentOnFormChanged);
         detailsController.setWorkStatementController(wsController);
-
-        if (lastLoadedJson != null && lastLoadedJson.has("workStatementConfig")) {
-            detailsController.loadWorkStatementDataFromJson(lastLoadedJson.getAsJsonObject("workStatementConfig"));
-        }
+        detailsController.loadWorkStatementData();
         tabbedPane.addTab("WorkStatement", wsView);
     }
 
@@ -226,7 +184,6 @@ public class ComponentBodyPanel extends JPanel {
     }
 
     public void updateForm(JsonObject jsonObject) {
-        this.lastLoadedJson = jsonObject;
         this.detailsController.updateForm(jsonObject);
         refreshTabs();
     }

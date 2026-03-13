@@ -1,7 +1,7 @@
 package com.bbva.gkxj.atiframework.filetype.component.editor.panels.tabs;
 
 import com.bbva.gkxj.atiframework.components.*;
-import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.FilterData;
+import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.FilterMapData;
 import com.bbva.gkxj.atiframework.filetype.workflow.utils.WorkflowThemeUtils;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.util.ui.JBUI;
@@ -10,44 +10,21 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.util.List;
 
-/**
- * Pestaña principal unificada para la configuración del nodo Filter.
- * <p>
- * Esta vista agrupa toda la interfaz necesaria para definir las reglas de filtrado de mensajes.
- * Contiene tanto la lista de scripts (gestionada mediante un {@link AtiTableSplitterPanel} en la parte izquierda)
- * como el formulario de detalle (en la parte derecha) donde se editan el código del filtro y su script asociado.
- * </p>
- */
 public class FilterTabView extends JPanel {
 
-    /** Panel divisor que contiene la lista de filtros a la izquierda y el detalle a la derecha. */
-    private AtiTableSplitterPanel<FilterData> splitterPanel;
-
-    // --- Campos del Formulario de Detalle ---
-
-    /** Campo de texto para introducir el código identificador único del filtro. */
+    private AtiTableSplitterPanel<FilterMapData> splitterPanel;
     private AtiTextField filterCodeField;
-
-    /** Panel de editor avanzado para escribir la lógica en JavaScript del filtro. */
     private AtiScriptPanel scriptField;
 
-    /** Callback que se ejecuta cuando el usuario realiza algún cambio en el formulario. */
-    private Runnable onChange;
+    private Runnable onFormChangedCallback;
 
-    /** Bandera para evitar disparar eventos de cambio mientras se cargan datos programáticamente. */
-    private boolean isPopulating = false;
-
-    /**
-     * Construye la vista de la pestaña Filter.
-     * Configura el diseño base, los márgenes, el título principal y llama a la inicialización de componentes.
-     */
     public FilterTabView() {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         setBorder(JBUI.Borders.empty(20));
 
-        // Título de la vista
         AtiJLabel titleLabel = new AtiJLabel("Filter List");
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         titleLabel.setBorder(JBUI.Borders.empty(10, 0, 20, 0));
@@ -56,12 +33,7 @@ public class FilterTabView extends JPanel {
         initComponents();
     }
 
-    /**
-     * Inicializa y ensambla todos los componentes visuales de la interfaz.
-     * Construye el panel de detalle (derecha) y lo inyecta dentro del componente {@code AtiTableSplitterPanel}.
-     */
     private void initComponents() {
-        // 1. Construimos el panel de detalle (Parte derecha)
         JPanel detailPanel = new JPanel(new BorderLayout());
         detailPanel.setOpaque(false);
 
@@ -105,69 +77,41 @@ public class FilterTabView extends JPanel {
         formContent.add(scriptWrapper);
         detailPanel.add(formContent, BorderLayout.CENTER);
 
-        // 2. Construimos el Splitter inyectándole nuestro panel de detalle recién creado
+        // --- Splitter ---
+        // Usamos el nuevo nombre FilterMapData
         splitterPanel = new AtiTableSplitterPanel<>(
-                "Scripts",
-                "Fields",
-                FilterData::new,
-                item -> String.format("%02d", (splitterPanel.getDataList().indexOf(item) + 1)),
-                item -> item.filterCode != null && !item.filterCode.isEmpty() ? item.filterCode : "New Filter",
+                "Scripts", "Fields",
+                FilterMapData::new,
+                (AtiTableSplitterPanel.ItemIdExtractor<FilterMapData>) item -> String.format("%02d", (splitterPanel.getDataList().indexOf(item) + 1)),
+                (AtiTableSplitterPanel.ItemNameExtractor<FilterMapData>) item -> item.filterCode != null && !item.filterCode.isEmpty() ? item.filterCode : "New Filter",
                 detailPanel
         );
 
         add(splitterPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Establece la acción que se ejecutará cada vez que se detecte un cambio en los campos del formulario.
-     *
-     * @param onChange Implementación del {@link Runnable} a ejecutar.
-     */
-    public void setOnChange(Runnable onChange) {
-        this.onChange = onChange;
-    }
-
-    /**
-     * Dispara el callback de notificación de cambios, siempre y cuando
-     * no se estén cargando datos desde el modelo en ese instante.
-     */
     private void notifyChange() {
-        if (!isPopulating && onChange != null) onChange.run();
+        if (onFormChangedCallback != null) onFormChangedCallback.run();
     }
 
-    /**
-     * Carga un elemento seleccionado de la tabla (modelo) en los campos visuales del formulario derecho.
-     * Bloquea temporalmente los eventos de cambio durante la carga.
-     *
-     * @param data El objeto {@link FilterData} que contiene los datos a mostrar.
-     */
-    public void loadData(FilterData data) {
-        this.isPopulating = true;
-        try {
-            filterCodeField.setText(data.filterCode != null ? data.filterCode : "");
-            scriptField.setText(data.script != null ? data.script : "");
-        } finally {
-            this.isPopulating = false;
-        }
-    }
+    // --- API PÚBLICA PARA EL CONTROLADOR ---
 
-    /**
-     * Extrae los valores actuales del formulario visual y los guarda en el elemento en memoria (modelo).
-     *
-     * @param data El objeto {@link FilterData} donde se guardarán los cambios.
-     */
-    public void saveData(FilterData data) {
-        data.filterCode = filterCodeField.getText().trim().isEmpty() ? null : filterCodeField.getText().trim();
-        data.script = scriptField.getText().trim().isEmpty() ? null : scriptField.getText();
-    }
+    public String getFilterCode() { return filterCodeField.getText().trim(); }
+    public void setFilterCode(String code) { filterCodeField.setText(code != null ? code : ""); }
 
-    /**
-     * Devuelve el componente contenedor del divisor y la tabla.
-     * Útil para que el controlador pueda suscribirse a los eventos de la tabla (selección, adición, borrado).
-     *
-     * @return La instancia de {@link AtiTableSplitterPanel} configurada para los filtros.
-     */
-    public AtiTableSplitterPanel<FilterData> getSplitterPanel() {
-        return splitterPanel;
+    public String getScript() { return scriptField.getText().trim(); }
+    public void setScript(String script) { scriptField.setText(script != null ? script : ""); }
+
+    public void setOnFormChanged(Runnable callback) { this.onFormChangedCallback = callback; }
+
+    public List<FilterMapData> getTableData() { return splitterPanel.getDataList(); }
+    public void setTableData(List<FilterMapData> data) { splitterPanel.reloadData(data); }
+
+    public FilterMapData getSelectedTableItem() { return splitterPanel.getCurrentSelection(); }
+    public void updateSelectedRowName(String name) { splitterPanel.updateSelectedRowName(name); }
+
+    public void setOnTableChangeCallback(Runnable callback) { splitterPanel.setChangeCallback(callback); }
+    public void setOnTableSelectionListener(AtiTableSplitterPanel.SelectionListener<FilterMapData> listener) {
+        splitterPanel.setSelectionListener(listener);
     }
 }

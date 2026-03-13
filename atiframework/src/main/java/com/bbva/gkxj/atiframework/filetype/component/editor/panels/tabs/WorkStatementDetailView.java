@@ -13,20 +13,14 @@ import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Vista de detalle principal actuando como orquestador.
- * Las lógicas complejas se delegan a WsQueryPanel, WsInputParametersPanel y WsScriptListPanel.
- */
 public class WorkStatementDetailView extends JPanel {
 
-    // Controles Básicos
     private AtiTextField wsCodeField;
     private AtiResizableTextArea wsDescriptionField;
     private AtiComboBox dependencyListCombo;
     private AtiScriptPanel shouldExecuteField;
     private AtiComboBox wsTypeCombo;
 
-    // Sub-paneles complejos delegados
     private WsInputParametersPanel inputParamsPanel;
     private WsQueryPanel queryPanel;
     private WsScriptListPanel scriptListPanel;
@@ -125,20 +119,22 @@ public class WorkStatementDetailView extends JPanel {
     public void loadData(WorkStatementData data) {
         this.isPopulating = true;
         try {
-            wsCodeField.setText(data.wsCode);
-            wsDescriptionField.setText(data.description);
-            shouldExecuteField.setText(data.shouldBeExecuted);
-            wsTypeCombo.setSelectedItem(data.wsType);
+            wsCodeField.setText(data.wsCode != null ? data.wsCode : "");
+            wsDescriptionField.setText(data.description != null ? data.description : "");
+            shouldExecuteField.setText(data.shouldBeExecuted != null ? data.shouldBeExecuted : "");
 
-            // Carga delegada a los sub-paneles
-            inputParamsPanel.loadData(data.enricherInputParameters);
+            // Determinar el tipo para la UI si no está guardado implícitamente
+            String derivedType = "Query";
+            if (data.enrichScriptList != null && !data.enrichScriptList.isEmpty() && data.queryCode != null) {
+                derivedType = "Query/Script";
+            } else if (data.enrichScriptList != null && !data.enrichScriptList.isEmpty()) {
+                derivedType = "Script";
+            }
+            wsTypeCombo.setSelectedItem(derivedType);
 
-            if ("Query".equals(data.wsType) || "Query/Script".equals(data.wsType)) {
-                queryPanel.loadData(data);
-            }
-            if ("Script".equals(data.wsType) || "Query/Script".equals(data.wsType)) {
-                scriptListPanel.loadData(data.enrichScriptList);
-            }
+            inputParamsPanel.loadData(data.enrichInputParameters);
+            queryPanel.loadData(data);
+            scriptListPanel.loadData(data.enrichScriptList);
 
             switchMainType();
         } finally {
@@ -147,22 +143,21 @@ public class WorkStatementDetailView extends JPanel {
     }
 
     public void saveData(WorkStatementData data) {
-        data.wsCode = wsCodeField.getText();
-        data.description = wsDescriptionField.getText();
-        data.shouldBeExecuted = shouldExecuteField.getText();
-        data.wsType = (String) wsTypeCombo.getSelectedItem();
+        data.wsCode = getNullIfEmpty(wsCodeField.getText());
+        data.description = getNullIfEmpty(wsDescriptionField.getText());
+        data.shouldBeExecuted = getNullIfEmpty(shouldExecuteField.getText());
 
-        // Extracción delegada a los sub-paneles
-        data.enricherInputParameters = inputParamsPanel.getData();
+        data.enrichInputParameters = inputParamsPanel.getData();
 
-        if ("Query".equals(data.wsType) || "Query/Script".equals(data.wsType)) {
+        String type = (String) wsTypeCombo.getSelectedItem();
+        if ("Query".equals(type) || "Query/Script".equals(type)) {
             queryPanel.saveData(data);
         } else {
-            // Vaciar campos si cambiamos el tipo
-            data.queryCode = null; data.queryType = null; data.dbSource = null; data.collectionName = null;
+            // Vaciar campos de base de datos si cambiamos el tipo
+            data.queryCode = null; data.dbSource = null; data.collectionName = null; data.sqlQuery = null;
         }
 
-        if ("Script".equals(data.wsType) || "Query/Script".equals(data.wsType)) {
+        if ("Script".equals(type) || "Query/Script".equals(type)) {
             data.enrichScriptList = scriptListPanel.getData();
         } else {
             data.enrichScriptList = new ArrayList<>();
@@ -191,5 +186,9 @@ public class WorkStatementDetailView extends JPanel {
         if (!isPopulating && onChange != null) {
             onChange.run();
         }
+    }
+
+    private String getNullIfEmpty(String text) {
+        return (text == null || text.trim().isEmpty()) ? null : text;
     }
 }

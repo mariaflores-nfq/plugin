@@ -93,7 +93,7 @@ public class AtiSchedulerDocumentationProvider extends AbstractDocumentationProv
         if (text.contains("trigger")) {
             return "El objeto <b>trigger</b> define cuándo se ejecuta el scheduler. " +
                    "Tipos válidos: DAILY, WEEKLY, MONTHLY. " +
-                   "Para días específicos de la semana, usar type=WEEKLY con weekDays en repeat.";
+                   "Para días específicos de la semana, usar nodeType=WEEKLY con weekDays en repeat.";
         }
         if (text.contains("conditionList")) {
             return "La lista <b>conditionList</b> define condiciones previas. " +
@@ -120,7 +120,7 @@ public class AtiSchedulerDocumentationProvider extends AbstractDocumentationProv
               "version": "String (Obligatorio)",
               "status": "NOT_PUBLISHED|PUBLISHED|INACTIVE|ARCHIVED",
               "trigger": {
-                "type": "DAILY|WEEKLY|MONTHLY",
+                "nodeType": "DAILY|WEEKLY|MONTHLY",
                 "repeat": {
                   "executionTime": "HH:MM:SS",
                   "maxExecutionTime": "HH:MM:SS",

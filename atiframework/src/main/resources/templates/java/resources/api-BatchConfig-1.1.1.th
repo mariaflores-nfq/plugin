@@ -27,34 +27,34 @@ paths:
         in: "path"
         description: "UUAA code associated to the configs"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "branchId"
         in: "path"
         description: "Branch code where the user is working."
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "commitId"
         in: "query"
         description: "Commit identifier associated to the step"
         required: false
-        type: "string"
+        nodeType: "string"
       - name: "batchId"
         in: "query"
         description: "Batch identifier associated to the step"
         required: false
-        type: "string"
+        nodeType: "string"
       - name: "status"
         in: "query"
         description: "Get a config from a status"
         required: false
-        type: "array"
+        nodeType: "array"
         items:
-          type: "string"
+          nodeType: "string"
       responses:
         "200":
           description: "Success"
           schema:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/definitions/BatchConfig"
         "400":
@@ -76,12 +76,12 @@ paths:
         in: "path"
         description: "UUAA code associated to the configs"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "branchId"
         in: "path"
         description: "Branch code where the user is working."
         required: true
-        type: "string"
+        nodeType: "string"
       - in: "body"
         name: "paginationInfo"
         description: "Pagination information to find in the DB"
@@ -112,27 +112,27 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "branchId"
         in: "path"
         description: "Branch code where the user is working."
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "batchCode"
         in: "path"
         description: "Unique key of the configuration"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "version"
         in: "query"
         description: "Config specific version"
         required: false
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
           schema:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/definitions/BatchConfig"
         "400":
@@ -154,12 +154,12 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "branchId"
         in: "path"
         description: "Branch code where the user is working."
         required: true
-        type: "string"
+        nodeType: "string"
       - in: "body"
         name: "config"
         description: "Batch Configuration to save in the DDBB"
@@ -179,9 +179,9 @@ paths:
           description: "Unexpected exception"
           schema:
             $ref: "#/definitions/ConfigServiceError"
-  /delete/{uuaa}/{branchId}/{id}:
+  /delete/{uuaa}/{branchId}/{_id}:
     post:
-      description: "Delete from DDBB an specific configuratio by id"
+      description: "Delete from DDBB an specific configuratio by _id"
       operationId: "deleteBatchConfig"
       produces:
       - "application/json"
@@ -190,22 +190,22 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "branchId"
         in: "path"
         description: "Branch code where the user is working."
         required: true
-        type: "string"
-      - name: "id"
+        nodeType: "string"
+      - name: "_id"
         in: "path"
         description: "Batch Id in Db"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
           schema:
-            type: "boolean"
+            nodeType: "boolean"
         "400":
           description: "Error Controled"
           schema:
@@ -225,7 +225,7 @@ paths:
         in: "path"
         description: "UUAA code associated to the config"
         required: true
-        type: "string"
+        nodeType: "string"
       - in: "body"
         name: "config"
         description: "Batch Configuration to save in the DDBB"
@@ -236,7 +236,7 @@ paths:
         "200":
           description: "Success"
           schema:
-            type: "boolean"
+            nodeType: "boolean"
         "400":
           description: "Error Controled"
           schema:
@@ -247,193 +247,193 @@ paths:
             $ref: "#/definitions/ConfigServiceError"
 definitions:
   BatchConfig:
-    type: "object"
+    nodeType: "object"
     required:
     - "_id"
     - "batchCode"
     - "paramAuditList"
     properties:
       _id:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       version:
-        type: "string"
+        nodeType: "string"
       uuaa:
-        type: "string"
+        nodeType: "string"
       batchType:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       status:
-        type: "string"
+        nodeType: "string"
       recordVersion:
-        type: "integer"
+        nodeType: "integer"
       branchCode:
-        type: "string"
+        nodeType: "string"
         description: "Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published"
       branchId:
-        type: "string"
+        nodeType: "string"
         description: "Branch Identifier related with the batchConfig, this is only informed when the batchConfig is NOT published"
       checkSum:
-        type: "string"
+        nodeType: "string"
         description: "CheckSum related with the batchConfig, this is useful to check if the batchConfig has been modified"
       paramAuditList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/ParamAudit"
       parameterList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/Parameter"
       workflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/WorkflowNode"
   ParamAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "audTs"
     - "audUser"
     - "status"
     properties:
       status:
-        type: "string"
+        nodeType: "string"
       comments:
-        type: "string"
+        nodeType: "string"
       audTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       audUser:
-        type: "string"
+        nodeType: "string"
   Parameter:
-    type: "object"
+    nodeType: "object"
     required:
     - "isMandatory"
     - "name"
-    - "type"
+    - "nodeType"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
       schedulerParamName:
-        type: "string"
-      type:
-        type: "string"
+        nodeType: "string"
+      nodeType:
+        nodeType: "string"
       ioType:
-        type: "string"
+        nodeType: "string"
       isMandatory:
-        type: "boolean"
+        nodeType: "boolean"
       description:
-        type: "string"
+        nodeType: "string"
       scriptValue:
-        type: "string"
+        nodeType: "string"
   WorkflowNode:
-    type: "object"
+    nodeType: "object"
     required:
-    - "type"
+    - "nodeType"
     - "workflowNodeCode"
     properties:
       workflowNodeCode:
-        type: "string"
-      type:
-        type: "string"
+        nodeType: "string"
+      nodeType:
+        nodeType: "string"
         description: "STEP/PARALLEL/INCLUSIVE/EXCLUSIVE/BATCH/LOOP"
       stepCode:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       xPosition:
-        type: "integer"
+        nodeType: "integer"
       yPosition:
-        type: "integer"
+        nodeType: "integer"
       isCritical:
-        type: "boolean"
+        nodeType: "boolean"
       nextWorkflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/NextWorkflowNode"
       wfnParameterList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/wfnParameter"
       joinWorkflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
-          type: "string"
+          nodeType: "string"
       initializeScript:
-        type: "string"
+        nodeType: "string"
       exitScript:
-        type: "string"
+        nodeType: "string"
       incrementScript:
-        type: "string"
+        nodeType: "string"
       isEndLoop:
-        type: "boolean"
+        nodeType: "boolean"
   wfnParameter:
-    type: "object"
+    nodeType: "object"
     required:
     - "batchParamName"
     - "name"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
         description: "Parameter name in the ETL or child batch."
       batchParamName:
-        type: "string"
+        nodeType: "string"
         description: "Parameter name in the Batch"
       fixedValue:
-        type: "string"
+        nodeType: "string"
       scriptValue:
-        type: "string"
+        nodeType: "string"
   NextWorkflowNode:
-    type: "object"
+    nodeType: "object"
     required:
     - "scriptCondition"
     - "workflowNodeCode"
     properties:
       workflowNodeCode:
-        type: "string"
+        nodeType: "string"
       scriptCondition:
-        type: "string"
+        nodeType: "string"
         description: "for INCLUSIVE or EXCLUSIVE nodes"
   ConfigServiceError:
-    type: "object"
+    nodeType: "object"
     properties:
       code:
-        type: "string"
+        nodeType: "string"
       message:
-        type: "string"
+        nodeType: "string"
     description: "Error messages"
   PaginationInfo:
-    type: "object"
+    nodeType: "object"
     required:
     - "limit"
     - "page"
     properties:
       page:
-        type: "integer"
+        nodeType: "integer"
       limit:
-        type: "integer"
+        nodeType: "integer"
       version:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       stepCode:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       includeArchived:
-        type: "boolean"
+        nodeType: "boolean"
       includeInactive:
-        type: "boolean"
+        nodeType: "boolean"
       sortOrder:
-        type: "string"
+        nodeType: "string"
         description: "ASC - DESC"
       sortBy:
-        type: "string"
+        nodeType: "string"
         description: "field name"
     description: "Request to find Planconfig with Pagination"
   PageBatchConfig:
-    type: "object"
+    nodeType: "object"
     required:
     - "hasNext"
     - "hasPrevious"
@@ -442,17 +442,17 @@ definitions:
     - "total"
     properties:
       total:
-        type: "integer"
+        nodeType: "integer"
       page:
-        type: "integer"
+        nodeType: "integer"
       limit:
-        type: "integer"
+        nodeType: "integer"
       hasPrevious:
-        type: "boolean"
+        nodeType: "boolean"
       hasNext:
-        type: "boolean"
+        nodeType: "boolean"
       result:
-        type: "array"
+        nodeType: "array"
         description: "BatchConfigs which complish the filter"
         items:
           $ref: "#/definitions/BatchConfig"

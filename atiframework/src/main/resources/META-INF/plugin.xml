@@ -4,8 +4,8 @@
 
 <idea-plugin>
 
-    <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
-    <id>com.bbva.gkxj.atiframework.moduletemplate</id>
+    <!-- Unique _id for this plugin. Must stay constant for the life of the plugin. -->
+    <_id>com.bbva.gkxj.atiframework.moduletemplate</_id>
 
     <!-- Text to display as name on Settings | Plugin page -->
     <name>ATI Framework: Client Generator</name>
@@ -35,9 +35,9 @@
     <vendor url="https://www.nfq.es">BBVA CIB - Nfq</vendor>
 
     <extensions defaultExtensionNs="com.intellij">
-        <moduleType id="ATI_MODULE_TYPE" implementationClass="com.bbva.gkxj.atiframework.moduletemplate.AtiModuleType"/>
+        <moduleType _id="ATI_MODULE_TYPE" implementationClass="com.bbva.gkxj.atiframework.moduletemplate.AtiModuleType"/>
         <moduleBuilder builderClass="com.bbva.gkxj.atiframework.moduletemplate.AtiModuleBuilder"
-                       id="ATI_STEP"
+                       _id="ATI_STEP"
                        order="first"/>
         <fileType name="ATI Scheduler File" implementationClass="com.bbva.gkxj.atiframework.filetype.scheduler.SchFileType" fieldName="INSTANCE"
                   language="ATI Scheduler" extensions="sch"/>
@@ -77,14 +77,14 @@
         <applicationConfigurable
                 parentId="tools"
                 instance="com.bbva.gkxj.atiframework.copilot.AtiFrameworkSettingsGroup"
-                id="com.bbva.gkxj.atiframework.settings"
+                _id="com.bbva.gkxj.atiframework.settings"
                 displayName="ATI Framework"/>
 
         <!-- Panel de configuración en Settings → Tools → ATI Framework → Copilot -->
         <applicationConfigurable
                 parentId="com.bbva.gkxj.atiframework.settings"
                 instance="com.bbva.gkxj.atiframework.copilot.AtiCopilotSettingsConfigurable"
-                id="com.bbva.gkxj.atiframework.copilot.settings"
+                _id="com.bbva.gkxj.atiframework.copilot.settings"
                 displayName="Copilot"/>
 
         <!-- Servicio de estado persistente para la configuración ATI (MongoDB) -->
@@ -96,36 +96,36 @@
         <applicationConfigurable
                 parentId="com.bbva.gkxj.atiframework.settings"
                 instance="com.bbva.gkxj.atiframework.config.AtiConfigurationConfigurable"
-                id="com.bbva.gkxj.atiframework.config.settings"
+                _id="com.bbva.gkxj.atiframework.config.settings"
                 displayName="ATI Configuration"/>
 
         <!-- Grupo de notificaciones para ATI Framework -->
-        <notificationGroup id="ATI Framework Notifications" displayType="BALLOON"/>
+        <notificationGroup _id="ATI Framework Notifications" displayType="BALLOON"/>
     </extensions>
     <actions>
-        <action id="com.bbva.gkxj.atiframework.filetype.scheduler.create.CreateSchFileAction"
+        <action _id="com.bbva.gkxj.atiframework.filetype.scheduler.create.CreateSchFileAction"
                 class="com.bbva.gkxj.atiframework.filetype.scheduler.create.CreateSchFileAction"
                 text="ATI Scheduler File (.sch)"
                 icon="AtiIcons.ATI_SCH_FILE_ICON"
                 description="Create a new Scheduler File (.sch)">
-            <add-to-group group-id="NewGroup" anchor="last"/>
+            <add-to-group group-_id="NewGroup" anchor="last"/>
         </action>
 
         <!-- Grupo ATI Framework dentro de Tools -->
-        <group id="com.bbva.gkxj.atiframework.AtiFrameworkToolsGroup"
+        <group _id="com.bbva.gkxj.atiframework.AtiFrameworkToolsGroup"
                text="ATI Framework"
                icon="AtiIcons.ATI_default_icon"
                popup="true">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-_id="ToolsMenu" anchor="last"/>
         </group>
 
         <!-- Acciones de ATI Copilot -->
-        <action id="com.bbva.gkxj.atiframework.copilot.ExportCopilotInstructionsAction"
+        <action _id="com.bbva.gkxj.atiframework.copilot.ExportCopilotInstructionsAction"
                 class="com.bbva.gkxj.atiframework.copilot.ExportCopilotInstructionsAction"
                 text="Exportar Instrucciones Copilot"
                 icon="AtiIcons.COPILOT_ICON"
                 description="Exporta las instrucciones de ATI Framework para Copilot al directorio .github del proyecto">
-            <add-to-group group-id="com.bbva.gkxj.atiframework.AtiFrameworkToolsGroup" anchor="last"/>
+            <add-to-group group-_id="com.bbva.gkxj.atiframework.AtiFrameworkToolsGroup" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>

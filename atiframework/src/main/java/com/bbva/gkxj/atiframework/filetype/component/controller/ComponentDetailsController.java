@@ -2,26 +2,18 @@ package com.bbva.gkxj.atiframework.filetype.component.controller;
 
 import com.bbva.gkxj.atiframework.filetype.component.editor.panels.ComponentDetailsView;
 import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData;
-import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.AdapterConfig;
-import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.WorkStatementConfig;
 import com.google.gson.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.DocumentAdapter;
 import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 
 import static com.bbva.gkxj.atiframework.filetype.component.utils.ComponentConstants.*;
-import static com.bbva.gkxj.atiframework.filetype.scheduler.utils.UiUtils.setComboBoxValueIgnoreCase;
 
-/**
- * Controlador principal de los detalles del componente.
- * Orquestra el flujo de datos entre el JSON del archivo y los controladores de las pestañas específicas.
- */
 public class ComponentDetailsController {
 
     private final Project myProject;
@@ -33,6 +25,7 @@ public class ComponentDetailsController {
     private FilterPropertiesController filterController;
     private WorkStatementPropertiesController wsController;
 
+    private ComponentJsonData currentModel = new ComponentJsonData();
     private boolean isPopulating = false;
 
     public ComponentDetailsController(@NotNull Project project, @NotNull VirtualFile file, Runnable onFormChanged) {
@@ -40,117 +33,86 @@ public class ComponentDetailsController {
         this.myDocument = FileDocumentManager.getInstance().getDocument(file);
         this.onFormChanged = onFormChanged;
         this.view = new ComponentDetailsView();
-        setupInternalListeners();
-    }
 
-    private void setupInternalListeners() {
-        DocumentAdapter commonListener = new DocumentAdapter() {
-            @Override protected void textChanged(@NotNull DocumentEvent e) {
-                if (!isPopulating) onFormChanged.run();
-            }
-        };
-
-        view.getComponentCodeField().getDocument().addDocumentListener(commonListener);
-        view.getVersionField().getDocument().addDocumentListener(commonListener);
-        view.getStatusField().getDocument().addDocumentListener(commonListener);
-        view.getDescriptionField().getDocument().addDocumentListener(commonListener);
-
-        view.getNodeTypeField().addActionListener(e -> {
-            if (!isPopulating) {
-                view.updateDynamicFields(getCurrentType());
-                onFormChanged.run();
+        this.view.setOnFormChanged(() -> {
+            if (!isPopulating && this.onFormChanged != null) {
+                this.onFormChanged.run();
             }
         });
-
-        view.getSubtypeField().addActionListener(e -> { if (!isPopulating) onFormChanged.run(); });
     }
 
     public void updateForm(JsonObject jsonObject) {
         if (jsonObject == null) return;
         this.isPopulating = true;
         try {
-            if (jsonObject.has("componentCode")) view.getComponentCodeField().setText(jsonObject.get("componentCode").getAsString());
-            if (jsonObject.has("version")) view.getVersionField().setText(jsonObject.get("version").getAsString());
-            if (jsonObject.has("status")) view.getStatusField().setText(jsonObject.get("status").getAsString());
-            if (jsonObject.has("description")) view.getDescriptionField().setText(jsonObject.get("description").getAsString());
+            Gson gson = new Gson();
+            this.currentModel = gson.fromJson(jsonObject, ComponentJsonData.class);
 
-            if (jsonObject.has("type")) {
-                String rawType = jsonObject.get("type").getAsString();
+            view.setComponentCode(currentModel.getComponentCode());
+            view.setVersion(currentModel.getVersion());
+            view.setStatus(currentModel.getStatus());
+            view.setDescription(currentModel.getDescription());
+
+            String rawType = currentModel.getNodeType();
+            if (rawType != null) {
                 String normalizedType = normalizeType(rawType);
-                setComboBoxValueIgnoreCase(view.getNodeTypeField(), normalizedType);
-                view.getNodeTypeField().setEnabled(false);
+                view.setNodeType(normalizedType);
+                view.setNodeTypeEnabled(false);
                 view.updateDynamicFields(normalizedType);
             }
 
-            if (jsonObject.has("subtype")) {
-                setComboBoxValueIgnoreCase(view.getSubtypeField(), jsonObject.get("subtype").getAsString());
+            // En el nuevo modelo, los subtipos se guardan con sus propios nombres (ej. inputAdapterType)
+            // Por retrocompatibilidad visual, mantenemos la lógica de la UI:
+            String subtype = getCurrentSubtypeFromModel();
+            if (subtype != null && !subtype.isEmpty()) {
+                view.setSubtype(subtype);
             }
+
         } finally {
             this.isPopulating = false;
         }
     }
 
-    /**
-     * Carga datos de Filter desde el JSON.
-     */
-    public void loadFilterDataFromJson(JsonObject filterJson) {
-        if (filterController != null && filterJson != null) {
-            ComponentJsonData.FilterConfig config = new Gson().fromJson(filterJson, ComponentJsonData.FilterConfig.class);
-            filterController.loadDataFromConfig(config);
-        }
+    // Métodos para cargar datos en los tabs delegados pasando el modelo unificado
+    public void loadAdapterData() {
+        if (adapterController != null) adapterController.loadDataFromConfig(currentModel);
     }
 
-    /**
-     * Carga datos de WorkStatement desde el JSON.
-     */
-    public void loadWorkStatementDataFromJson(JsonObject wsJson) {
-        if (wsController != null && wsJson != null) {
-            WorkStatementConfig config = new Gson().fromJson(wsJson, WorkStatementConfig.class);
-            wsController.loadDataFromConfig(config);
-        }
+    public void loadFilterData() {
+        if (filterController != null) filterController.loadDataFromConfig(currentModel);
     }
 
-    /**
-     * Carga datos de Adaptadores (JMS/Async) desde el JSON.
-     */
-    public void loadAdapterDataFromJson(JsonObject adapterJson) {
-        if (adapterController != null && adapterJson != null) {
-            AdapterConfig config = new Gson().fromJson(adapterJson, AdapterConfig.class);
-            adapterController.loadDataFromConfig(config);
-        }
+    public void loadWorkStatementData() {
+        if (wsController != null) wsController.loadDataFromConfig(currentModel);
     }
 
-    public void updateDocument(JsonObject jsonObject) {
-        jsonObject.addProperty("componentCode", view.getComponentCodeField().getText());
-        jsonObject.addProperty("version", view.getVersionField().getText());
-        jsonObject.addProperty("status", view.getStatusField().getText());
-        jsonObject.addProperty("description", view.getDescriptionField().getText());
+    public void updateDocument(JsonObject originalJson) {
+        // 1. Extraer datos básicos de la UI principal
+        currentModel.setComponentCode(view.getComponentCode());
+        currentModel.setVersion(view.getVersion());
+        currentModel.setStatus(view.getStatus());
+        currentModel.setDescription(view.getDescription());
 
-        String type = getCurrentType();
-        String subtype = getCurrentSubtype();
-        jsonObject.addProperty("type", type);
-        jsonObject.addProperty("subtype", subtype);
+        String type = view.getNodeType();
+        String subtype = view.getSubtype();
+        currentModel.setNodeType(type);
 
-        // Guardado de Adaptadores
-        if (adapterController != null) {
-            JsonElement configJson = new Gson().toJsonTree(adapterController.getDataFromUI());
-            if (SUBTYPE_JMS.equals(subtype)) jsonObject.add("jmsConfig", configJson);
-            else if (SUBTYPE_ASYNC_API.equals(subtype)) jsonObject.add("asyncApiConfig", configJson);
-        }
+        // Guardar el subtipo en la variable correcta según el tipo de nodo
+        if (TYPE_INPUT_ADAPTER.equals(type)) currentModel.setInputAdapterType(subtype);
+        else if (TYPE_OUTPUT_ADAPTER.equals(type)) currentModel.setOutputAdapterType(subtype);
 
-        // Guardado de Filters
-        if (filterController != null && TYPE_FILTER.equals(type)) {
-            jsonObject.add("filterConfig", new Gson().toJsonTree(filterController.getDataFromUI()));
-        }
+        // 2. Extraer datos de los controladores delegados (Pestañas)
+        if (adapterController != null) currentModel = adapterController.getDataFromUI();
+        if (filterController != null) currentModel = filterController.getDataFromUI();
+        if (wsController != null) currentModel = wsController.getDataFromUI();
 
-        // Guardado de WorkStatements
-        if (wsController != null && TYPE_ENRICHER.equals(type)) {
-            jsonObject.add("workStatementConfig", new Gson().toJsonTree(wsController.getDataFromUI()));
-        }
-
-        // Escritura física
+        // 3. Serializar y guardar el documento
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        WriteCommandAction.runWriteCommandAction(myProject, () -> this.myDocument.setText(gson.toJson(jsonObject)));
+        JsonElement updatedTree = gson.toJsonTree(currentModel);
+
+        WriteCommandAction.runWriteCommandAction(myProject, () -> {
+            this.myDocument.setText(gson.toJson(updatedTree));
+        });
     }
 
     private String normalizeType(String rawType) {
@@ -160,14 +122,20 @@ public class ComponentDetailsController {
         return rawType;
     }
 
+    private String getCurrentSubtypeFromModel() {
+        if (TYPE_INPUT_ADAPTER.equals(currentModel.getNodeType())) return currentModel.getInputAdapterType();
+        if (TYPE_OUTPUT_ADAPTER.equals(currentModel.getNodeType())) return currentModel.getOutputAdapterType();
+        return null; // Añade aquí lógica para Enricher/Aggregator si la usabas
+    }
+
     // --- Getters y Setters ---
     public void setAdapterController(AdapterPropertiesController c) { this.adapterController = c; }
     public void setFilterController(FilterPropertiesController c) { this.filterController = c; }
     public void setWorkStatementController(WorkStatementPropertiesController c) { this.wsController = c; }
 
     public boolean isPopulating() { return isPopulating; }
-    public String getCurrentType() { return (String) view.getNodeTypeField().getSelectedItem(); }
-    public String getCurrentSubtype() { return (String) view.getSubtypeField().getSelectedItem(); }
+    public String getCurrentType() { return view.getNodeType(); }
+    public String getCurrentSubtype() { return view.getSubtype(); }
     public JPanel getView() { return view; }
-    public JComponent getPreferredFocusedComponent() { return view.getComponentCodeField(); }
+    public JComponent getPreferredFocusedComponent() { return view.getFocusTarget(); }
 }

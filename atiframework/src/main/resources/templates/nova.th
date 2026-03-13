@@ -10,8 +10,8 @@ service:
     [(${atiSettings.getServiceDescription()})]
   # Service version
   version: "1.0.0"
-  # Service type: do not touch
-  type: Daemon
+  # Service nodeType: do not touch
+  nodeType: Daemon
   # Language: do not touch
   language: Java - Spring boot
   # language version: do not touch
@@ -27,7 +27,7 @@ service:
 # APIs definitions
 # contains all APIs used by the service
 apis:
-  # NOTE served: is forbidden for this service type
+  # NOTE served: is forbidden for this service nodeType
 
   # Optional
   # APIs used by the service itself
@@ -58,8 +58,8 @@ properties:
   # property name/identifier must be unique
   - name: "service.log"
     description: "Nivel de log"
-    # type: STRING, JSON, XML
-    type: "STRING"
+    # nodeType: STRING, JSON, XML
+    nodeType: "STRING"
     # default value
     default: "silly"
       # who is the property owner
@@ -74,43 +74,43 @@ properties:
 
   - name: "release.header.Batchaudit"
     description: "Release del api Batch Audit"
-    type: "STRING"
+    nodeType: "STRING"
     default: "[(${atiSettings.getAtiRelease()})]"
     management: "SERVICE"
     encrypt: false
   - name: "release.header.Schedulerplanaudit"
     description: "Release del api SchedulerPlan Audit"
-    type: "STRING"
+    nodeType: "STRING"
     default: "[(${atiSettings.getAtiRelease()})]"
     management: "SERVICE"
     encrypt: false
   - name: "release.header.Schedulerconfig"
     description: "Release del api SchedulerPlan Config"
-    type: "STRING"
+    nodeType: "STRING"
     default: "[(${atiSettings.getAtiRelease()})]"
     management: "SERVICE"
     encrypt: false
   - name: "release.header.Batchconfig"
     description: "Release del api Batch Config"
-    type: "STRING"
+    nodeType: "STRING"
     default: "[(${atiSettings.getAtiRelease()})]"
     management: "SERVICE"
     encrypt: false
   - name: "release.header.Stepconfig"
     description: "Release del api Step Config"
-    type: "STRING"
+    nodeType: "STRING"
     default: "[(${atiSettings.getAtiRelease()})]"
     management: "SERVICE"
     encrypt: false
   - name: "release.header.Branchconfig"
     description: "Release del api Step Config"
-    type: "STRING"
+    nodeType: "STRING"
     default: "[(${atiSettings.getAtiRelease()})]"
     management: "SERVICE"
     encrypt: false
 [# th:if="${atiSettings.getIsNovaTransferIncluded()}"]  - name: "release.header.Filetransfer"
     description: "Release del api File Transfer"
-    type: "STRING"
+    nodeType: "STRING"
     default: "NOVAFileTransferJ11v3"
     management: "SERVICE"
     encrypt: false[/]

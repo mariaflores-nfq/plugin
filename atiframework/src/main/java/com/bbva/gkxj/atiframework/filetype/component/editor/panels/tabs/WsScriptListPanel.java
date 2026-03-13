@@ -40,7 +40,6 @@ public class WsScriptListPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Cabecera
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         header.setOpaque(false);
         header.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -52,12 +51,10 @@ public class WsScriptListPanel extends JPanel {
         header.add(btnScriptToggle);
         header.add(scriptToggleLabel);
 
-        // Contenido
         scriptListContent = new JPanel(new BorderLayout(0, 15));
         scriptListContent.setOpaque(false);
         scriptListContent.setBorder(JBUI.Borders.emptyLeft(20));
 
-        // Tabla
         scriptListTable = new AtiSimpleTablePanel<>("Nº of elements", "Field Name", WsScriptData::new,
                 item -> item.fieldName != null && !item.fieldName.isEmpty() ? item.fieldName : "{New Script}");
         scriptListTable.setPreferredSize(new Dimension(0, 150));
@@ -68,10 +65,10 @@ public class WsScriptListPanel extends JPanel {
             isPopulating = true;
             try {
                 if (scriptItem != null) {
-                    scriptFieldNameField.setText(scriptItem.fieldName);
-                    scriptDescField.setText(scriptItem.description);
-                    scriptPayloadPathField.setText(scriptItem.payloadPath);
-                    scriptEditorPanel.setText(scriptItem.script);
+                    scriptFieldNameField.setText(scriptItem.fieldName != null ? scriptItem.fieldName : "");
+                    scriptDescField.setText(scriptItem.description != null ? scriptItem.description : "");
+                    scriptPayloadPathField.setText(scriptItem.payloadPath != null ? scriptItem.payloadPath : "");
+                    scriptEditorPanel.setText(scriptItem.script != null ? scriptItem.script : "");
                 } else {
                     scriptFieldNameField.setText("");
                     scriptDescField.setText("");
@@ -81,7 +78,6 @@ public class WsScriptListPanel extends JPanel {
             } finally { isPopulating = wasPopulating; }
         });
 
-        // Formulario
         JPanel form = new JPanel(new GridBagLayout());
         form.setOpaque(true);
         form.setBackground(UIUtil.getPanelBackground());
@@ -113,7 +109,6 @@ public class WsScriptListPanel extends JPanel {
         scriptListContent.add(scriptListTable, BorderLayout.NORTH);
         scriptListContent.add(form, BorderLayout.CENTER);
 
-        // Lógica de Acordeón
         header.addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 isScriptExpanded = !isScriptExpanded;
@@ -146,10 +141,11 @@ public class WsScriptListPanel extends JPanel {
         if (isPopulating) return;
         WsScriptData currentScript = scriptListTable.getCurrentSelection();
         if (currentScript != null) {
-            currentScript.fieldName = scriptFieldNameField.getText();
-            currentScript.description = scriptDescField.getText();
-            currentScript.payloadPath = scriptPayloadPathField.getText();
-            currentScript.script = scriptEditorPanel.getText();
+            currentScript.fieldName = getNullIfEmpty(scriptFieldNameField.getText());
+            currentScript.description = getNullIfEmpty(scriptDescField.getText());
+            currentScript.payloadPath = getNullIfEmpty(scriptPayloadPathField.getText());
+            currentScript.script = getNullIfEmpty(scriptEditorPanel.getText());
+
             scriptListTable.refreshSelectedRow();
         }
         if (onChangeCallback != null) onChangeCallback.run();
@@ -160,9 +156,14 @@ public class WsScriptListPanel extends JPanel {
         f.getDocument().addDocumentListener(new DocumentAdapter() { @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }});
         return f;
     }
+
     private AtiResizableTextArea createResizableTextArea() {
         AtiResizableTextArea f = WorkflowThemeUtils.createThemedResizableTextArea();
         f.getDocument().addDocumentListener(new DocumentAdapter() { @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }});
         return f;
+    }
+
+    private String getNullIfEmpty(String text) {
+        return (text == null || text.trim().isEmpty()) ? null : text;
     }
 }

@@ -27,12 +27,12 @@ paths:
         in: "path"
         description: "UUAA code associated to the configs"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
           schema:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/definitions/BatchAudit"
         "400":
@@ -55,7 +55,7 @@ paths:
         in: "path"
         description: "UUAA code associated to the configs"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "paginationInfo"
         in: "body"
         required: true
@@ -87,7 +87,7 @@ paths:
         in: "path"
         description: "UUAA code associated to the batch audits"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "batchAudit"
         in: "body"
         description: "Batch audit to save in the DDBB"
@@ -118,17 +118,17 @@ paths:
         in: "path"
         description: "UUAA code associated to the config"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "parentExecutionId"
         in: "query"
-        description: "Parent execution id"
+        description: "Parent execution _id"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "parentStepExecutionId"
         in: "query"
-        description: "Parent step execution id"
+        description: "Parent step execution _id"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
@@ -154,12 +154,12 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "executionId"
         in: "query"
-        description: "Unique execution id of the configuration"
+        description: "Unique execution _id of the configuration"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
@@ -176,7 +176,7 @@ paths:
 
 definitions:
   BatchAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "_id"
     - "uuaa"
@@ -185,54 +185,54 @@ definitions:
     - "executionDate"
     properties:
       _id:
-        type: "string"
+        nodeType: "string"
       executionId:
-        type: "string"
+        nodeType: "string"
       uuaa:
-        type: "string"
+        nodeType: "string"
       userId:
-        type: "string"
+        nodeType: "string"
         description: "UserId who launch/relaunch the Batch"
       stopUserId:
-        type: "string"
+        nodeType: "string"
         description: "UserId who stop the Batch"
       executionStatus:
-        type: "string"
+        nodeType: "string"
       initTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       endTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       parentExecutionId:
-        type: "string"
+        nodeType: "string"
       parentStepExecutionId:
-        type: "string"
+        nodeType: "string"
       schedulerId:
-        type: "string"
+        nodeType: "string"
       stepCounter:
-        type: "integer"
+        nodeType: "integer"
       batchConfig:
         $ref: "#/definitions/BatchConfig"
       batchParameterMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/BatchParameterAuditItem"
       stepStatementMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/StepStatementItem"
       stopStatementMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/StepStatementItem"
       loopStack:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/LoopContextItem"
 
   BatchConfig:
-    type: "object"
+    nodeType: "object"
     required:
     - "_id"
     - "batchCode"
@@ -240,224 +240,224 @@ definitions:
     - "paramAuditList"
     properties:
       _id:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       version:
-        type: "string"
+        nodeType: "string"
       uuaa:
-        type: "string"
+        nodeType: "string"
       batchType:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       status:
-        type: "string"
+        nodeType: "string"
       recordVersion:
-        type: "integer"
+        nodeType: "integer"
       branchCode:
-        type: "string"
+        nodeType: "string"
         description: "Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published"
       branchId:
-        type: "string"
+        nodeType: "string"
         description: "Branch Identifier related with the batchConfig, this is only informed when the batchConfig is NOT published"
       checkSum:
-        type: "string"
+        nodeType: "string"
         description: "CheckSum related with the batchConfig, this is useful to check if the batchConfig has been modified"
       paramAuditList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/ParamAudit"
       parameterList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/BatchParameter"
       workflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/WorkflowNode"
 
   ParamAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "audTs"
     - "audUser"
     - "status"
     properties:
       status:
-        type: "string"
+        nodeType: "string"
       comments:
-        type: "string"
+        nodeType: "string"
       audTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       audUser:
-        type: "string"
+        nodeType: "string"
 
   BatchParameter:
-    type: "object"
+    nodeType: "object"
     required:
     - "isMandatory"
     - "name"
-    - "type"
+    - "nodeType"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
       schedulerParamName:
-        type: "string"
-      type:
-        type: "string"
+        nodeType: "string"
+      nodeType:
+        nodeType: "string"
       ioType:
-        type: "string"
+        nodeType: "string"
       isMandatory:
-        type: "boolean"
+        nodeType: "boolean"
       description:
-        type: "string"
+        nodeType: "string"
       scriptValue:
-        type : "string"
+        nodeType : "string"
 
   BatchParameterAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "isMandatory"
     - "name"
-    - "type"
+    - "nodeType"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
       schedulerParamName:
-        type: "string"
-      type:
-        type: "string"
+        nodeType: "string"
+      nodeType:
+        nodeType: "string"
       ioType:
-        type: "string"
+        nodeType: "string"
       isMandatory:
-        type: "boolean"
+        nodeType: "boolean"
       description:
-        type: "string"
+        nodeType: "string"
       value:
-        type : "string"
+        nodeType : "string"
 
   WorkflowNode:
-    type: "object"
+    nodeType: "object"
     required:
-    - "type"
+    - "nodeType"
     - "workflowNodeCode"
     properties:
       workflowNodeCode:
-        type: "string"
-      type:
-        type: "string"
+        nodeType: "string"
+      nodeType:
+        nodeType: "string"
         description: "STEP/PARALLEL/INCLUSIVE/EXCLUSIVE/BATCH/LOOP"
       stepCode:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       xPosition:
-        type: "integer"
+        nodeType: "integer"
       yPosition:
-        type: "integer"
+        nodeType: "integer"
       isCritical:
-        type: "boolean"
+        nodeType: "boolean"
       nextWorkflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/NextWorkflowNode"
       wfnParameterList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/wfnParameter"
       joinWorkflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
-          type: "string"
+          nodeType: "string"
       initializeScript:
-        type: "string"
+        nodeType: "string"
       exitScript:
-        type: "string"
+        nodeType: "string"
       incrementScript:
-        type: "string"
+        nodeType: "string"
       isEndLoop:
-        type: "boolean"
+        nodeType: "boolean"
 
   wfnParameter:
-    type: "object"
+    nodeType: "object"
     required:
     - "name"
     - "batchParamName"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
         description: "Parameter name in the ETL or child batch."
       batchParamName:
-        type: "string"
+        nodeType: "string"
         description: "Parameter name in the Batch"
       fixedValue:
-        type: "string"
+        nodeType: "string"
       scriptValue:
-        type: "string"
+        nodeType: "string"
 
   NextWorkflowNode:
-    type: "object"
+    nodeType: "object"
     required:
     - "scriptCondition"
     - "workflowNodeCode"
     properties:
       workflowNodeCode:
-        type: "string"
+        nodeType: "string"
       scriptCondition:
-        type: "string"
+        nodeType: "string"
         description: "for INCLUSIVE or EXCLUSIVE nodes"
 
   BatchAuditError:
-    type: "object"
+    nodeType: "object"
     properties:
       code:
-        type: "string"
+        nodeType: "string"
       message:
-        type: "string"
+        nodeType: "string"
     description: "Error messages"
 
   PaginationInfo:
-    type: "object"
+    nodeType: "object"
     required:
     - "page"
     - "limit"
     properties:
       page:
-        type: "integer"
+        nodeType: "integer"
       limit:
-        type: "integer"
+        nodeType: "integer"
       version:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       stepCode:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       status:
-        type: "string"
+        nodeType: "string"
       initTsFrom:
-        type: "string"
+        nodeType: "string"
       initTsTo:
-        type: "string"
+        nodeType: "string"
       endTsFrom:
-        type: "string"
+        nodeType: "string"
       endTsTo:
-        type: "string"
+        nodeType: "string"
       includeChildProcess:
-        type: "boolean"
+        nodeType: "boolean"
       sortOrder:
-        type: "string"
+        nodeType: "string"
         description: "ASC - DESC"
       sortBy:
-        type: "string"
+        nodeType: "string"
         description: "field name"
     description: "Request to find Batch audit with Pagination"
 
   PageBatchAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "total"
     - "page"
@@ -466,188 +466,188 @@ definitions:
     - "hasNext"
     properties:
       total:
-        type: "integer"
+        nodeType: "integer"
       page:
-        type: "integer"
+        nodeType: "integer"
       limit:
-        type: "integer"
+        nodeType: "integer"
       hasPrevious:
-        type: "boolean"
+        nodeType: "boolean"
       hasNext:
-        type: "boolean"
+        nodeType: "boolean"
       result:
-        type: "array"
+        nodeType: "array"
         description: "Batch audits which complish the filter"
         items:
           $ref: "#/definitions/BatchAudit"
     description: "Response to find BatchAudit with Pagination"
 
   StepStatementItem:
-    type: "object"
+    nodeType: "object"
     properties:
       key:
-        type: "string"
+        nodeType: "string"
       value:
         $ref: "#/definitions/StepStatement"
 
   StepStatement:
-    type: "object"
+    nodeType: "object"
     properties:
       executionId:
-        type: "string"
+        nodeType: "string"
       stepExecutionId:
-        type: "string"
+        nodeType: "string"
       executionStatus:
-        type: "string"
+        nodeType: "string"
       initTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       endTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       batchCode:
-        type: "string"
+        nodeType: "string"
       etlStatus:
-        type: "string"
+        nodeType: "string"
       batchStatus:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       version:
-        type: "string"
+        nodeType: "string"
       batchId:
-        type: "string"
+        nodeType: "string"
       stepId:
-        type: "string"
+        nodeType: "string"
       loopNumber:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
       loopCode:
-        type: "string"
+        nodeType: "string"
       iterator:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
       workflowNode:
         $ref: "#/definitions/WorkflowNode"
       nextWorkflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
-          type: "string"
+          nodeType: "string"
       joinWorkflowNodeList:
-        type: "array"
+        nodeType: "array"
         items:
-          type: "string"
+          nodeType: "string"
       springBatchStepList:
-        type : "array"
+        nodeType : "array"
         items:
           $ref: "#/definitions/springBatchStep"
       failureExceptionList:
-        type : "array"
+        nodeType : "array"
         items:
           $ref: "#/definitions/failureException"
       batchParameterMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/BatchParameterAuditItem"
       stepParameterMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/StepParameterItem"
   BatchParameterAuditItem:
-    type: "object"
+    nodeType: "object"
     properties:
       key:
-        type: "string"
+        nodeType: "string"
       value:
         $ref: "#/definitions/BatchParameterAudit"
   StepParameterItem:
-    type: "object"
+    nodeType: "object"
     properties:
       key:
-        type: "string"
+        nodeType: "string"
       value:
-        type: "string"
+        nodeType: "string"
   LoopContextItem:
-    type: "object"
+    nodeType: "object"
     properties:
       key:
-        type: "string"
+        nodeType: "string"
       value:
         $ref: "#/definitions/LoopContext"
   LoopContext:
-    type: "object"
+    nodeType: "object"
     properties:
       loopCode:
-        type: "string"
+        nodeType: "string"
       iterator:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
       stepCounter:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
       endStepCounter:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
   springBatchStep:
-    type: "object"
+    nodeType: "object"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
       status:
-        type: "string"
+        nodeType: "string"
       initTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       endTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       readCount:
-        type: "integer"
+        nodeType: "integer"
       writeCount:
-        type: "integer"
+        nodeType: "integer"
       skipCount:
-        type: "integer"
+        nodeType: "integer"
       operation:
-        type: "string"
+        nodeType: "string"
       affectedFileList:
-        type : "array"
+        nodeType : "array"
         items:
           $ref: "#/definitions/affectedFile"
       queryResultList:
-        type : "array"
+        nodeType : "array"
         items:
           $ref: "#/definitions/queryResult"
 
   affectedFile:
-    type: "object"
+    nodeType: "object"
     properties:
       file:
-        type: "string"
+        nodeType: "string"
       affected:
-        type: "boolean"
+        nodeType: "boolean"
 
   queryResult:
-    type: "object"
+    nodeType: "object"
     properties:
       queryCode:
-        type: "string"
+        nodeType: "string"
       dbSource:
-        type: "string"
+        nodeType: "string"
       updateCount:
-        type: "integer"
+        nodeType: "integer"
       matchCount:
-        type: "integer"
+        nodeType: "integer"
       insertCount:
-        type: "integer"
+        nodeType: "integer"
       deleteCount:
-        type: "integer"
+        nodeType: "integer"
 
   failureException:
-    type: "object"
+    nodeType: "object"
     properties:
       className:
-        type: "string"
+        nodeType: "string"
       message:
-        type: "string"
+        nodeType: "string"
 x-generator-properties:
   business-unit: "gkxj"

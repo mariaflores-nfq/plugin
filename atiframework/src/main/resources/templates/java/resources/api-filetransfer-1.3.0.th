@@ -32,7 +32,7 @@ paths:
         in: "query"
         description: "move file (no copy), deleting it from source when transferred"
         required: false
-        type: "boolean"
+        nodeType: "boolean"
       responses:
         "200":
           description: "Executed instance"
@@ -58,7 +58,7 @@ paths:
         in: "query"
         description: "move file (no copy), deleting it from source when transferred"
         required: false
-        type: "boolean"
+        nodeType: "boolean"
       responses:
         "200":
           description: "Executed instance"
@@ -91,56 +91,56 @@ paths:
         in: "query"
         description: "The UUAA of the File Transfer"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "name"
         in: "query"
         description: "The name of the File Transfer"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "subpath"
         in: "query"
         description: "The subpath to search for files under the folder configured in the transfer. If this field is empty, the root path of the transfer will be searched."
         required: false
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "File Transfer results"
           schema:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/definitions/FileTransferFileDTO"
 definitions:
   NewFileTransferInstanceDTO:
-    type: "object"
+    nodeType: "object"
     properties:
       uuaa:
-        type: "string"
+        nodeType: "string"
         description: "UUAA of the associated product"
       name:
-        type: "string"
+        nodeType: "string"
         description: "The name of the File Transfer Configuration"
       sourcePath:
-        type: "string"
+        nodeType: "string"
         description: "Source location for the new instance"
       targetPath:
-        type: "string"
+        nodeType: "string"
         description: "Target location for the new instance"
     description: "DTO object for a new request of a File Transfer"
   FileTransferInstanceStatusDTO:
-    type: "object"
+    nodeType: "object"
     properties:
-      id:
-        type: "integer"
+      _id:
+        nodeType: "integer"
         format: "int32"
         description: "Id that identifies the File Tranfer Instance"
       uuaa:
-        type: "string"
+        nodeType: "string"
         description: "UUAA of the associated product"
       environment:
-        type: "string"
+        nodeType: "string"
         description: "Associated environment"
       name:
-        type: "string"
+        nodeType: "string"
         description: "The name of the File Transfer Configuration"
       source:
         description: "Source location for this File Transfer Instance"
@@ -152,150 +152,150 @@ definitions:
         description: "Options for this instance"
         $ref: "#/definitions/FileTransferInstanceOptionsDTO"
       status:
-        type: "string"
+        nodeType: "string"
         description: "Current status of this File Transfer Instance"
       comments:
-        type: "string"
+        nodeType: "string"
         description: "Cause of errors, comments, current status, etc."
       createAt:
-        type: "string"
+        nodeType: "string"
         description: "Create timestamp"
       updateAt:
-        type: "string"
+        nodeType: "string"
         description: "Update timestamp"
     description: "DTO object for an unique instance of a File Transfer"
   FileTransferInstanceLocationDTO:
-    type: "object"
+    nodeType: "object"
     properties:
       locationType:
-        type: "string"
+        nodeType: "string"
         description: "Type of file location"
       locationDesc:
-        type: "string"
+        nodeType: "string"
         description: "Location description"
       absolutePath:
-        type: "string"
+        nodeType: "string"
         description: "Absolute path"
       relativePath:
-        type: "string"
+        nodeType: "string"
         description: "Relative path"
     description: "File location DTO object"
   FileTransferInstanceOptionsDTO:
-    type: "object"
+    nodeType: "object"
     properties:
       move:
-        type: "boolean"
+        nodeType: "boolean"
         description: "Move-mode flag"
     description: "Options for an unique instance of a File Transfer"
   ErrorsMessages:
-    type: "object"
+    nodeType: "object"
     required:
     - "messages"
     properties:
       messages:
-        type: "array"
+        nodeType: "array"
         description: "Array containing the diferent errors in a resource invocation"
         items:
           $ref: "#/definitions/ErrorsErrorMessage"
     description: "Default data structure for errors in BBVA APIs"
   ErrorsErrorMessage:
-    type: "object"
+    nodeType: "object"
     required:
     - "code"
     - "message"
     properties:
       code:
-        type: "string"
+        nodeType: "string"
         description: "Code associated to the error"
       message:
-        type: "string"
+        nodeType: "string"
         description: "Message associated to the error"
       parameters:
-        type: "array"
+        nodeType: "array"
         description: "Parameters wrong informed."
         items:
           $ref: "#/definitions/ErrorParameter"
   ErrorParameter:
-    type: "object"
+    nodeType: "object"
     required:
     - "name"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
         description: "Name of parameter wrong informed."
   ExecutedFTInstanceStatusDTO:
-    type: "object"
+    nodeType: "object"
     properties:
       target:
         description: "Target location for this File Transfer Instance"
         $ref: "#/definitions/FileTransferInstanceLocationDTO"
       status:
-        type: "string"
+        nodeType: "string"
         description: "Current status of this File Transfer Instance"
       totalSize:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
       files:
-        type: "array"
+        nodeType: "array"
         description: "List of files associated to File Transfer Instance"
         items:
           $ref: "#/definitions/FileDTO"
     description: "DTO object for an executed instance of a File Transfer"
   FileDTO:
-    type: "object"
+    nodeType: "object"
     properties:
       fileName:
-        type: "string"
+        nodeType: "string"
         description: "the name of the file"
       size:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
         description: "The consume of megabytes of file"
     description: "DTO for usage of File Transfer Config for one day."
   CustomErrorDTO:
-    type: "object"
+    nodeType: "object"
     properties:
       code:
-        type: "string"
+        nodeType: "string"
         description: "Http status code"
       errorMessage:
-        type: "string"
+        nodeType: "string"
         description: "Error description"
   FileTransferFileDTO:
-    type: "object"
+    nodeType: "object"
     required:
     - "fileName"
     - "status"
     properties:
       fileName:
-        type: "string"
+        nodeType: "string"
         description: "The file name"
       size:
-        type: "integer"
+        nodeType: "integer"
         format: "int64"
         description: "The file size"
       status:
-        type: "string"
+        nodeType: "string"
         description: "The file status"
         enum:
         - "OK"
         - "ERROR"
       creationDate:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
         description: "The creation date"
       modificationDate:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
         description: "The modification date"
       user:
-        type: "string"
+        nodeType: "string"
         description: "The file user"
       permissions:
-        type: "array"
+        nodeType: "array"
         description: "The file permissions"
         items:
-          type: "string"
+          nodeType: "string"
     description: "File transfer file details"
 x-generator-properties:
   business-unit: "T4I8"

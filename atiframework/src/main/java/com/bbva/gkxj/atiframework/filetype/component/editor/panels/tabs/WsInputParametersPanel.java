@@ -1,6 +1,7 @@
 package com.bbva.gkxj.atiframework.filetype.component.editor.panels.tabs;
 
 import com.bbva.gkxj.atiframework.components.*;
+import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.FormattingConfig;
 import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.WsInputParameter;
 import com.bbva.gkxj.atiframework.filetype.workflow.utils.WorkflowThemeUtils;
 import com.intellij.icons.AllIcons;
@@ -64,7 +65,6 @@ public class WsInputParametersPanel extends JPanel {
             notifyChange();
         });
 
-        // Inicializar componentes UI base
         ipFieldNameField = createTextField();
         ipDescField = createResizableTextArea();
         ipPayloadPathField = createTextField();
@@ -96,13 +96,11 @@ public class WsInputParametersPanel extends JPanel {
         wrapCountry = new AtiLabeledComponent("Country", ipCountryField);
         wrapTz = new AtiLabeledComponent("TimeZone", ipTzField);
 
-        // Contenedor del formulario
         form = new JPanel(new GridBagLayout());
         form.setOpaque(true);
         form.setBackground(UIUtil.getPanelBackground());
         form.setBorder(JBUI.Borders.empty(15));
 
-        // Primera construcción del layout
         buildFormLayout();
 
         inputParamsTable.setSelectionListener(item -> {
@@ -110,18 +108,34 @@ public class WsInputParametersPanel extends JPanel {
             isPopulating = true;
             try {
                 if (item != null) {
-                    ipFieldNameField.setText(item.fieldName);
-                    ipDescField.setText(item.description);
-                    ipValueTypeCombo.setSelectedItem(item.inputValueType != null ? item.inputValueType : "PAYLOAD_PATH");
-                    ipPayloadPathField.setText(item.payloadPath);
-                    ipFixedValueField.setText(item.extractionValue);
-                    ipFieldTypeCombo.setSelectedItem(item.fieldType != null ? item.fieldType : "STRING");
-                    ipFormatField.setText(item.fieldFormat);
-                    ipDecimalCombo.setText(item.decimalDelimiter);
-                    ipGroupingCombo.setText(item.groupingDelimiter);
-                    ipLangField.setText(item.language);
-                    ipCountryField.setText(item.country);
-                    ipTzField.setText(item.timeZone);
+                    // Propiedades de BaseField
+                    ipFieldNameField.setText(item.fieldName != null ? item.fieldName : "");
+                    ipDescField.setText(item.description != null ? item.description : "");
+                    ipPayloadPathField.setText(item.payloadPath != null ? item.payloadPath : "");
+
+                    // Propiedades directas
+                    ipFieldTypeCombo.setSelectedItem(item.type != null ? item.type : "STRING");
+                    ipFixedValueField.setText(item.fixedValue != null ? item.fixedValue : "");
+
+                    // Lógica UI para el tipo de valor
+                    if (item.fixedValue != null && !item.fixedValue.isEmpty()) {
+                        ipValueTypeCombo.setSelectedItem("FIXED_VALUE");
+                    } else {
+                        ipValueTypeCombo.setSelectedItem("PAYLOAD_PATH");
+                    }
+
+                    // Propiedades de FormattingConfig
+                    if (item.fieldExtraConfig != null) {
+                        ipFormatField.setText(item.fieldExtraConfig.fieldFormat != null ? item.fieldExtraConfig.fieldFormat : "");
+                        ipDecimalCombo.setText(item.fieldExtraConfig.decimalDelimiter != null ? item.fieldExtraConfig.decimalDelimiter : "");
+                        ipGroupingCombo.setText(item.fieldExtraConfig.groupingDelimiter != null ? item.fieldExtraConfig.groupingDelimiter : "");
+                        ipLangField.setText(item.fieldExtraConfig.language != null ? item.fieldExtraConfig.language : "");
+                        ipCountryField.setText(item.fieldExtraConfig.country != null ? item.fieldExtraConfig.country : "");
+                        ipTzField.setText(item.fieldExtraConfig.timeZone != null ? item.fieldExtraConfig.timeZone : "");
+                    } else {
+                        ipFormatField.setText(""); ipDecimalCombo.setText(""); ipGroupingCombo.setText("");
+                        ipLangField.setText(""); ipCountryField.setText(""); ipTzField.setText("");
+                    }
                 } else {
                     ipFieldNameField.setText(""); ipDescField.setText("");
                     ipPayloadPathField.setText(""); ipFixedValueField.setText("");
@@ -147,10 +161,6 @@ public class WsInputParametersPanel extends JPanel {
         add(inputParamsContent, BorderLayout.CENTER);
     }
 
-    /**
-     * Reconstruye la cuadrícula (GridBagLayout) ignorando los componentes que no están visibles,
-     * para que todo quede apilado limpiamente sin huecos.
-     */
     private void buildFormLayout() {
         form.removeAll();
 
@@ -164,23 +174,19 @@ public class WsInputParametersPanel extends JPanel {
         int row = 0;
         int col = 0;
 
-        // Fila 1 siempre fija
         addComponentToGrid(new AtiLabeledComponent("Field Name", ipFieldNameField), gbc, col++, row);
-        gbc.insets = JBUI.insets(0, 0, 10, 0); // Quitar margen derecho para el segundo
+        gbc.insets = JBUI.insets(0, 0, 10, 0);
         addComponentToGrid(new AtiLabeledComponent("Description", ipDescField), gbc, col++, row);
 
         row++; col = 0; gbc.insets = JBUI.insets(0, 0, 10, 15);
 
-        // Fila 2 siempre fija
         addComponentToGrid(new AtiLabeledComponent("Input Value Type", ipValueTypeCombo), gbc, col++, row);
         gbc.insets = JBUI.insets(0, 0, 10, 0);
         addComponentToGrid(new AtiLabeledComponent("Field Type", ipFieldTypeCombo), gbc, col++, row);
 
         row++; col = 0;
 
-        // --- Lista de componentes dinámicos a evaluar ---
         List<JComponent> visibleComponents = new ArrayList<>();
-
         if (wrapPayloadPath.isVisible()) visibleComponents.add(wrapPayloadPath);
         if (wrapFixedValue.isVisible()) visibleComponents.add(wrapFixedValue);
         if (wrapFormat.isVisible()) visibleComponents.add(wrapFormat);
@@ -190,24 +196,19 @@ public class WsInputParametersPanel extends JPanel {
         if (wrapCountry.isVisible()) visibleComponents.add(wrapCountry);
         if (wrapTz.isVisible()) visibleComponents.add(wrapTz);
 
-        // Distribuir dinámicamente en 2 columnas
         for (JComponent comp : visibleComponents) {
             gbc.insets = col == 0 ? JBUI.insets(0, 0, 10, 15) : JBUI.insets(0, 0, 10, 0);
             addComponentToGrid(comp, gbc, col, row);
 
             col++;
-            if (col > 1) { // Salto de línea si llegamos a la segunda columna
+            if (col > 1) {
                 col = 0;
                 row++;
             }
         }
 
-        // Truco para evitar que los campos se estiren verticalmente y empujen hacia el centro
-        gbc.gridx = 0;
-        gbc.gridy = row + 1;
-        gbc.gridwidth = 2;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0; gbc.gridy = row + 1; gbc.gridwidth = 2;
+        gbc.weighty = 1.0; gbc.fill = GridBagConstraints.BOTH;
         form.add(Box.createGlue(), gbc);
 
         form.revalidate();
@@ -228,7 +229,6 @@ public class WsInputParametersPanel extends JPanel {
         boolean isPayload = "PAYLOAD_PATH".equals(valType);
         boolean isNumeric = fieldType.contains("INTEGER") || fieldType.contains("LONG") || fieldType.contains("DOUBLE");
         boolean isDate = fieldType.contains("DATE");
-
 
         wrapPayloadPath.setVisible(isPayload);
         wrapFixedValue.setVisible(!isPayload);
@@ -258,19 +258,24 @@ public class WsInputParametersPanel extends JPanel {
         if (isPopulating) return;
         WsInputParameter current = inputParamsTable.getCurrentSelection();
         if (current != null) {
-            current.fieldName = ipFieldNameField.getText();
-            current.description = ipDescField.getText();
-            current.inputValueType = (String) ipValueTypeCombo.getSelectedItem();
-            current.payloadPath = ipPayloadPathField.getText();
-            current.extractionValue = ipFixedValueField.getText();
-            current.fieldType = (String) ipFieldTypeCombo.getSelectedItem();
+            current.fieldName = getNullIfEmpty(ipFieldNameField.getText());
+            current.description = getNullIfEmpty(ipDescField.getText());
+            current.payloadPath = getNullIfEmpty(ipPayloadPathField.getText());
+            current.fixedValue = getNullIfEmpty(ipFixedValueField.getText());
+            current.type = (String) ipFieldTypeCombo.getSelectedItem();
 
-            current.fieldFormat = wrapFormat.isVisible() ? ipFormatField.getText() : null;
-            current.decimalDelimiter = wrapDecimal.isVisible() ? ipDecimalCombo.getText() : null;
-            current.groupingDelimiter = wrapGrouping.isVisible() ? ipGroupingCombo.getText() : null;
-            current.language = wrapLang.isVisible() ? ipLangField.getText() : null;
-            current.country = wrapCountry.isVisible() ? ipCountryField.getText() : null;
-            current.timeZone = wrapTz.isVisible() ? ipTzField.getText() : null;
+            if (wrapFormat.isVisible() || wrapDecimal.isVisible() || wrapLang.isVisible()) {
+                if (current.fieldExtraConfig == null) current.fieldExtraConfig = new FormattingConfig();
+
+                current.fieldExtraConfig.fieldFormat = wrapFormat.isVisible() ? getNullIfEmpty(ipFormatField.getText()) : null;
+                current.fieldExtraConfig.decimalDelimiter = wrapDecimal.isVisible() ? getNullIfEmpty(ipDecimalCombo.getText()) : null;
+                current.fieldExtraConfig.groupingDelimiter = wrapGrouping.isVisible() ? getNullIfEmpty(ipGroupingCombo.getText()) : null;
+                current.fieldExtraConfig.language = wrapLang.isVisible() ? getNullIfEmpty(ipLangField.getText()) : null;
+                current.fieldExtraConfig.country = wrapCountry.isVisible() ? getNullIfEmpty(ipCountryField.getText()) : null;
+                current.fieldExtraConfig.timeZone = wrapTz.isVisible() ? getNullIfEmpty(ipTzField.getText()) : null;
+            } else {
+                current.fieldExtraConfig = null;
+            }
 
             inputParamsTable.refreshSelectedRow();
         }
@@ -287,5 +292,9 @@ public class WsInputParametersPanel extends JPanel {
         AtiResizableTextArea f = WorkflowThemeUtils.createThemedResizableTextArea();
         f.getDocument().addDocumentListener(new DocumentAdapter() { @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }});
         return f;
+    }
+
+    private String getNullIfEmpty(String text) {
+        return (text == null || text.trim().isEmpty()) ? null : text;
     }
 }

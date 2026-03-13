@@ -1,6 +1,9 @@
 {
-  "workflowCode": "new_aggregator_808",
   "id": "fb605cc1-f9fb-40c3-9ff9-f5f206607913",
   "componentCode": "new_aggregator_808",
-  "type": "Aggregator"
+  "description": "vfxgf",
+  "status": "mjm",
+  "version": "yjgh",
+  "nodeType": "Aggregator",
+  "critical": false
 }

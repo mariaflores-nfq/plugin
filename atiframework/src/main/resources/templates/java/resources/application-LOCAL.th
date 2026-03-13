@@ -15,7 +15,7 @@ spring:
     stream:
       binders:
         local_rabbit:
-          type: rabbit
+          nodeType: rabbit
           environment:
             spring:
               rabbitmq:

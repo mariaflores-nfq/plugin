@@ -61,17 +61,18 @@ public class WsQueryPanel extends JPanel {
     }
 
     public void loadData(WorkStatementData data) {
-        queryCodeField.setText(data.queryCode);
-        queryTypeCombo.setSelectedItem(data.queryType);
-        dbSourceCombo.setSelectedItem(data.dbSource);
-        collectionField.setText(data.collectionName);
+        queryCodeField.setText(data.queryCode != null ? data.queryCode : "");
+        // Asumiendo que determinamos el queryType base al dbSource si no viene
+        String qType = "MongoDb".equals(data.dbSource) ? "Mongo Query" : "SQL Query";
+        queryTypeCombo.setSelectedItem(qType);
+        dbSourceCombo.setSelectedItem(data.dbSource != null ? data.dbSource : "MongoDb");
+        collectionField.setText(data.collectionName != null ? data.collectionName : "");
     }
 
     public void saveData(WorkStatementData data) {
-        data.queryCode = queryCodeField.getText();
-        data.queryType = (String) queryTypeCombo.getSelectedItem();
+        data.queryCode = getNullIfEmpty(queryCodeField.getText());
         data.dbSource = (String) dbSourceCombo.getSelectedItem();
-        data.collectionName = collectionField.getText();
+        data.collectionName = getNullIfEmpty(collectionField.getText());
     }
 
     private AtiTextField createTextField(Runnable onChange) {
@@ -80,5 +81,9 @@ public class WsQueryPanel extends JPanel {
             @Override protected void textChanged(@NotNull DocumentEvent e) { onChange.run(); }
         });
         return field;
+    }
+
+    private String getNullIfEmpty(String text) {
+        return (text == null || text.trim().isEmpty()) ? null : text;
     }
 }

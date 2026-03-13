@@ -32,16 +32,16 @@ components:
 
     schemas:
       schedulerPlanPayload:
-        type: object
+        nodeType: object
         properties:
           uuaa:
-            type: string
+            nodeType: string
             description: UUAA asociated to the audit
           schedulerPlanAudit:
             $ref: '#/components/schemas/SchedulerPlanAudit'
 
       SchedulerPlanAudit:
-        type: object
+        nodeType: object
         required:
         - _id
         - planCode
@@ -52,28 +52,28 @@ components:
         - batchPlan
         properties:
           _id:
-            type: string
+            nodeType: string
           planCode:
-            type: string
+            nodeType: string
           planningDate:
-            type: string
+            nodeType: string
           version:
-            type: string
+            nodeType: string
           description:
-            type: string
+            nodeType: string
           status:
-            type: string
+            nodeType: string
             description: WAITING - PENDING - READY_TO_EXECUTE - DISCARDED
           holdStatus:
-            type: string
+            nodeType: string
           uuaa:
-            type: string
+            nodeType: string
           schedulerConfigId:
-            type: string
+            nodeType: string
           force:
-            type: boolean
+            nodeType: boolean
           enable:
-            type: boolean
+            nodeType: boolean
           triggerPlan:
             $ref: '#/components/schemas/TriggerPlan'
           batchPlan:
@@ -81,247 +81,247 @@ components:
           batchPlanError:
             $ref: '#/components/schemas/BatchPlan'
           conditionPlanList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/ConditionPlan'
           executionInfoList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/ExecutionInfo'
           failedTreatmentPlan:
             $ref: '#/components/schemas/FailedTreatmentPlan'
 
       TriggerPlan:
-        type: object
+        nodeType: object
         required:
-        - type
+        - nodeType
         - initTs
         - endTs
         - repeat
         properties:
           executed:
-            type: boolean
+            nodeType: boolean
           nextExecution:
-            type: string
+            nodeType: string
             format: date-time
-          type:
-            type: string
+          nodeType:
+            nodeType: string
           initTs:
-            type: string
+            nodeType: string
             format: date-time
           endTs:
-            type: string
+            nodeType: string
             format: date-time
           maxExecutionTime:
-            type: string
+            nodeType: string
             format: date-time
           repeat:
             $ref: '#/components/schemas/Repeat'
 
       BatchPlan:
-        type: object
+        nodeType: object
         required:
         - batchCode
         properties:
           batchCode:
-            type: string
+            nodeType: string
           parameterQueryList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/Query'
           jobParameterList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/JobParameter'
           item:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/MapItem'
           jobParameterMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/MapItem'
 
       Query:
-        type: object
+        nodeType: object
         required:
         - queryCode
         properties:
           queryCode:
-            type: string
+            nodeType: string
           sqlQuery:
-            type: string
+            nodeType: string
           dbSource:
-            type: string
+            nodeType: string
           mongoQuery:
             $ref: '#/components/schemas/MongoQuery'
         description: DB reading query. May be SQL or MongoDB
 
       MongoQuery:
-        type: object
+        nodeType: object
         required:
         - collection
         - filter
         properties:
           collection:
-            type: string
+            nodeType: string
           filter:
-            type: array
+            nodeType: array
             description: MongoDB Aggregation Pipelines to filter
             items:
-              type: string
+              nodeType: string
         description: mongoDB reading Query
 
       JobParameter:
-        type: object
+        nodeType: object
         required:
         - paramName
         properties:
           paramName:
-            type: string
+            nodeType: string
           queryParam:
-            type: string
+            nodeType: string
             description: name of the field recovered in the parameterQueryList
           fixedValue:
-            type: string
+            nodeType: string
           scriptValue:
-            type: string
+            nodeType: string
 
       ConditionPlan:
-        type: object
+        nodeType: object
         required:
         - filename
         - checkEvery
         - forceAtEnd
         properties:
           name:
-            type: string
+            nodeType: string
           filename:
-            type: string
+            nodeType: string
           startCondition:
-            type: string
+            nodeType: string
             format: date-time
           endCondition:
-            type: string
+            nodeType: string
             format: date-time
           nextCheck:
-            type: string
+            nodeType: string
             format: date-time
           status:
-            type: string
+            nodeType: string
           checkEvery:
-            type: integer
+            nodeType: integer
             description: in seconds
           forceAtEnd:
-            type: boolean
+            nodeType: boolean
             description: if true force the execution even if the condition doesn't match
           script:
-            type: string
+            nodeType: string
             description: to validate the queries with the recovered information
           path:
-            type: string
+            nodeType: string
           filePattern:
-            type: string
+            nodeType: string
           fileParameterName:
-            type: string
+            nodeType: string
           novaTransferName:
-            type: "string"
+            nodeType: "string"
           extractionQuery:
             $ref: '#/components/schemas/Query'
         description: previous condition to execute the planning
 
       FailedTreatmentPlan:
-        type: object
+        nodeType: object
         required:
         - level
         properties:
           level:
-            type: string
+            nodeType: string
           issueCode:
-            type: string
+            nodeType: string
           technicalCode:
-            type: string
+            nodeType: string
 
       ExecutionInfo:
-        type: object
+        nodeType: object
         required:
         - executionType
         - executionDate
         properties:
           batchCode:
-            type: string
+            nodeType: string
           executionType:
-            type: string
+            nodeType: string
           executionDate:
-            type: string
+            nodeType: string
             format: date-time
           executionId:
-            type: string
+            nodeType: string
           status:
-            type: string
+            nodeType: string
           initTs:
-            type: string
+            nodeType: string
             format: date-time
           endTs:
-            type: string
+            nodeType: string
             format: date-time
           batchParameterMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/BatchParameter'
 
       BatchParameter:
-        type: object
+        nodeType: object
         properties:
           name:
-            type: string
+            nodeType: string
           value:
-            type: string
+            nodeType: string
 
       MapItem:
-        type: object
+        nodeType: object
         properties:
           key:
-            type: string
+            nodeType: string
           value:
-            type: string
+            nodeType: string
 
       Repeat:
-        type: object
+        nodeType: object
         required:
         - executionTime
         - maxExecutionTime
         properties:
           executionTime:
-            type: string
+            nodeType: string
           repeatEvery:
-            type: integer
+            nodeType: integer
           maxExecutionTime:
-            type: string
+            nodeType: string
           weekDays:
-            type: array
+            nodeType: array
             items:
-              type: string
+              nodeType: string
           monthly:
             $ref: '#/components/schemas/Monthly'
 
       Monthly:
-        type: object
+        nodeType: object
         required:
         - months
         properties:
           months:
-            type: array
+            nodeType: array
             items:
-              type: string
+              nodeType: string
           days:
-            type: array
+            nodeType: array
             items:
-              type: integer
+              nodeType: integer
           eventWeek:
-            type: string
+            nodeType: string
           weekDays:
-            type: array
+            nodeType: array
             items:
-              type: string
+              nodeType: string
 

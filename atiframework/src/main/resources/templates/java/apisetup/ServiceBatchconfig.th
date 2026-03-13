@@ -58,7 +58,7 @@ public class ServiceBatchconfig
     private final NovaMetadata novaMetadata;
 
     /**
-     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     * The request config of the client. Define the nodeType of REST protocol (HTTP or HTTPS)
      */
     private final NovaRequestConfig novaRequestConfig;
 
@@ -200,7 +200,7 @@ public class ServiceBatchconfig
 
 	/**
      * @param branchId Branch code where the user is working.
-     * @param id Batch Id in Db
+     * @param _id Batch Id in Db
      * @param uuaa UUAA code associated to the schedulers
 	 * @return Success
 	 * @throws NovaApiClientRequestException with an API client request exception
@@ -210,14 +210,14 @@ public class ServiceBatchconfig
      * @throws DeleteBatchConfigException400 with an occurred exception
      * @throws DeleteBatchConfigException500 with an occurred exception
 	 */
-	public Boolean deleteBatchConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteBatchConfigException400,  DeleteBatchConfigException500
+	public Boolean deleteBatchConfig(final String branchId, final String _id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteBatchConfigException400,  DeleteBatchConfigException500
 	{
 		LOG.debug("[ServiceBatchconfig] -> [deleteBatchConfig]");
 
         LOG.debug("[ServiceBatchconfig] -> [deleteBatchConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
 
         // Do the call to endpoint via RestHandler
-        return this.restHandlerBatchconfig.deleteBatchConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+        return this.restHandlerBatchconfig.deleteBatchConfig(this.novaRequestConfig, this.novaMetadata, branchId, _id, uuaa);
 	}
 
 }

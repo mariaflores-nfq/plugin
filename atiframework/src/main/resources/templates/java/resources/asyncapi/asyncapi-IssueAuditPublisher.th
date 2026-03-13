@@ -30,17 +30,17 @@ components:
           $ref: '#/components/schemas/issueAuditPayload'
     schemas:
       issueAuditPayload:
-        type: object
+        nodeType: object
         properties:
           uuaa:
-            type: string
+            nodeType: string
             description: UUAA asociated to the audit
           issueAudit:
             $ref: '#/components/schemas/IssueAudit'
 
       IssueAudit:
         description: Issue Audit object returned by the service
-        type: object
+        nodeType: object
         required:
         - _id
         - issueCode
@@ -50,141 +50,141 @@ components:
         - issueTechnicalCode
         properties:
           _id:
-            type: string
+            nodeType: string
             description: Unique identifier in db
           uuaa:
-            type: string
+            nodeType: string
             description: UUAA code associated to the issue
           status:
-            type: string
+            nodeType: string
             description: Status of the issue (OPEN / CLOSED)
           issueClass:
-            type: string
+            nodeType: string
             description: 'Class of the issue in runtime, example: NullPointerException'
           issueMessage:
-            type: string
+            nodeType: string
             description: Message of the issue in runtime
           sourceSystem:
-            type: string
+            nodeType: string
             description: Source system of the issue (Scheduler / Orchestator / Executor)
           executionId:
-            type: string
+            nodeType: string
             description: Execution ID associated to the issue
           stepExecutionId:
-            type: string
+            nodeType: string
             description: Step Execution ID associated to the issue
           schedulerId:
-            type: string
+            nodeType: string
             description: Scheduler ID associated to the issue
           batchCode:
-            type: string
+            nodeType: string
             description: Batch code associated to the issue
           stepCode:
-            type: string
+            nodeType: string
             description: Step code associated to the issue
           serviceCode:
-            type: string
+            nodeType: string
             description: Service code associated to the issue
           version:
-            type: string
+            nodeType: string
             description: Version of the issue
           targetField:
-            type: string
+            nodeType: string
             description: Target field of the issue
           targetValue:
-            type: string
+            nodeType: string
             description: Target value of the issue
           groupCriteria:
-            type: string
+            nodeType: string
             description: Group criteria of the issue
           generationTs:
-            type: string
+            nodeType: string
             format: date-time
             description: Date when the issue was generated
           modificationTs:
-            type: string
+            nodeType: string
             format: date-time
             description: Date when the issue was modified
           infoDataMap:
             description: Info data map with additional information
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/InfoDataMapItem'
           auditList:
             description: List of audits
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/Audit'
           issueTypeDetail:
-            description: Issue type detail
+            description: Issue nodeType detail
             $ref: '#/components/schemas/IssueTypeDetail'
 
       InfoDataMapItem:
         description: Info data map item
-        type: object
+        nodeType: object
         required:
         - key
         - value
         properties:
           key:
             description: Key of the info data map
-            type: string
+            nodeType: string
           value:
             description: Value with the info
-            type: string
+            nodeType: string
 
       Audit:
         description: Audit object returned by the service
-        type: object
+        nodeType: object
         properties:
           userId:
             description: UserId who made the audit action in the issue
-            type: string
+            nodeType: string
           auditTs:
-            type: string
+            nodeType: string
             format: date-time
             description: Date when the audit was made
           comment:
-            type: string
+            nodeType: string
             description: Comment of the audit
           event:
-            type: string
+            nodeType: string
             description: Event of the audit
 
       IssueTypeDetail:
-        description: Issue type detail
-        type: object
+        description: Issue nodeType detail
+        nodeType: object
         properties:
           technicalCode:
-            type: string
+            nodeType: string
             description: Technical code of the issue
           issueCode:
-            type: string
+            nodeType: string
             description: Code of the issue
           issueDescription:
-            type: string
+            nodeType: string
             description: Description of the issue
           assignedGroupRole:
-            type: string
+            nodeType: string
             description: Assigned group role
           solutionList:
             description: List of solutions comments
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/Solution'
 
       Solution:
         description: Solution object returned by the service
-        type: object
+        nodeType: object
         properties:
           userId:
-            type: string
+            nodeType: string
             description: UserId who made the solution
           solution:
-            type: string
+            nodeType: string
             description: Comment of the solution
           solutionTs:
-            type: string
+            nodeType: string
             format: date-time
             description: Date when the solution was made
 

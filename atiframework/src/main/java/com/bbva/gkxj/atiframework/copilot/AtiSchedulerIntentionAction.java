@@ -147,7 +147,7 @@ public class AtiSchedulerIntentionAction extends PsiElementBaseIntentionAction i
                 Revisa que tenga todos los campos obligatorios:
                 - _id, planCode, version, status, uuaa, recordVersion, checkSum
                 - paramAuditList (array con status, audTs, audUser, comments)
-                - trigger (type, repeat con executionTime y maxExecutionTime)
+                - trigger (nodeType, repeat con executionTime y maxExecutionTime)
                 - batch (batchCode, parameterQueryList)
                 
                 Indica los campos que faltan o tienen valores incorrectos.

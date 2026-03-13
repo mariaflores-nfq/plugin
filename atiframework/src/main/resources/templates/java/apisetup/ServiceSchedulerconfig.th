@@ -71,7 +71,7 @@ public class ServiceSchedulerconfig
 	private final NovaMetadata novaMetadata;
 
 	/**
-	 * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+	 * The request config of the client. Define the nodeType of REST protocol (HTTP or HTTPS)
 	 */
 	private final NovaRequestConfig novaRequestConfig;
 
@@ -96,7 +96,7 @@ public class ServiceSchedulerconfig
 
 	/**
 	 * @param branchId Branch code where the user is working.
-	 * @param id Calendar Id in Db
+	 * @param _id Calendar Id in Db
 	 * @param uuaa UUAA code associated to the calendar
 	 * @return Success
 	 * @throws NovaApiClientRequestException with an API client request exception
@@ -106,14 +106,14 @@ public class ServiceSchedulerconfig
 	 * @throws DeleteCalendarConfigException400 with an occurred exception
 	 * @throws DeleteCalendarConfigException500 with an occurred exception
 	 */
-	public Boolean deleteCalendarConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteCalendarConfigException400,  DeleteCalendarConfigException500
+	public Boolean deleteCalendarConfig(final String branchId, final String _id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteCalendarConfigException400,  DeleteCalendarConfigException500
 	{
 		LOG.debug("[ServiceSchedulerconfig] -> [deleteCalendarConfig]");
 
 		LOG.debug("[ServiceSchedulerconfig] -> [deleteCalendarConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
 
 		// Do the call to endpoint via RestHandler
-		return this.restHandlerSchedulerconfig.deleteCalendarConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+		return this.restHandlerSchedulerconfig.deleteCalendarConfig(this.novaRequestConfig, this.novaMetadata, branchId, _id, uuaa);
 	}
 
 
@@ -285,7 +285,7 @@ public class ServiceSchedulerconfig
 
 	/**
 	 * @param branchId Branch code where the user is working.
-	 * @param id Plan Id in Db
+	 * @param _id Plan Id in Db
 	 * @param uuaa UUAA code associated to the schedulers
 	 * @return Success
 	 * @throws NovaApiClientRequestException with an API client request exception
@@ -295,14 +295,14 @@ public class ServiceSchedulerconfig
 	 * @throws DeletePlanConfigException400 with an occurred exception
 	 * @throws DeletePlanConfigException500 with an occurred exception
 	 */
-	public Boolean deletePlanConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeletePlanConfigException400,  DeletePlanConfigException500
+	public Boolean deletePlanConfig(final String branchId, final String _id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeletePlanConfigException400,  DeletePlanConfigException500
 	{
 		LOG.debug("[ServiceSchedulerconfig] -> [deletePlanConfig]");
 
 		LOG.debug("[ServiceSchedulerconfig] -> [deletePlanConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
 
 		// Do the call to endpoint via RestHandler
-		return this.restHandlerSchedulerconfig.deletePlanConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+		return this.restHandlerSchedulerconfig.deletePlanConfig(this.novaRequestConfig, this.novaMetadata, branchId, _id, uuaa);
 	}
 
 

@@ -111,12 +111,12 @@ public class ServiceBatchconfigTest {
     @Test
     public void testDeleteBatchConfig() throws Exception {
         String branchCode = "testBranch";
-        String id = "testId";
+        String _id = "testId";
         String uuaa = "testUuaa";
 
         when(restHandlerBatchconfig.deleteBatchConfig(any(), any(), anyString(), anyString(), anyString())).thenReturn(true);
 
-        Boolean result = serviceBatchconfig.deleteBatchConfig(branchCode, id, uuaa);
+        Boolean result = serviceBatchconfig.deleteBatchConfig(branchCode, _id, uuaa);
 
         assertNotNull("Result should not be null", result);
         assertEquals(Boolean.TRUE, result);

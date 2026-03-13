@@ -23,7 +23,7 @@ A continuación, se detalla el esquema exacto y obligatorio que debes respetar a
 
 ### Objeto `trigger` (Obligatorio)
 [cite_start]Detalle de la planificación horaria del Plan[cite: 29, 30].
-* `type` (String, Obligatorio): Tipo de desencadenador. [cite_start]Valores permitidos: `DAILY` para tipo de planificaciones diarias, `WEEKLY` para tipo de planificaciones semanales, `MONTHLY` para tipo de planificaciones mensuales[cite: 30, 31].
+* `nodeType` (String, Obligatorio): Tipo de desencadenador. [cite_start]Valores permitidos: `DAILY` para tipo de planificaciones diarias, `WEEKLY` para tipo de planificaciones semanales, `MONTHLY` para tipo de planificaciones mensuales[cite: 30, 31].
 * [cite_start]`initTs` (Datetime, Opcional): Fecha de inicio de la planificación[cite: 31, 32].
 * [cite_start]`endTs` (Datetime, Opcional): Fecha de fin de la planificación[cite: 32, 33].
 * [cite_start]`repeat` (Objeto, Obligatorio): Define los detalles de cuándo se ejecutará.[cite: 33, 34].

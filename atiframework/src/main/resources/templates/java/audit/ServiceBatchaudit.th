@@ -56,7 +56,7 @@ public class ServiceBatchaudit
 	private final NovaMetadata novaMetadata;
 
 	/**
-	 * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+	 * The request config of the client. Define the nodeType of REST protocol (HTTP or HTTPS)
 	 */
 	private final NovaRequestConfig novaRequestConfig;
 
@@ -103,7 +103,7 @@ public class ServiceBatchaudit
 
 	/**
 	 * @param uuaa UUAA code associated to the schedulers
-	 * @param executionId Unique execution id of the configuration
+	 * @param executionId Unique execution _id of the configuration
 	 * @return Success
 	 * @throws NovaApiClientRequestException with an API client request exception
 	 * @throws NovaApiClientResponseException with an API client response exception
@@ -168,8 +168,8 @@ public class ServiceBatchaudit
 
 	/**
 	 * @param uuaa UUAA code associated to the config
-	 * @param parentExecutionId Parent execution id
-	 * @param parentStepExecutionId Parent step execution id
+	 * @param parentExecutionId Parent execution _id
+	 * @param parentStepExecutionId Parent step execution _id
 	 * @return Success
 	 * @throws NovaApiClientRequestException with an API client request exception
 	 * @throws NovaApiClientResponseException with an API client response exception

@@ -41,7 +41,7 @@ Todo archivo `.sch` debe contener los siguientes campos en su raíz:
 # Esquema de Datos: Objeto Trigger
 
 * **trigger** (Objeto, Obligatorio): Detalle de la planificación horaria del Plan. Propiedades:
-    * **type** (String, Obligatorio): Tipo de desencadenador (`DAILY`, `WEEKLY`, `MONTHLY`).
+    * **nodeType** (String, Obligatorio): Tipo de desencadenador (`DAILY`, `WEEKLY`, `MONTHLY`).
     * **initTs** (Datetime, Opcional): Fecha de inicio de la planificación.
     * **endTs** (Datetime, Opcional): Fecha de fin de la planificación.
     * **repeat** (Objeto, Obligatorio): Habrá que definir los detalles de cuando se ejecutará.

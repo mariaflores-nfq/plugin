@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class WorkStatementTabView extends JPanel {
 
-    private  AtiTableSplitterPanel<WorkStatementData> splitterPanel;
+    private AtiTableSplitterPanel<WorkStatementData> splitterPanel;
     private final WorkStatementDetailView detailView;
 
     public WorkStatementTabView() {
@@ -23,8 +23,8 @@ public class WorkStatementTabView extends JPanel {
                 "WorkStatements",
                 "Fields",
                 WorkStatementData::new,
-                item ->  String.format("%02d", (splitterPanel.getDataList().indexOf(item) + 1)),
-                item -> item.wsCode != null ? item.wsCode : "New WorkStament",
+                (AtiTableSplitterPanel.ItemIdExtractor<WorkStatementData>) item ->  String.format("%02d", (splitterPanel.getDataList().indexOf(item) + 1)),
+                (AtiTableSplitterPanel.ItemNameExtractor<WorkStatementData>) item -> item.wsCode != null && !item.wsCode.isEmpty() ? item.wsCode : "New WorkStatement",
                 detailView
         );
         splitterPanel.setMinimumSize(new Dimension(250, 0));

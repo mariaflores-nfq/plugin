@@ -1,229 +1,535 @@
 package com.bbva.gkxj.atiframework.filetype.component.model;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.util.List;
 
-/**
- * Modelo de datos exclusivo para la serialización y deserialización de archivos de tipo Component (.comp).
- * <p>
- * Representa la estructura JSON de un único nodo, almacenando sus propiedades técnicas,
- * metadatos y la configuración específica de sus pestañas (como Aggregators, JMS, Async API o Filters).
- * </p>
- */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ComponentJsonData {
 
-    // =================================================================================
-    // PROPIEDADES DEL MODELO
-    // =================================================================================
-
-    // --- Metadatos Básicos ---
-
-    /** Identificador único interno del componente. */
-    private String id;
-
-    /** Código de negocio o nombre técnico asignado al componente. */
-    private String componentCode;
-
-    /** Tipo principal del nodo (ej. Input Adapter, Output Adapter, Filter, Aggregator). */
-    private String type;
-
-    /** Subtipo específico del nodo (ej. JMS, Async API, Workstatement). */
-    private String subtype;
-
-    /** Versión actual del componente. */
-    private String version;
-
-    /** Estado del componente (ej. Draft, Final). */
-    private String status;
-
-    /** Descripción funcional o técnica del propósito del componente. */
-    private String description;
-
-    // --- Configuración para Aggregators ---
-
-    /** Estrategia utilizada para correlacionar los mensajes en un Aggregator. */
-    private String correlationType;
-
-    /** Estrategia utilizada para agregar el contenido de los mensajes. */
-    private String aggregationType;
-
-    /** Estrategia que define cuándo se liberan los mensajes agregados. */
-    private String releaseType;
-
-    // --- Configuración de Pestañas Dinámicas ---
-
-    /** Configuración exclusiva cuando el tipo de componente es Filter. */
-    private FilterConfig filterConfig;
-
-    /** Configuración exclusiva cuando el tipo es Adapter y el subtipo es JMS. */
-    private AdapterConfig jmsConfig;
-
-    /** Configuración exclusiva cuando el tipo es Adapter y el subtipo es Async API. */
-    private AdapterConfig asyncApiConfig;
-
-    /** Configuración para el tab Enricher */
-    private WorkStatementConfig workStatementConfig;
-    // =================================================================================
-    // GETTERS Y SETTERS PRINCIPALES
-    // =================================================================================
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public String getComponentCode() { return componentCode; }
-    public void setComponentCode(String componentCode) { this.componentCode = componentCode; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
-    public String getSubtype() { return subtype; }
-    public void setSubtype(String subtype) { this.subtype = subtype; }
-
-    public String getVersion() { return version; }
-    public void setVersion(String version) { this.version = version; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public AdapterConfig getJmsConfig() { return jmsConfig; }
-    public void setJmsConfig(AdapterConfig jmsConfig) { this.jmsConfig = jmsConfig; }
-
-    public AdapterConfig getAsyncApiConfig() { return asyncApiConfig; }
-    public void setAsyncApiConfig(AdapterConfig asyncApiConfig) { this.asyncApiConfig = asyncApiConfig; }
-
-    public FilterConfig getFilterConfig() { return filterConfig; }
-    public void setFilterConfig(FilterConfig filterConfig) { this.filterConfig = filterConfig; }
-
-    // =================================================================================
-    // CLASES INTERNAS (ESTRUCTURAS DE DATOS JSON)
-    // =================================================================================
-    public static class WorkStatementConfig {
-        public List<WorkStatementData> workStatements = new ArrayList<>();
+    public String getAsyncApiClassName() {
+        return asyncApiClassName;
     }
 
-    public static class WorkStatementData {
+    public void setAsyncApiClassName(String asyncApiClassName) {
+        this.asyncApiClassName = asyncApiClassName;
+    }
 
+    public String getComponentCode() {
+        return componentCode;
+    }
+
+    public void setComponentCode(String componentCode) {
+        this.componentCode = componentCode;
+    }
+
+    public boolean isCritical() {
+        return critical;
+    }
+
+    public void setCritical(boolean critical) {
+        this.critical = critical;
+    }
+
+    public List<QueryData> getDataSet() {
+        return dataSet;
+    }
+
+    public void setDataSet(List<QueryData> dataSet) {
+        this.dataSet = dataSet;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<FieldData> getFieldDataList() {
+        return fieldDataList;
+    }
+
+    public void setFieldDataList(List<FieldData> fieldDataList) {
+        this.fieldDataList = fieldDataList;
+    }
+
+    public List<FilterMapData> getFilterScriptMap() {
+        return filterScriptMap;
+    }
+
+    public void setFilterScriptMap(List<FilterMapData> filterScriptMap) {
+        this.filterScriptMap = filterScriptMap;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getInputAdapterType() {
+        return inputAdapterType;
+    }
+
+    public void setInputAdapterType(String inputAdapterType) {
+        this.inputAdapterType = inputAdapterType;
+    }
+
+    public String getJmsConnector() {
+        return jmsConnector;
+    }
+
+    public void setJmsConnector(String jmsConnector) {
+        this.jmsConnector = jmsConnector;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public String getNodeType() {
+        return nodeType;
+    }
+
+    public void setNodeType(String nodeType) {
+        this.nodeType = nodeType;
+    }
+
+    public String getOutputAdapterType() {
+        return outputAdapterType;
+    }
+
+    public void setOutputAdapterType(String outputAdapterType) {
+        this.outputAdapterType = outputAdapterType;
+    }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
+    }
+
+    public String getRecordVersion() {
+        return recordVersion;
+    }
+
+    public void setRecordVersion(String recordVersion) {
+        this.recordVersion = recordVersion;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUuaa() {
+        return uuaa;
+    }
+
+    public void setUuaa(String uuaa) {
+        this.uuaa = uuaa;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public List<WorkStatementData> getWorkStatementList() {
+        return workStatementList;
+    }
+
+    public void setWorkStatementList(List<WorkStatementData> workStatementList) {
+        this.workStatementList = workStatementList;
+    }
+
+    // --- Metadatos Básicos ---
+    @JsonProperty("_id")
+    private String id;
+    private String componentCode;
+    private String description;
+    private String status;
+    private String uuaa;
+    private String version;
+    private String recordVersion;
+
+    // --- Configuración de Adaptadores ---
+    private String nodeType;
+    private String inputAdapterType;
+    private String jmsConnector;
+    private String queueName;
+    @JsonProperty("isCritical")
+    private boolean critical;
+    private String messageType;
+    private String asyncApiClassName;
+    private String outputAdapterType;
+
+    // --- Listas de Configuración ---
+    private List<QueryData> dataSet;
+    private List<FilterMapData> filterScriptMap;
+    private List<FieldData> fieldDataList;
+    private List<WorkStatementData> workStatementList;
+
+
+
+    // =================================================================================
+    // CLASES BASE Y OBJETOS DE VALOR (Reutilizables)
+    // =================================================================================
+
+    /** Clase base para unificar campos comunes */
+    public abstract static class BaseField {
+        public String fieldName;
+        public String description;
+
+        public String getPayloadPath() {
+            return payloadPath;
+        }
+
+        public void setPayloadPath(String payloadPath) {
+            this.payloadPath = payloadPath;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String payloadPath;
+    }
+
+    /** Objeto de valor para unificar configuraciones de formato */
+    public static class FormattingConfig {
+        public String fieldRegex;
+
+        public String getFieldFormat() {
+            return fieldFormat;
+        }
+
+        public void setFieldFormat(String fieldFormat) {
+            this.fieldFormat = fieldFormat;
+        }
+
+        public String getTimeZone() {
+            return timeZone;
+        }
+
+        public void setTimeZone(String timeZone) {
+            this.timeZone = timeZone;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
+
+        public String getGroupingDelimiter() {
+            return groupingDelimiter;
+        }
+
+        public void setGroupingDelimiter(String groupingDelimiter) {
+            this.groupingDelimiter = groupingDelimiter;
+        }
+
+        public String getFieldRegex() {
+            return fieldRegex;
+        }
+
+        public void setFieldRegex(String fieldRegex) {
+            this.fieldRegex = fieldRegex;
+        }
+
+        public Integer getFieldLength() {
+            return fieldLength;
+        }
+
+        public void setFieldLength(Integer fieldLength) {
+            this.fieldLength = fieldLength;
+        }
+
+        public String getDecimalDelimiter() {
+            return decimalDelimiter;
+        }
+
+        public void setDecimalDelimiter(String decimalDelimiter) {
+            this.decimalDelimiter = decimalDelimiter;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public String fieldFormat;
+        public String decimalDelimiter;
+        public String groupingDelimiter;
+        public Integer fieldLength;
+        public String country;
+        public String language;
+        public String timeZone;
+    }
+
+    // =================================================================================
+    // 1. ESTRUCTURA DE CONSULTAS
+    // =================================================================================
+    public static class QueryData {
+        public Integer priority;
+        public String type;
+        public String operation;
+        public String dbSource;
+        public String collectionName;
+        public String queryCode;
+        public String shouldBeExecuted;
+        public String options;
+        public String filter;
+        public String insert;
+        public String update;
+        public String sqlQuery;
+
+        public List<QueryParameter> getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(List<QueryParameter> parameters) {
+            this.parameters = parameters;
+        }
+
+        public String getCollectionName() {
+            return collectionName;
+        }
+
+        public void setCollectionName(String collectionName) {
+            this.collectionName = collectionName;
+        }
+
+        public String getDbSource() {
+            return dbSource;
+        }
+
+        public void setDbSource(String dbSource) {
+            this.dbSource = dbSource;
+        }
+
+        public String getFilter() {
+            return filter;
+        }
+
+        public void setFilter(String filter) {
+            this.filter = filter;
+        }
+
+        public String getInsert() {
+            return insert;
+        }
+
+        public void setInsert(String insert) {
+            this.insert = insert;
+        }
+
+        public String getOperation() {
+            return operation;
+        }
+
+        public void setOperation(String operation) {
+            this.operation = operation;
+        }
+
+        public String getOptions() {
+            return options;
+        }
+
+        public void setOptions(String options) {
+            this.options = options;
+        }
+
+        public Integer getPriority() {
+            return priority;
+        }
+
+        public void setPriority(Integer priority) {
+            this.priority = priority;
+        }
+
+        public String getQueryCode() {
+            return queryCode;
+        }
+
+        public void setQueryCode(String queryCode) {
+            this.queryCode = queryCode;
+        }
+
+        public String getShouldBeExecuted() {
+            return shouldBeExecuted;
+        }
+
+        public void setShouldBeExecuted(String shouldBeExecuted) {
+            this.shouldBeExecuted = shouldBeExecuted;
+        }
+
+        public String getSqlQuery() {
+            return sqlQuery;
+        }
+
+        public void setSqlQuery(String sqlQuery) {
+            this.sqlQuery = sqlQuery;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getUpdate() {
+            return update;
+        }
+
+        public void setUpdate(String update) {
+            this.update = update;
+        }
+
+        public List<QueryParameter> parameters;
+    }
+
+    public static class QueryParameter {
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+
+        public String getParamType() {
+            return paramType;
+        }
+
+        public void setParamType(String paramType) {
+            this.paramType = paramType;
+        }
+
+        public String getQueryParam() {
+            return queryParam;
+        }
+
+        public void setQueryParam(String queryParam) {
+            this.queryParam = queryParam;
+        }
+
+        public String paramType;
+        public String fieldName;
+        public String queryParam;
+    }
+
+    // =================================================================================
+    // 2. ESTRUCTURA DE FILTROS
+    // =================================================================================
+    public static class FilterMapData {
+        public String filterCode;
+        public String script;
+    }
+
+    // =================================================================================
+    // 3. ESTRUCTURA DE CAMPOS (Refactorizada)
+    // =================================================================================
+    public static class FieldData extends BaseField {
+        public String productFpml;
+        // fieldName, description y payloadPath vienen heredados de BaseField
+        public String xpath;
+        public String jsonPath;
+        public String csvColumn;
+        public Integer priority;
+        public String type;
+        public String shouldBeExecuted;
+        public String outputMessagePath;
+        public String outputMessageFixedValue;
+
+        // @JsonUnwrapped "desempaqueta" este objeto en el JSON final.
+        // Así el JSON sigue siendo plano, pero tu Java está ordenado.
+        @JsonUnwrapped
+        public FormattingConfig formattingConfig;
+    }
+
+    // =================================================================================
+    // 4. ESTRUCTURA DE ENRICHER (Refactorizada)
+    // =================================================================================
+    public static class WorkStatementData {
         public String wsCode;
         public String description;
         public String queryCode;
+        public List<String> wsDependencyList;
         public String shouldBeExecuted;
-        public List<String> wsDependencyList = new ArrayList<>();
         public String dbSource;
         public String collectionName;
         public String sqlQuery;
-        public List<String> mongoAggregatePipelines ;
-        public List<WsInputParameter> enricherInputParameters = new ArrayList<>();
-        public String wsType;
-        public String queryType;
-        public List<WsOutputParameter> enricherOutputFields;
+        public List<String> mongoAggregatePipelines;
         public CacheInfo cacheInfo;
+
+        public List<WsInputParameter> enrichInputParameters;
         public List<WsScriptData> enrichScriptList;
+        public List<WsOutputParameter> enricherOutputFields;
     }
 
-    public static class WsInputParameter extends AdapterFieldData {
-        public String inputValueType; // PAYLOAD_PATH, FIXED_VALUE
-        public String description;
+    public static class WsInputParameter extends BaseField {
+        // fieldName, description y payloadPath vienen heredados
+        public String type;
+        public String enviromentField;
+        public String fixedValue;
+        @JsonProperty("isMandatory")
+        public boolean mandatory;
+
+        // Aquí no usamos @JsonUnwrapped porque en el Excel original
+        // fieldExtraConfig SÍ era un objeto anidado.
+        @JsonProperty("fieldExtraConfig")
+        public FormattingConfig fieldExtraConfig;
     }
 
-    public static class WsOutputParameter {
-        public String fieldName;
-        public String description;
-        public String payloadPath;
+    public static class WsOutputParameter extends BaseField {
+        // No necesita campos extra, hereda todo lo necesario de BaseField
     }
 
-    public static class WsScriptData {
-        public String fieldName;
-        public String description;
-        public String payloadPath;
+    public static class WsScriptData extends BaseField {
         public String script;
     }
 
     public static class CacheInfo {
         public String name;
-        public Long ttl;
         public Integer size;
-    }
-    /**
-     * Estructura interna genérica para la configuración de adaptadores (JMS o Async API).
-     * Agrupa propiedades de conexión y listas de campos organizadas por formato de mensaje.
-     */
-    public static class AdapterConfig {
-        // --- Campos de JMS ---
-        /** Nombre de la conexión JMS (ej. Operation, Admin). */
-        public String jmsConnection;
-
-        /** Nombre de la cola de mensajería (Queue). */
-        public String queueName;
-
-        // --- Campo de Async API ---
-        /** Nombre de la clase Java que implementa el publisher/subscriber en Async API. */
-        public String javaClassName;
-
-        // --- Campos compartidos ---
-        /** Formato del mensaje procesado (XML, JSON, CSV). */
-        public String messageType;
-
-        /** Indica si la ejecución de este adaptador es crítica para el flujo. */
-        public boolean isCritical;
-
-        // --- Buffers de campos por formato de mensaje ---
-        /** Lista de campos configurados para procesar mensajes en formato XML. */
-        public List<AdapterFieldData> xmlFields = new ArrayList<>();
-
-        /** Lista de campos configurados para procesar mensajes en formato JSON. */
-        public List<AdapterFieldData> jsonFields = new ArrayList<>();
-
-        /** Lista de campos configurados para procesar mensajes en formato CSV. */
-        public List<AdapterFieldData> csvFields = new ArrayList<>();
-    }
-
-    /**
-     * Representa la definición detallada de un único campo (Field) para las operaciones
-     * de extracción o generación de payloads en los adaptadores.
-     */
-    public static class AdapterFieldData {
-        // --- Datos Básicos y de Extracción ---
-        public String fieldName;
-        public String payloadPath;
-        public Integer priority;
-        public String fieldType;
-        public String extractionType;
-        public String extractionValue;
-
-        // --- Configuración Específica de Formato (Numéricos, Fechas, etc.) ---
-        public String fieldFormat;
-        public String fieldLength;
-        public String regularExpression;
-        public String decimalDelimiter;
-        public String groupingDelimiter;
-        public String language;
-        public String country;
-        public String timeZone;
-
-        // --- Scripts Personalizados ---
-        public String script;
-    }
-
-    /**
-     * Contenedor para la configuración del nodo Filter.
-     * Agrupa todos los scripts de filtrado que se ejecutarán en este componente.
-     */
-    public static class FilterConfig {
-        /** Lista de filtros (scripts) configurados. */
-        public List<FilterData> filters = new ArrayList<>();
-    }
-
-    /**
-     * Representa un script de filtrado individual dentro de un componente Filter.
-     */
-    public static class FilterData {
-        /** Código identificador único del filtro. */
-        public String filterCode;
-
-        /** Código JavaScript que evalúa si el mensaje debe ser filtrado. */
-        public String script;
+        public Integer ttl;
     }
 }

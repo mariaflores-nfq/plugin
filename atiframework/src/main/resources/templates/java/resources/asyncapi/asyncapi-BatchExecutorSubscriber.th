@@ -30,52 +30,52 @@ components:
           $ref: '#/components/schemas/batchExecutorPayload'
     schemas:
       batchExecutorPayload:
-        type: object
+        nodeType: object
         properties:
           uuaa:
-            type: string
+            nodeType: string
             description: UUAA asociated to the audit
           userId:
-            type: string
+            nodeType: string
             description: User Id how launch/relanch/stop the batch.
           batchType :
-            type: string
+            nodeType: string
             description: Type of launch, [LAUNCH] for launch a Batch with the last parameters or [RELAUNCH]
           batchCode:
-            type: "string"
+            nodeType: "string"
             description: "batch code to launch or relaunch"
           executionId:
-            type: "string"
+            nodeType: "string"
             description: "Execution Id for the Batch execution to relaunch"
           parentExecutionId:
-            type: "string"
+            nodeType: "string"
             description: "Parent Execution Id, when this is a child Batch execution"
           parentStepExecutionId:
-            type: "string"
+            nodeType: "string"
             description: "Parent Step Execution Id, when this is a child Batch execution"
           schedulerId:
-            type: "string"
+            nodeType: "string"
             description: "unique identifier for scheduler asociated to the execution"
           parameterList:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/components/schemas/Parameter"
           batchAudit:
             $ref: '#/components/schemas/BatchAudit'
 
       Parameter:
-        type: "object"
+        nodeType: "object"
         required:
         - "name"
         - "value"
         properties:
           name:
-            type: "string"
+            nodeType: "string"
           value:
-            type: "string"
+            nodeType: "string"
 
       BatchAudit:
-        type: object
+        nodeType: object
         required:
         - _id
         - uuaa
@@ -84,54 +84,54 @@ components:
         - executionDate
         properties:
           _id:
-            type: string
+            nodeType: string
           executionId:
-            type: string
+            nodeType: string
           uuaa:
-            type: string
+            nodeType: string
           userId:
-            type: "string"
+            nodeType: "string"
             description: "UserId who launch/relaunch the Batch"
           stopUserId:
-            type: "string"
+            nodeType: "string"
             description: "UserId who stop the Batch"
           executionStatus:
-            type: string
+            nodeType: string
           initTs:
-            type: string
+            nodeType: string
             format: date-time
           endTs:
-            type: string
+            nodeType: string
             format: date-time
           parentExecutionId:
-            type: string
+            nodeType: string
           parentStepExecutionId:
-            type: string
+            nodeType: string
           schedulerId:
-            type: string
+            nodeType: string
           stepCounter:
-            type: integer
+            nodeType: integer
           batchConfig:
             $ref: '#/components/schemas/BatchConfig'
           batchParameterMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/BatchParameterAuditItem'
           stepStatementMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/StepStatementItem'
           stopStatementMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/StepStatementItem'
           loopStack:
-            type: array
+            nodeType: array
             items:
               $ref: "#/components/schemas/LoopContextItem"
 
       BatchConfig:
-        type: object
+        nodeType: object
         required:
         - _id
         - batchCode
@@ -139,342 +139,342 @@ components:
         - paramAuditList
         properties:
           _id:
-            type: string
+            nodeType: string
           batchCode:
-            type: string
+            nodeType: string
           version:
-            type: string
+            nodeType: string
           uuaa:
-            type: string
+            nodeType: string
           batchType:
-            type: string
+            nodeType: string
           description:
-            type: string
+            nodeType: string
           status:
-            type: string
+            nodeType: string
           recordVersion:
-            type: integer
+            nodeType: integer
           branchCode:
-            type: string
+            nodeType: string
             description: Branch Code related with the batchConfig, this is only informed when the batchConfig is NOT published
           branchId:
-            type: string
+            nodeType: string
             description: Branch Identifier related with the batchConfig, this is only informed when the batchConfig is NOT published
           checkSum:
-            type: string
+            nodeType: string
             description: CheckSum related with the batchConfig, this is useful to check if the batchConfig has been modified
           paramAuditList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/ParamAudit'
           parameterList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/BatchParameter'
           workflowNodeList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/WorkflowNode'
 
       ParamAudit:
-        type: object
+        nodeType: object
         required:
         - audTs
         - audUser
         - status
         properties:
           status:
-            type: string
+            nodeType: string
           comments:
-            type: string
+            nodeType: string
           audTs:
-            type: string
+            nodeType: string
             format: date-time
           audUser:
-            type: string
+            nodeType: string
 
       BatchParameter:
-        type: object
+        nodeType: object
         required:
         - isMandatory
         - name
-        - type
+        - nodeType
         properties:
           name:
-            type: string
+            nodeType: string
           schedulerParamName:
-            type: string
-          type:
-            type: string
+            nodeType: string
+          nodeType:
+            nodeType: string
           ioType:
-            type: string
+            nodeType: string
           isMandatory:
-            type: boolean
+            nodeType: boolean
           description:
-            type: string
+            nodeType: string
           scriptValue:
-            type : string
+            nodeType : string
 
       BatchParameterAudit:
-        type: object
+        nodeType: object
         required:
         - isMandatory
         - name
-        - type
+        - nodeType
         properties:
           name:
-            type: string
+            nodeType: string
           schedulerParamName:
-            type: string
-          type:
-            type: string
+            nodeType: string
+          nodeType:
+            nodeType: string
           ioType:
-            type: string
+            nodeType: string
           isMandatory:
-            type: boolean
+            nodeType: boolean
           description:
-            type: string
+            nodeType: string
           value:
-            type : string
+            nodeType : string
 
       WorkflowNode:
-        type: object
+        nodeType: object
         required:
-        - type
+        - nodeType
         - workflowNodeCode
         properties:
           workflowNodeCode:
-            type: string
-          type:
-            type: string
+            nodeType: string
+          nodeType:
+            nodeType: string
             description: STEP/PARALLEL/INCLUSIVE/EXCLUSIVE/BATCH/LOOP
           stepCode:
-            type: string
+            nodeType: string
           batchCode:
-            type: string
+            nodeType: string
           xPosition:
-            type: integer
+            nodeType: integer
           yPosition:
-            type: integer
+            nodeType: integer
           isCritical:
-            type: boolean
+            nodeType: boolean
           nextWorkflowNodeList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/NextWorkflowNode'
           wfnParameterList:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/wfnParameter'
           joinWorkflowNodeList:
-            type: array
+            nodeType: array
             items:
-              type: string
+              nodeType: string
           initializeScript:
-            type: string
+            nodeType: string
           exitScript:
-            type: string
+            nodeType: string
           incrementScript:
-            type: string
+            nodeType: string
           isEndLoop:
-            type: boolean
+            nodeType: boolean
 
       wfnParameter:
-        type: object
+        nodeType: object
         required:
         - name
         - batchParamName
         properties:
           name:
-            type: string
+            nodeType: string
             description: Parameter name in the ETL or child batch.
           batchParamName:
-            type: string
+            nodeType: string
             description: Parameter name in the Batch
           fixedValue:
-            type: string
+            nodeType: string
           scriptValue:
-            type: string
+            nodeType: string
 
       NextWorkflowNode:
-        type: object
+        nodeType: object
         required:
         - scriptCondition
         - workflowNodeCode
         properties:
           workflowNodeCode:
-            type: string
+            nodeType: string
           scriptCondition:
-            type: string
+            nodeType: string
             description: for INCLUSIVE or EXCLUSIVE nodes
 
       StepStatementItem:
-        type: object
+        nodeType: object
         properties:
           key:
-            type: string
+            nodeType: string
           value:
             $ref: '#/components/schemas/StepStatement'
 
       StepStatement:
-        type: object
+        nodeType: object
         properties:
           executionId:
-            type: string
+            nodeType: string
           stepExecutionId:
-            type: string
+            nodeType: string
           executionStatus:
-            type: string
+            nodeType: string
           initTs:
-            type: string
+            nodeType: string
             format: date-time
           endTs:
-            type: string
+            nodeType: string
             format: date-time
           batchCode:
-            type: string
+            nodeType: string
           etlStatus:
-            type: string
+            nodeType: string
           batchStatus:
-            type: string
+            nodeType: string
           description:
-            type: string
+            nodeType: string
           version:
-            type: string
+            nodeType: string
           batchId:
-            type: string
+            nodeType: string
           stepId:
-            type: string
+            nodeType: string
           loopNumber:
-            type: "integer"
+            nodeType: "integer"
             format: "int64"
           loopCode:
-            type: "string"
+            nodeType: "string"
           iterator:
-            type: "integer"
+            nodeType: "integer"
             format: "int64"
           workflowNode:
             $ref: '#/components/schemas/WorkflowNode'
           nextWorkflowNodeList:
-            type: array
+            nodeType: array
             items:
-              type: string
+              nodeType: string
           joinWorkflowNodeList:
-            type: array
+            nodeType: array
             items:
-              type: string
+              nodeType: string
           springBatchStepList:
-            type : array
+            nodeType : array
             items:
               $ref: '#/components/schemas/springBatchStep'
           failureExceptionList:
-            type : array
+            nodeType : array
             items:
               $ref: '#/components/schemas/failureException'
           batchParameterMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/BatchParameterAuditItem'
           stepParameterMap:
-            type: array
+            nodeType: array
             items:
               $ref: '#/components/schemas/StepParameterItem'
       BatchParameterAuditItem:
-        type: object
+        nodeType: object
         properties:
           key:
-            type: string
+            nodeType: string
           value:
             $ref: '#/components/schemas/BatchParameterAudit'
       StepParameterItem:
-        type: object
+        nodeType: object
         properties:
           key:
-            type: string
+            nodeType: string
           value:
-            type: string
+            nodeType: string
       LoopContextItem:
-        type: "object"
+        nodeType: "object"
         properties:
           key:
-            type: "string"
+            nodeType: "string"
           value:
             $ref: "#/components/schemas/LoopContext"
       LoopContext:
-        type: "object"
+        nodeType: "object"
         properties:
           loopCode:
-            type: "string"
+            nodeType: "string"
           iterator:
-            type: "integer"
+            nodeType: "integer"
             format: "int64"
           stepCounter:
-            type: "integer"
+            nodeType: "integer"
             format: "int64"
           endStepCounter:
-            type: "integer"
+            nodeType: "integer"
             format: "int64"
       springBatchStep:
-        type: object
+        nodeType: object
         properties:
           name:
-            type: string
+            nodeType: string
           status:
-            type: string
+            nodeType: string
           initTs:
-            type: string
+            nodeType: string
             format: date-time
           endTs:
-            type: string
+            nodeType: string
             format: date-time
           readCount:
-            type: integer
+            nodeType: integer
           writeCount:
-            type: integer
+            nodeType: integer
           skipCount:
-            type: integer
+            nodeType: integer
           operation:
-            type: string
+            nodeType: string
           affectedFileList:
-            type : array
+            nodeType : array
             items:
               $ref: '#/components/schemas/affectedFile'
           queryResultList:
-            type : array
+            nodeType : array
             items:
               $ref: '#/components/schemas/queryResult'
 
       affectedFile:
-        type: object
+        nodeType: object
         properties:
           file:
-            type: string
+            nodeType: string
           affected:
-            type: boolean
+            nodeType: boolean
 
       queryResult:
-        type: object
+        nodeType: object
         properties:
           queryCode:
-            type: string
+            nodeType: string
           dbSource:
-            type: string
+            nodeType: string
           updateCount:
-            type: integer
+            nodeType: integer
           matchCount:
-            type: integer
+            nodeType: integer
           insertCount:
-            type: integer
+            nodeType: integer
           deleteCount:
-            type: integer
+            nodeType: integer
 
       failureException:
-        type: object
+        nodeType: object
         properties:
           className:
-            type: string
+            nodeType: string
           message:
-            type: string
+            nodeType: string
 
 
 

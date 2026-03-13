@@ -27,12 +27,12 @@ paths:
         in: "path"
         description: "UUAA code associated to the scheduler plan"
         required: true
-        type: "string"
-      - name: "id"
+        nodeType: "string"
+      - name: "_id"
         in: "query"
         description: "Id associated to the scheduler plan"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
@@ -57,17 +57,17 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "planningDate"
         in: "path"
         description: "PlanningDate associated to the schedulers, ex: 2023-01-01"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
           schema:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/definitions/SchedulerPlanAudit"
         "400":
@@ -89,7 +89,7 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - in: "body"
         name: "paginationInfo"
         description: "Pagination information to find in the DB"
@@ -120,7 +120,7 @@ paths:
         in: "path"
         description: "UUAA code associated to the scheduler plans"
         required: true
-        type: "string"
+        nodeType: "string"
       - in: "body"
         name: "schedulerPlan"
         description: "Batch Configuration to save in the DDBB"
@@ -140,7 +140,7 @@ paths:
           description: "Unexpected exception"
           schema:
             $ref: "#/definitions/SchedulerPlanAuditError"
-  /hold/{uuaa}/{id}:
+  /hold/{uuaa}/{_id}:
     get:
       description: "hold or unhold a scheduler for a UUAA"
       operationId: "holdSchedulerPlanAudit"
@@ -151,17 +151,17 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
-      - name: "id"
+        nodeType: "string"
+      - name: "_id"
         in: "path"
-        description: "id of the scheduler"
+        description: "_id of the scheduler"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "hold"
         in: "query"
         description: "hold or unhold indicator"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
@@ -186,17 +186,17 @@ paths:
         in: "path"
         description: "UUAA code associated to the schedulers"
         required: true
-        type: "string"
+        nodeType: "string"
       - name: "planningDate"
         in: "path"
         description: "PlanningDate associated to the schedulers, ex: 2023-01-01"
         required: true
-        type: "string"
+        nodeType: "string"
       responses:
         "200":
           description: "Success"
           schema:
-            type: "array"
+            nodeType: "array"
             items:
               $ref: "#/definitions/SchedulerPlanAudit"
         "400":
@@ -209,7 +209,7 @@ paths:
             $ref: "#/definitions/SchedulerPlanAuditError"
 definitions:
   SchedulerPlanAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "_id"
     - "batchPlan"
@@ -220,28 +220,28 @@ definitions:
     - "version"
     properties:
       _id:
-        type: "string"
+        nodeType: "string"
       planCode:
-        type: "string"
+        nodeType: "string"
       planningDate:
-        type: "string"
+        nodeType: "string"
       version:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       status:
-        type: "string"
+        nodeType: "string"
         description: "WAITING - PENDING - READY_TO_EXECUTE - DISCARDED"
       holdStatus:
-        type: "string"
+        nodeType: "string"
       uuaa:
-        type: "string"
+        nodeType: "string"
       schedulerConfigId:
-        type: "string"
+        nodeType: "string"
       force:
-        type: "boolean"
+        nodeType: "boolean"
       enable:
-        type: "boolean"
+        nodeType: "boolean"
       triggerPlan:
         $ref: "#/definitions/TriggerPlan"
       batchPlan:
@@ -249,225 +249,225 @@ definitions:
       batchPlanError:
         $ref: "#/definitions/BatchPlan"
       conditionPlanList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/ConditionPlan"
       executionInfoList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/ExecutionInfo"
       failedTreatmentPlan:
         $ref: "#/definitions/FailedTreatmentPlan"
   TriggerPlan:
-    type: "object"
+    nodeType: "object"
     required:
     - "endTs"
     - "initTs"
     - "repeat"
-    - "type"
+    - "nodeType"
     properties:
       executed:
-        type: "boolean"
+        nodeType: "boolean"
       nextExecution:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
-      type:
-        type: "string"
+      nodeType:
+        nodeType: "string"
       initTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       endTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       maxExecutionTime:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       repeat:
-        type: "object"
+        nodeType: "object"
         properties:
           executionTime:
-            type: "string"
+            nodeType: "string"
           repeatEvery:
-            type: "integer"
+            nodeType: "integer"
           maxExecutionTime:
-            type: "string"
+            nodeType: "string"
           weekDays:
-            type: "array"
+            nodeType: "array"
             items:
-              type: "string"
+              nodeType: "string"
           monthly:
-            type: "object"
+            nodeType: "object"
             properties:
               months:
-                type: "array"
+                nodeType: "array"
                 items:
-                  type: "string"
+                  nodeType: "string"
               days:
-                type: "array"
+                nodeType: "array"
                 items:
-                  type: "integer"
+                  nodeType: "integer"
               eventWeek:
-                type: "string"
+                nodeType: "string"
               weekDays:
-                type: "array"
+                nodeType: "array"
                 items:
-                  type: "string"
+                  nodeType: "string"
             required:
             - "months"
         required:
         - "executionTime"
         - "maxExecutionTime"
   BatchPlan:
-    type: "object"
+    nodeType: "object"
     required:
     - "batchCode"
     properties:
       batchCode:
-        type: "string"
+        nodeType: "string"
       parameterQueryList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/Query"
       jobParameterList:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/JobParameter"
       item:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/MapItem"
       jobParameterMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/MapItem"
   Query:
-    type: "object"
+    nodeType: "object"
     required:
     - "queryCode"
     properties:
       queryCode:
-        type: "string"
+        nodeType: "string"
       sqlQuery:
-        type: "string"
+        nodeType: "string"
       dbSource:
-        type: "string"
+        nodeType: "string"
       mongoQuery:
         $ref: "#/definitions/MongoQuery"
     description: "DB reading query. May be SQL or MongoDB"
   MongoQuery:
-    type: "object"
+    nodeType: "object"
     required:
     - "collection"
     - "filter"
     properties:
       collection:
-        type: "string"
+        nodeType: "string"
       filter:
-        type: "array"
+        nodeType: "array"
         description: "MongoDB Aggregation Pipelines to filter"
         items:
-          type: "string"
+          nodeType: "string"
     description: "mongoDB reading Query"
   JobParameter:
-    type: "object"
+    nodeType: "object"
     required:
     - "paramName"
     properties:
       paramName:
-        type: "string"
+        nodeType: "string"
       queryParam:
-        type: "string"
+        nodeType: "string"
         description: "name of the field recovered in the parameterQueryList"
       fixedValue:
-        type: "string"
+        nodeType: "string"
       scriptValue:
-        type: "string"
+        nodeType: "string"
   ConditionPlan:
-    type: "object"
+    nodeType: "object"
     required:
     - "checkEvery"
     - "filename"
     - "forceAtEnd"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
       filename:
-        type: "string"
+        nodeType: "string"
       startCondition:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       endCondition:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       nextCheck:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       status:
-        type: "string"
+        nodeType: "string"
       checkEvery:
-        type: "integer"
+        nodeType: "integer"
         description: "in seconds"
       forceAtEnd:
-        type: "boolean"
+        nodeType: "boolean"
         description: "if true force the execution even if the condition doesn't match"
       script:
-        type: "string"
+        nodeType: "string"
         description: "to validate the queries with the recovered information"
       path:
-        type: "string"
+        nodeType: "string"
       filePattern:
-        type: "string"
+        nodeType: "string"
       fileParameterName:
-        type: "string"
+        nodeType: "string"
       novaTransferName:
-        type: "string"
+        nodeType: "string"
       extractionQuery:
         $ref: "#/definitions/Query"
     description: "previous condition to execute the planning"
   FailedTreatmentPlan:
-    type: "object"
+    nodeType: "object"
     required:
     - "level"
     properties:
       level:
-        type: "string"
+        nodeType: "string"
       issueCode:
-        type: "string"
+        nodeType: "string"
       technicalCode:
-        type: "string"
+        nodeType: "string"
   PaginationInfo:
-    type: "object"
+    nodeType: "object"
     required:
     - "limit"
     - "page"
     properties:
       page:
-        type: "integer"
+        nodeType: "integer"
       limit:
-        type: "integer"
+        nodeType: "integer"
       planCode:
-        type: "string"
+        nodeType: "string"
       version:
-        type: "string"
+        nodeType: "string"
       batchCode:
-        type: "string"
+        nodeType: "string"
       stepCode:
-        type: "string"
+        nodeType: "string"
       description:
-        type: "string"
+        nodeType: "string"
       fromDate:
-        type: "string"
+        nodeType: "string"
       toDate:
-        type: "string"
+        nodeType: "string"
       sortOrder:
-        type: "string"
+        nodeType: "string"
         description: "ASC - DESC"
       sortBy:
-        type: "string"
+        nodeType: "string"
         description: "field name"
     description: "Request to find Planconfig with Pagination"
   PageSchedulerPlanAudit:
-    type: "object"
+    nodeType: "object"
     required:
     - "hasNext"
     - "hasPrevious"
@@ -476,69 +476,69 @@ definitions:
     - "total"
     properties:
       total:
-        type: "integer"
+        nodeType: "integer"
       page:
-        type: "integer"
+        nodeType: "integer"
       limit:
-        type: "integer"
+        nodeType: "integer"
       hasPrevious:
-        type: "boolean"
+        nodeType: "boolean"
       hasNext:
-        type: "boolean"
+        nodeType: "boolean"
       result:
-        type: "array"
+        nodeType: "array"
         description: "Scheduler plans which complish the filter"
         items:
           $ref: "#/definitions/SchedulerPlanAudit"
     description: "Response to find Planconfig with Pagination"
   ExecutionInfo:
-    type: "object"
+    nodeType: "object"
     required:
     - "executionDate"
     - "executionType"
     properties:
       batchCode:
-        type: "string"
+        nodeType: "string"
       executionType:
-        type: "string"
+        nodeType: "string"
       executionDate:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       executionId:
-        type: "string"
+        nodeType: "string"
       status:
-        type: "string"
+        nodeType: "string"
       initTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       endTs:
-        type: "string"
+        nodeType: "string"
         format: "date-time"
       batchParameterMap:
-        type: "array"
+        nodeType: "array"
         items:
           $ref: "#/definitions/BatchParameter"
   BatchParameter:
-    type: "object"
+    nodeType: "object"
     properties:
       name:
-        type: "string"
+        nodeType: "string"
       value:
-        type: "string"
+        nodeType: "string"
   MapItem:
-    type: "object"
+    nodeType: "object"
     properties:
       key:
-        type: "string"
+        nodeType: "string"
       value:
-        type: "string"
+        nodeType: "string"
   SchedulerPlanAuditError:
-    type: "object"
+    nodeType: "object"
     properties:
       code:
-        type: "string"
+        nodeType: "string"
       message:
-        type: "string"
+        nodeType: "string"
     description: "Error messages"
 x-generator-properties:
   business-unit: "gkxj"

@@ -57,7 +57,7 @@ public class ServiceStepconfig
     private final NovaMetadata novaMetadata;
 
     /**
-     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     * The request config of the client. Define the nodeType of REST protocol (HTTP or HTTPS)
      */
     private final NovaRequestConfig novaRequestConfig;
 
@@ -199,7 +199,7 @@ public class ServiceStepconfig
 
 	/**
      * @param branchId Branch code where the user is working.
-     * @param id Step Id in Db
+     * @param _id Step Id in Db
      * @param uuaa UUAA code associated to the step
 	 * @return Success
 	 * @throws NovaApiClientRequestException with an API client request exception
@@ -209,14 +209,14 @@ public class ServiceStepconfig
      * @throws DeleteStepConfigException400 with an occurred exception
      * @throws DeleteStepConfigException500 with an occurred exception
 	 */
-	public Boolean deleteStepConfig(final String branchId, final String id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteStepConfigException400,  DeleteStepConfigException500
+	public Boolean deleteStepConfig(final String branchId, final String _id, final String uuaa) throws NovaApiClientRequestException, NovaApiClientResponseException, NovaApiClientResponseTimeoutException, Exception, Errors,  DeleteStepConfigException400,  DeleteStepConfigException500
 	{
 		LOG.debug("[ServiceStepconfig] -> [deleteStepConfig]");
 
         LOG.debug("[ServiceStepconfig] -> [deleteStepConfig]: novaMetadata  [{}]", this.novaMetadata.toString());
 
         // Do the call to endpoint via RestHandler
-        return this.restHandlerStepconfig.deleteStepConfig(this.novaRequestConfig, this.novaMetadata, branchId, id, uuaa);
+        return this.restHandlerStepconfig.deleteStepConfig(this.novaRequestConfig, this.novaMetadata, branchId, _id, uuaa);
 	}
 
 

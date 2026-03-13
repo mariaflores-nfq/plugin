@@ -1,92 +1,54 @@
 package com.bbva.gkxj.atiframework.filetype.component.editor.panels.tabs;
 
 import com.bbva.gkxj.atiframework.components.*;
-import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.AdapterFieldData;
+import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.FieldData;
 import com.bbva.gkxj.atiframework.filetype.workflow.utils.WorkflowThemeUtils;
+import com.intellij.ui.DocumentAdapter;
 import com.intellij.util.ui.JBUI;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.util.List;
+import java.util.function.Consumer;
 
 import static com.bbva.gkxj.atiframework.filetype.component.utils.ComponentConstants.*;
 
-/**
- * Vista unificada para adaptadores que soporta protocolos JMS y Async API.
- * <p>
- * Esta clase gestiona una interfaz dinámica que adapta sus componentes de cabecera
- * según el subtipo de adaptador proporcionado. Utiliza un {@link AtiTableSplitterPanel}
- * para la gestión de listas de campos inmutables y permite la edición detallada
- * a través de {@link FieldDetailView}.
- * </p>
- * <p>
- * Implementa una lógica de "descubrimiento" de componentes mediante recursividad para
- * actualizar etiquetas internas que son inaccesibles (final) en la librería base.
- * </p>
- */
 public class AdapterTabView extends JPanel {
 
-    // --- Campos Cabecera JMS ---
-    /** Combo para seleccionar la conexión JMS. */
     private AtiComboBox jmsConnectionCombo;
-    /** Campo de texto para el nombre de la cola (Queue). */
     private AtiTextField queueNameField;
-    /** Switch personalizado para marcar la criticidad del adaptador. */
     private JToggleButton isCriticalSwitch;
-
-    // --- Campos Cabecera Async API ---
-    /** Campo de texto para la clase Java que implementa el contrato Async API. */
     private AtiTextField javaClassNameField;
-
-    // --- Campos Comunes ---
-    /** Combo para seleccionar el tipo de mensaje (XML, JSON, CSV). */
     private AtiComboBox messageTypeCombo;
-
-    // --- Paneles de Campos ---
-    /** Panel divisor que contiene la tabla de campos a la izquierda y el detalle a la derecha. */
-    private AtiTableSplitterPanel<AdapterFieldData> splitterPanel;
-    /** Vista de detalle para la edición de campos individuales (Panel derecho del Splitter). */
+    private AtiTableSplitterPanel<FieldData> splitterPanel;
     private FieldDetailView detailView;
-    /** Contenedor que permite ocultar o mostrar la sección de campos dinámicamente. */
     private JPanel fieldsSectionContainer;
 
-    /** Dirección del componente: Input o Output. */
     private final String componentType;
-    /** Protocolo del adaptador: JMS o Async API. */
     private final String subtype;
+    private Runnable onFormChangedCallback;
 
-    /**
-     * Constructor del Tab unificado de Adaptadores.
-     * * @param componentType El tipo de componente (ej. {@code TYPE_INPUT_ADAPTER}).
-     * @param subtype El subtipo de comunicación (ej. {@code SUBTYPE_JMS} o {@code SUBTYPE_ASYNC_API}).
-     */
     public AdapterTabView(String componentType, String subtype) {
         this.componentType = componentType;
         this.subtype = subtype;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         initComponents();
+        initInternalListeners();
     }
 
-    /**
-     * Inicializa los componentes de la interfaz de usuario.
-     * <p>
-     * Divide la construcción en dos bloques: la cabecera (dinámica según el protocolo)
-     * y la sección de campos (común para adaptadores con carga de datos).
-     * </p>
-     */
     private void initComponents() {
-
-        // --- 1. CONFIGURACIÓN DE CABECERA (DINÁMICA) ---
         JPanel gridPanel = new JPanel(new GridBagLayout());
         gridPanel.setOpaque(false);
-        gridPanel.setBorder(JBUI.Borders.empty(20, 20, 0, 20)); // Márgenes para la cabecera
+        gridPanel.setBorder(JBUI.Borders.empty(20, 20, 0, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 20, 20);
 
         if (SUBTYPE_ASYNC_API.equals(subtype)) {
             javaClassNameField = WorkflowThemeUtils.createThemedTextField();
-
             gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.5;
             gridPanel.add(new AtiLabeledComponent("Java Class Name", javaClassNameField), gbc);
 
@@ -96,7 +58,6 @@ public class AdapterTabView extends JPanel {
                 gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 0.5;
                 gridPanel.add(new AtiLabeledComponent("Message Type", messageTypeCombo), gbc);
             }
-
         } else {
             jmsConnectionCombo = new AtiComboBox(new Object[]{"", "Operation", "Admin"});
             WorkflowThemeUtils.applyWorkflowTheme(jmsConnectionCombo);
@@ -104,7 +65,6 @@ public class AdapterTabView extends JPanel {
             gridPanel.add(new AtiLabeledComponent("JMS Connection", jmsConnectionCombo), gbc);
 
             queueNameField = WorkflowThemeUtils.createThemedTextField();
-
             gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 0.7;
             gridPanel.add(new AtiLabeledComponent("Queue Name", queueNameField), gbc);
 
@@ -124,137 +84,101 @@ public class AdapterTabView extends JPanel {
             }
         }
 
-        // AÑADIMOS LA CABECERA AL NORTE (Se queda pegada arriba y no crece hacia abajo)
         add(gridPanel, BorderLayout.NORTH);
 
-        // --- 2. SECCIÓN DINÁMICA DE CAMPOS (SPLITTER + DETAIL) ---
         fieldsSectionContainer = new JPanel(new BorderLayout());
         fieldsSectionContainer.setOpaque(false);
-        fieldsSectionContainer.setBorder(JBUI.Borders.empty(0, 20, 20, 20)); // Márgenes para el cuerpo
+        fieldsSectionContainer.setBorder(JBUI.Borders.empty(0, 20, 20, 20));
         fieldsSectionContainer.setVisible(false);
 
         detailView = new FieldDetailView(this.componentType, () -> {});
-
         Dimension hackSize = new Dimension(100, 500);
         detailView.setPreferredSize(hackSize);
         detailView.setMinimumSize(hackSize);
 
+        // Actualizado a FieldData
         splitterPanel = new AtiTableSplitterPanel<>(
-                "Fields",
-                "Fields",
-                AdapterFieldData::new,
-                item -> String.format("%02d", (splitterPanel.getDataList().indexOf(item) + 1)),
-                item -> item.fieldName != null ? item.fieldName : "New Field",
+                "Fields", "Fields",
+                FieldData::new,
+                (AtiTableSplitterPanel.ItemIdExtractor<FieldData>) item -> String.format("%02d", (splitterPanel.getDataList().indexOf(item) + 1)),
+                (AtiTableSplitterPanel.ItemNameExtractor<FieldData>) item -> item.fieldName != null ? item.fieldName : "New Field",
                 detailView
         );
 
         splitterPanel.setMinimumSize(new Dimension(250, 0));
-
         fieldsSectionContainer.add(splitterPanel, BorderLayout.CENTER);
-
         add(fieldsSectionContainer, BorderLayout.CENTER);
     }
 
-    /**
-     * Refresca la visibilidad de la sección de campos y actualiza el contexto de extracción.
-     * <p>
-     * Se encarga de ocultar la sección si el tipo de mensaje no está definido o si
-     * se trata de un Output Adapter para Async API (según definición de negocio).
-     * </p>
-     * * @param type El tipo de mensaje seleccionado (XML, JSON, CSV).
-     */
+    private void initInternalListeners() {
+        if (jmsConnectionCombo != null) jmsConnectionCombo.addActionListener(e -> notifyChange());
+        if (isCriticalSwitch != null) isCriticalSwitch.addActionListener(e -> notifyChange());
+        if (queueNameField != null) queueNameField.getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }
+        });
+        if (javaClassNameField != null) javaClassNameField.getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }
+        });
+    }
+
+    private void notifyChange() {
+        if (onFormChangedCallback != null) onFormChangedCallback.run();
+    }
+
+    public String getJmsConnection() { return jmsConnectionCombo != null ? (String) jmsConnectionCombo.getSelectedItem() : ""; }
+    public void setJmsConnection(String val) { if (jmsConnectionCombo != null) jmsConnectionCombo.setSelectedItem(val); }
+
+    public String getQueueName() { return queueNameField != null ? queueNameField.getText() : ""; }
+    public void setQueueName(String val) { if (queueNameField != null) queueNameField.setText(val); }
+
+    public String getJavaClassName() { return javaClassNameField != null ? javaClassNameField.getText() : ""; }
+    public void setJavaClassName(String val) { if (javaClassNameField != null) javaClassNameField.setText(val); }
+
+    public String getMessageType() { return messageTypeCombo != null ? (String) messageTypeCombo.getSelectedItem() : ""; }
+    public void setMessageType(String val) { if (messageTypeCombo != null) messageTypeCombo.setSelectedItem(val); }
+
+    public boolean isCritical() { return isCriticalSwitch != null && isCriticalSwitch.isSelected(); }
+    public void setCritical(boolean val) { if (isCriticalSwitch != null) isCriticalSwitch.setSelected(val); }
+
+    // Cambiado a FieldData
+    public List<FieldData> getTableData() { return splitterPanel != null ? splitterPanel.getDataList() : null; }
+    public void setTableData(List<FieldData> data) { if (splitterPanel != null) splitterPanel.reloadData(data); }
+
+    public FieldData getSelectedTableItem() { return splitterPanel != null ? splitterPanel.getCurrentSelection() : null; }
+    public void updateSelectedRowName(String name) { if (splitterPanel != null) splitterPanel.updateSelectedRowName(name); }
+
+    public void loadDetailData(FieldData item) { if (detailView != null) detailView.loadData(item); }
+    public void saveDetailData(FieldData item) { if (detailView != null) detailView.saveData(item); }
+    public void updateDetailExtractionLabel(String type) { if (detailView != null) detailView.updateExtractionLabel(type); }
+
+    public void setOnFormChanged(Runnable callback) { this.onFormChangedCallback = callback; }
+    public void setOnTableSelectionChanged(AtiTableSplitterPanel.SelectionListener<FieldData> callback) {
+        if (splitterPanel != null) splitterPanel.setSelectionListener(callback);
+    }
+    public void setOnDetailViewChanged(Runnable callback) { if (detailView != null) detailView.setOnChange(callback); }
+    public void setOnMessageTypeChanged(Consumer<String> callback) {
+        if (messageTypeCombo != null) {
+            messageTypeCombo.addActionListener(e -> {
+                String type = (String) messageTypeCombo.getSelectedItem();
+                callback.accept(type != null ? type : "");
+            });
+        }
+    }
+
     public void updateFieldsContext(String type) {
-        // En Async API Output Adapter la zona de campos NUNCA se muestra.
         if (SUBTYPE_ASYNC_API.equals(subtype) && TYPE_OUTPUT_ADAPTER.equals(componentType)) {
             fieldsSectionContainer.setVisible(false);
             return;
         }
-
-        // Para el resto (JMS Input/Output o Async API Input), validamos si hay tipo seleccionado
         boolean hasType = type != null && !type.trim().isEmpty();
         fieldsSectionContainer.setVisible(hasType);
-
-        if (hasType) {
-            // 1. Etiqueta del formulario derecho (XPath vs JSONPath)
+        if (hasType && detailView != null) {
             detailView.updateExtractionLabel(type);
-
-            // 2. Actualizar el título del componente custom
-            try {
-                splitterPanel.setTitle(type + " Fields");
-            } catch (Exception e) {
-                // Fallback a lógica de descubrimiento si setTitle falla
-                updateInternalSplitterLabel(type + " Fields");
-            }
+            try { splitterPanel.setTitle(type + " Fields"); } catch (Exception e) {}
         }
-
         revalidate();
         repaint();
     }
 
-    /**
-     * Accede internamente a las etiquetas del SplitterPanel mediante descubrimiento recursivo.
-     * * @param newText El nuevo texto base para el prefijo de la etiqueta.
-     */
-    private void updateInternalSplitterLabel(String newText) {
-        findAndSetLabel(splitterPanel, newText);
-    }
-
-    /**
-     * Busca recursivamente un JLabel que contenga paréntesis dentro del contenedor y actualiza su texto.
-     * * @param container Contenedor donde iniciar la búsqueda.
-     * @param text Texto base a asignar antes del paréntesis.
-     */
-    private void findAndSetLabel(Container container, String text) {
-        for (Component comp : container.getComponents()) {
-            if (comp instanceof JLabel && ((JLabel) comp).getText().contains("(")) {
-                String currentText = ((JLabel) comp).getText();
-                int startIndex = currentText.indexOf("(");
-                if (startIndex != -1) {
-                    ((JLabel) comp).setText(text + " " + currentText.substring(startIndex));
-                }
-                return;
-            } else if (comp instanceof Container) {
-                findAndSetLabel((Container) comp, text);
-            }
-        }
-    }
-
-    // --- GETTERS ---
-
-    /** @return Desplegable de conexiones JMS. */
-    public AtiComboBox getJmsConnectionCombo() { return jmsConnectionCombo; }
-    /** @return Campo del nombre de cola JMS. */
-    public AtiTextField getQueueNameField() { return queueNameField; }
-    /** @return Desplegable del tipo de mensaje. */
-    public AtiComboBox getMessageTypeCombo() { return messageTypeCombo; }
-    /** @return Botón tipo switch para criticidad. */
-    public JToggleButton getIsCriticalSwitch() { return isCriticalSwitch; }
-    /** @return Campo para el nombre de la clase Java (Async API). */
-    public AtiTextField getJavaClassNameField() { return javaClassNameField; }
-    /** @return Panel de tabla y divisor de campos. */
-    public AtiTableSplitterPanel<AdapterFieldData> getSplitterPanel() { return splitterPanel; }
-    /** @return Vista de detalle del campo seleccionado. */
-    public FieldDetailView getDetailView() { return detailView; }
-
-    /**
-     * Crea un componente {@link JToggleButton} con apariencia de switch Material Design.
-     * * @return El switch configurado con renderizado personalizado.
-     */
-    private JToggleButton createCustomSwitch() {
-        JToggleButton sw = new JToggleButton() {
-            @Override protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(isSelected() ? new Color(255, 64, 129) : Color.LIGHT_GRAY);
-                g2.fillRoundRect(0, 8, 34, 16, 16, 16);
-                g2.setColor(Color.WHITE);
-                g2.fillOval(isSelected() ? 18 : 2, 6, 20, 20);
-                g2.dispose();
-            }
-        };
-        sw.setPreferredSize(new Dimension(40, 30));
-        sw.setBorder(null);
-        sw.setContentAreaFilled(false);
-        return sw;
-    }
+    private JToggleButton createCustomSwitch() { return new JToggleButton(); }
 }

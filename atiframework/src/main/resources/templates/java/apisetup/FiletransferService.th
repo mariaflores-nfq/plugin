@@ -48,7 +48,7 @@ public class FiletransferService
     private final NovaMetadata novaMetadata;
 
     /**
-     * The request config of the client. Define the type of REST protocol (HTTP or HTTPS)
+     * The request config of the client. Define the nodeType of REST protocol (HTTP or HTTPS)
      */
     private final NovaRequestConfig novaRequestConfig;
 

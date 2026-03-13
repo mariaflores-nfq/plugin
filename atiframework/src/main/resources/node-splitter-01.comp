@@ -1,8 +1,9 @@
 {
-  "workflowCode": "Item_Splitter",
   "id": "node-splitter-01",
   "componentCode": "Item_Splitter",
-  "type": "Splitter",
-  "subtype": "RootElement",
-  "description": "Divide el mensaje por cada item del array."
+  "description": "Divide el mensaje por cada item del array.",
+  "status": "",
+  "version": "",
+  "nodeType": "Splitter",
+  "critical": false
 }

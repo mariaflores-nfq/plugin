@@ -4,7 +4,7 @@
 
 ## Quickstart
 
-Este plugin desarrollado para ATI Framework en una versión inicial solo permite la creación de un servicio anfigrión a partir de la extensión de `com.intellij.moduleType`, el cual añade un nevo module type to the *New Module* Project Wizard.
+Este plugin desarrollado para ATI Framework en una versión inicial solo permite la creación de un servicio anfigrión a partir de la extensión de `com.intellij.moduleType`, el cual añade un nevo module nodeType to the *New Module* Project Wizard.
 El Module con el nombre de `ATI Framework: Client Generator`, solicita la información relevante para poder construir un cliente básico en un único demonio (en esta versión no permite configrar atiTasklet ni servicios separados en distintos demonios).
 
 ### Extension Points

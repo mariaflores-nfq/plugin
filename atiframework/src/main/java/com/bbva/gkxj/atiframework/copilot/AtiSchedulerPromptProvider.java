@@ -117,7 +117,7 @@ public final class AtiSchedulerPromptProvider {
             - recordVersion: Número de versión del registro
             - checkSum: Código de verificación
             - paramAuditList: Lista de auditoría de cambios
-            - trigger: Configuración de cuándo se ejecuta (type: DAILY, WEEKLY, MONTHLY)
+            - trigger: Configuración de cuándo se ejecuta (nodeType: DAILY, WEEKLY, MONTHLY)
             - batch: Información del batch a ejecutar (batchCode, parameterQueryList)
             
             Genera siempre JSON válido y estructurado siguiendo este esquema.
