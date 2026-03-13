@@ -1,15 +1,14 @@
 {
-  "id": "node-out-01",
-  "componentCode": "Database_Output",
-  "description": "Persistencia final en Oracle.",
-  "status": "",
-  "version": "",
-  "nodeType": "Output Adapter",
-  "jmsConnector": "",
-  "queueName": "",
-  "critical": false,
-  "messageType": "",
-  "asyncApiClassName": "",
-  "outputAdapterType": "Database",
-  "fieldDataList": []
+  "componentCode" : "Database_Output",
+  "description" : "Persistencia final en Oracle.",
+  "status" : "2",
+  "version" : "1",
+  "nodeType" : "Output Adapter",
+  "jmsConnector" : "",
+  "queueName" : "",
+  "messageType" : "JSON",
+  "asyncApiClassName" : "",
+  "outputAdapterType" : "JMS",
+  "fieldDataList" : [ ],
+  "isCritical" : false
 }

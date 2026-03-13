@@ -62,9 +62,8 @@ public class FilterPropertiesController {
         }
     }
 
-    public ComponentJsonData getDataFromUI() {
-        currentModel.setFilterScriptMap(new ArrayList<>(view.getTableData()));
-        return currentModel;
+    public void updateModelFromUI(ComponentJsonData globalModel) {
+        globalModel.setFilterScriptMap(new ArrayList<>(view.getTableData()));
     }
 
     private void notifyChange() {

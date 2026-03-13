@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+import java.util.ArrayList;
+
 import static com.bbva.gkxj.atiframework.filetype.component.utils.ComponentConstants.*;
 
 public class ComponentDetailsController {
@@ -31,16 +33,25 @@ public class ComponentDetailsController {
 
     private ComponentJsonData currentModel = new ComponentJsonData();
     private boolean isPopulating = false;
+    private String currentActiveSubtype = "";
 
     public ComponentDetailsController(@NotNull Project project, @NotNull VirtualFile file, Runnable onFormChanged) {
         this.myProject = project;
         this.myDocument = FileDocumentManager.getInstance().getDocument(file);
         this.onFormChanged = onFormChanged;
         this.view = new ComponentDetailsView();
-
         this.view.setOnFormChanged(() -> {
-            if (!isPopulating && this.onFormChanged != null) {
-                this.onFormChanged.run();
+            if (!isPopulating) {
+                String newSubtype = view.getSubtype() != null ? view.getSubtype() : "";
+
+                if (!newSubtype.equals(this.currentActiveSubtype) && !this.currentActiveSubtype.isEmpty()) {
+                    handleSubtypeChange();
+                    this.currentActiveSubtype = newSubtype;
+                }
+
+                if (this.onFormChanged != null) {
+                    this.onFormChanged.run();
+                }
             }
         });
     }
@@ -49,12 +60,9 @@ public class ComponentDetailsController {
         if (jsonObject == null) return;
         this.isPopulating = true;
         try {
-            // Usamos Jackson en lugar de Gson para respetar @JsonUnwrapped
             ObjectMapper mapper = new ObjectMapper();
-            // Ignorar propiedades desconocidas por si el JSON tiene basura
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-            // Convertimos el JsonObject de la API de IntelliJ a String para que Jackson lo lea
             this.currentModel = mapper.readValue(jsonObject.toString(), ComponentJsonData.class);
 
             view.setComponentCode(currentModel.getComponentCode());
@@ -70,14 +78,14 @@ public class ComponentDetailsController {
                 view.updateDynamicFields(normalizedType);
             }
 
-            // Recuperar el subtipo
             String subtype = getCurrentSubtypeFromModel();
             if (subtype != null && !subtype.isEmpty()) {
                 view.setSubtype(subtype);
+                this.currentActiveSubtype = subtype;
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Útil para ver si hay algún error de parseo en la consola de IntelliJ
+            e.printStackTrace();
         } finally {
             this.isPopulating = false;
         }
@@ -106,39 +114,27 @@ public class ComponentDetailsController {
         String subtype = view.getSubtype();
         currentModel.setNodeType(type);
 
-        // Guardar el subtipo en la variable correcta
         if (TYPE_INPUT_ADAPTER.equals(type)) currentModel.setInputAdapterType(subtype);
         else if (TYPE_OUTPUT_ADAPTER.equals(type)) currentModel.setOutputAdapterType(subtype);
 
-        // EXTRA: Si tienes campos de Aggregator en tu modelo, guárdalos aquí:
-        /*
-        if (TYPE_AGGREGATOR.equals(type)) {
-            currentModel.setCorrelationType((String) view.getCorrelationStrategyField().getSelectedItem());
-            currentModel.setAggregationType((String) view.getAggregationStrategyField().getSelectedItem());
-            currentModel.setReleaseType((String) view.getReleaseStrategyField().getSelectedItem());
-        }
-        */
-
         // 2. Extraer datos de los controladores delegados (Pestañas)
-        if (adapterController != null) currentModel = adapterController.getDataFromUI();
-        if (filterController != null) currentModel = filterController.getDataFromUI();
-        if (wsController != null) currentModel = wsController.getDataFromUI();
+        // CORRECCIÓN: Le pasamos el currentModel para que lo actualicen, en lugar de reasignarlo y borrar los scripts.
+        if (adapterController != null) adapterController.updateModelFromUI(currentModel);
+        if (filterController != null) filterController.updateModelFromUI(currentModel);
+        if (wsController != null) wsController.updateModelFromUI(currentModel);
 
         // 3. Serializar con JACKSON y guardar en el documento
         try {
             ObjectMapper mapper = new ObjectMapper();
-            // Evitar escribir campos a null en el JSON final
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            // Formatear bonito (Pretty Print)
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
             String finalJson = mapper.writeValueAsString(currentModel);
 
-            // CORRECCIÓN: Normalizar los saltos de línea a formato Unix (\n) para IntelliJ
             String normalizedJson = StringUtil.convertLineSeparators(finalJson);
 
             WriteCommandAction.runWriteCommandAction(myProject, () -> {
-                this.myDocument.setText(normalizedJson); // Usar el texto normalizado
+                this.myDocument.setText(normalizedJson);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +153,19 @@ public class ComponentDetailsController {
         if (TYPE_OUTPUT_ADAPTER.equals(currentModel.getNodeType())) return currentModel.getOutputAdapterType();
         return null;
     }
+    private void handleSubtypeChange() {
 
+        currentModel.setJmsConnector(null);
+        currentModel.setQueueName(null);
+        currentModel.setAsyncApiClassName(null);
+        currentModel.setMessageType(null);
+        currentModel.setCritical(false);
+        currentModel.setFieldDataList(new ArrayList<>());
+
+        if (adapterController != null) {
+            adapterController.clearAllData();
+        }
+    }
     private String getNullIfEmpty(String text) {
         return (text == null || text.trim().isEmpty()) ? null : text;
     }
