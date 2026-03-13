@@ -118,29 +118,53 @@ public class AdapterPropertiesController {
     }
 
     /**
-     * Extrae los datos de la UI y actualiza el ComponentJsonData general.
+     * Extrae los datos de la UI y los inyecta en el ComponentJsonData global.
      */
-    public ComponentJsonData getDataFromUI() {
+    public void updateModelFromUI(ComponentJsonData globalModel) {
         saveCurrentListToBuffer(lastSelectedType);
 
         // Nombres actualizados
-        currentModel.setJmsConnector(view.getJmsConnection());
-        currentModel.setQueueName(view.getQueueName());
-        currentModel.setAsyncApiClassName(view.getJavaClassName());
-        currentModel.setMessageType(view.getMessageType());
-        currentModel.setCritical(view.isCritical());
+        globalModel.setJmsConnector(view.getJmsConnection());
+        globalModel.setQueueName(view.getQueueName());
+        globalModel.setAsyncApiClassName(view.getJavaClassName());
+        globalModel.setMessageType(view.getMessageType());
+        globalModel.setCritical(view.isCritical());
 
         // Asignar al modelo general SOLO la lista correspondiente al tipo seleccionado
         switch (lastSelectedType) {
-            case "XML" -> currentModel.setFieldDataList(new ArrayList<>(xmlBuffer));
-            case "JSON" -> currentModel.setFieldDataList(new ArrayList<>(jsonBuffer));
-            case "CSV" -> currentModel.setFieldDataList(new ArrayList<>(csvBuffer));
-            default -> currentModel.setFieldDataList(new ArrayList<>());
+            case "XML" -> globalModel.setFieldDataList(new ArrayList<>(xmlBuffer));
+            case "JSON" -> globalModel.setFieldDataList(new ArrayList<>(jsonBuffer));
+            case "CSV" -> globalModel.setFieldDataList(new ArrayList<>(csvBuffer));
+            default -> globalModel.setFieldDataList(new ArrayList<>());
         }
-
-        return currentModel;
     }
+    /**
+     * Resetea todos los datos del formulario y los buffers cuando cambia el subtipo de adaptador.
+     */
+    public void clearAllData() {
+        this.isPopulating = true; // Bloqueamos los eventos circulares
+        try {
+            // 1. Vaciar memoria
+            this.xmlBuffer.clear();
+            this.jsonBuffer.clear();
+            this.csvBuffer.clear();
+            this.lastSelectedType = "";
 
+            // 2. Limpiar la UI
+            view.setJmsConnection("");
+            view.setQueueName("");
+            view.setJavaClassName("");
+            view.setMessageType("");
+            view.setCritical(false);
+
+            view.setTableData(new ArrayList<>());
+            view.updateFieldsContext("");
+
+        } finally {
+            this.isPopulating = false;
+            notifyChange(); // Avisamos de que hay que guardar este "reseteo"
+        }
+    }
     private void notifyChange() {
         if (!isPopulating && onFormChanged != null) {
             onFormChanged.run();

@@ -59,12 +59,11 @@ public class WorkStatementPropertiesController {
         }
     }
 
-    public ComponentJsonData getDataFromUI() {
+    public void updateModelFromUI(ComponentJsonData globalModel) {
         if (view.getSplitterPanel() != null) {
             // Guarda directamente la lista en la raíz del JSON
-            currentModel.setWorkStatementList(new ArrayList<>(view.getSplitterPanel().getDataList()));
+            globalModel.setWorkStatementList(new ArrayList<>(view.getSplitterPanel().getDataList()));
         }
-        return currentModel;
     }
 
     private void notifyChange() {

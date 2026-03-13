@@ -2,15 +2,21 @@ package com.bbva.gkxj.atiframework.filetype.component.controller;
 
 import com.bbva.gkxj.atiframework.filetype.component.editor.panels.ComponentDetailsView;
 import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData;
-import com.google.gson.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.JsonObject;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+
+import java.util.ArrayList;
 
 import static com.bbva.gkxj.atiframework.filetype.component.utils.ComponentConstants.*;
 
@@ -27,16 +33,25 @@ public class ComponentDetailsController {
 
     private ComponentJsonData currentModel = new ComponentJsonData();
     private boolean isPopulating = false;
+    private String currentActiveSubtype = "";
 
     public ComponentDetailsController(@NotNull Project project, @NotNull VirtualFile file, Runnable onFormChanged) {
         this.myProject = project;
         this.myDocument = FileDocumentManager.getInstance().getDocument(file);
         this.onFormChanged = onFormChanged;
         this.view = new ComponentDetailsView();
-
         this.view.setOnFormChanged(() -> {
-            if (!isPopulating && this.onFormChanged != null) {
-                this.onFormChanged.run();
+            if (!isPopulating) {
+                String newSubtype = view.getSubtype() != null ? view.getSubtype() : "";
+
+                if (!newSubtype.equals(this.currentActiveSubtype) && !this.currentActiveSubtype.isEmpty()) {
+                    handleSubtypeChange();
+                    this.currentActiveSubtype = newSubtype;
+                }
+
+                if (this.onFormChanged != null) {
+                    this.onFormChanged.run();
+                }
             }
         });
     }
@@ -45,8 +60,10 @@ public class ComponentDetailsController {
         if (jsonObject == null) return;
         this.isPopulating = true;
         try {
-            Gson gson = new Gson();
-            this.currentModel = gson.fromJson(jsonObject, ComponentJsonData.class);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+            this.currentModel = mapper.readValue(jsonObject.toString(), ComponentJsonData.class);
 
             view.setComponentCode(currentModel.getComponentCode());
             view.setVersion(currentModel.getVersion());
@@ -61,19 +78,19 @@ public class ComponentDetailsController {
                 view.updateDynamicFields(normalizedType);
             }
 
-            // En el nuevo modelo, los subtipos se guardan con sus propios nombres (ej. inputAdapterType)
-            // Por retrocompatibilidad visual, mantenemos la lógica de la UI:
             String subtype = getCurrentSubtypeFromModel();
             if (subtype != null && !subtype.isEmpty()) {
                 view.setSubtype(subtype);
+                this.currentActiveSubtype = subtype;
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             this.isPopulating = false;
         }
     }
 
-    // Métodos para cargar datos en los tabs delegados pasando el modelo unificado
     public void loadAdapterData() {
         if (adapterController != null) adapterController.loadDataFromConfig(currentModel);
     }
@@ -88,31 +105,40 @@ public class ComponentDetailsController {
 
     public void updateDocument(JsonObject originalJson) {
         // 1. Extraer datos básicos de la UI principal
-        currentModel.setComponentCode(view.getComponentCode());
-        currentModel.setVersion(view.getVersion());
-        currentModel.setStatus(view.getStatus());
-        currentModel.setDescription(view.getDescription());
+        currentModel.setComponentCode(getNullIfEmpty(view.getComponentCode()));
+        currentModel.setVersion(getNullIfEmpty(view.getVersion()));
+        currentModel.setStatus(getNullIfEmpty(view.getStatus()));
+        currentModel.setDescription(getNullIfEmpty(view.getDescription()));
 
         String type = view.getNodeType();
         String subtype = view.getSubtype();
         currentModel.setNodeType(type);
 
-        // Guardar el subtipo en la variable correcta según el tipo de nodo
         if (TYPE_INPUT_ADAPTER.equals(type)) currentModel.setInputAdapterType(subtype);
         else if (TYPE_OUTPUT_ADAPTER.equals(type)) currentModel.setOutputAdapterType(subtype);
 
         // 2. Extraer datos de los controladores delegados (Pestañas)
-        if (adapterController != null) currentModel = adapterController.getDataFromUI();
-        if (filterController != null) currentModel = filterController.getDataFromUI();
-        if (wsController != null) currentModel = wsController.getDataFromUI();
+        // CORRECCIÓN: Le pasamos el currentModel para que lo actualicen, en lugar de reasignarlo y borrar los scripts.
+        if (adapterController != null) adapterController.updateModelFromUI(currentModel);
+        if (filterController != null) filterController.updateModelFromUI(currentModel);
+        if (wsController != null) wsController.updateModelFromUI(currentModel);
 
-        // 3. Serializar y guardar el documento
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement updatedTree = gson.toJsonTree(currentModel);
+        // 3. Serializar con JACKSON y guardar en el documento
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        WriteCommandAction.runWriteCommandAction(myProject, () -> {
-            this.myDocument.setText(gson.toJson(updatedTree));
-        });
+            String finalJson = mapper.writeValueAsString(currentModel);
+
+            String normalizedJson = StringUtil.convertLineSeparators(finalJson);
+
+            WriteCommandAction.runWriteCommandAction(myProject, () -> {
+                this.myDocument.setText(normalizedJson);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String normalizeType(String rawType) {
@@ -125,7 +151,23 @@ public class ComponentDetailsController {
     private String getCurrentSubtypeFromModel() {
         if (TYPE_INPUT_ADAPTER.equals(currentModel.getNodeType())) return currentModel.getInputAdapterType();
         if (TYPE_OUTPUT_ADAPTER.equals(currentModel.getNodeType())) return currentModel.getOutputAdapterType();
-        return null; // Añade aquí lógica para Enricher/Aggregator si la usabas
+        return null;
+    }
+    private void handleSubtypeChange() {
+
+        currentModel.setJmsConnector(null);
+        currentModel.setQueueName(null);
+        currentModel.setAsyncApiClassName(null);
+        currentModel.setMessageType(null);
+        currentModel.setCritical(false);
+        currentModel.setFieldDataList(new ArrayList<>());
+
+        if (adapterController != null) {
+            adapterController.clearAllData();
+        }
+    }
+    private String getNullIfEmpty(String text) {
+        return (text == null || text.trim().isEmpty()) ? null : text;
     }
 
     // --- Getters y Setters ---

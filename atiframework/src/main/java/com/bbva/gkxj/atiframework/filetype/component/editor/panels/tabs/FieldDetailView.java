@@ -1,8 +1,6 @@
 package com.bbva.gkxj.atiframework.filetype.component.editor.panels.tabs;
 
 import com.bbva.gkxj.atiframework.components.*;
-import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.FieldData;
-import com.bbva.gkxj.atiframework.filetype.component.model.ComponentJsonData.FormattingConfig;
 import com.bbva.gkxj.atiframework.filetype.workflow.utils.WorkflowThemeUtils;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.JBScrollPane;
@@ -18,7 +16,7 @@ import static com.bbva.gkxj.atiframework.filetype.component.utils.ComponentConst
 
 public class FieldDetailView extends JPanel {
 
-    // --- Componentes Gráficos (Mismos que tenías) ---
+    // --- Componentes Gráficos ---
     private AtiTextField fieldNameField, payloadPathField, priorityField, extractionValueField;
     private AtiComboBox fieldTypeCombo, extractionTypeCombo;
     private AtiScriptPanel scriptField;
@@ -46,12 +44,9 @@ public class FieldDetailView extends JPanel {
     }
 
     public void setOnChange(Runnable onChange) { this.onChange = onChange; }
+    public void setPopulating(boolean populating) { this.isPopulating = populating; }
 
     private void initComponents() {
-        // (Todo el código de initComponents se mantiene exactamente igual,
-        // ya que solo define el diseño y no toca el modelo directamente).
-        // ... (Copiado de tu clase original para abreviar)
-
         JPanel mainContent = new JPanel();
         mainContent.setLayout(new BoxLayout(mainContent, BoxLayout.Y_AXIS));
         mainContent.setOpaque(false);
@@ -160,14 +155,30 @@ public class FieldDetailView extends JPanel {
     }
 
     private void notifyChange() { if (!isPopulating && onChange != null) onChange.run(); }
-    private JPanel createSectionHeader(String title) { /* Igual */ JPanel p = new JPanel(new BorderLayout()); p.setBackground(new Color(242, 242, 242)); p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32)); p.setBorder(JBUI.Borders.empty(5, 10)); JLabel l = new JLabel(title); l.setFont(l.getFont().deriveFont(Font.BOLD, 12f)); l.setForeground(new Color(102, 102, 102)); p.add(l, BorderLayout.WEST); return p; }
-    private AtiLabeledComponent wrapField(String label, AtiTextField field) { /* Igual */ field.getDocument().addDocumentListener(new DocumentAdapter() { @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); } }); return new AtiLabeledComponent(label, field); }
 
-    private void updateConfigVisibility() { /* Igual, la lógica visual no cambia */
+    private JPanel createSectionHeader(String title) {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setBackground(new Color(242, 242, 242));
+        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
+        p.setBorder(JBUI.Borders.empty(5, 10));
+        JLabel l = new JLabel(title);
+        l.setFont(l.getFont().deriveFont(Font.BOLD, 12f));
+        l.setForeground(new Color(102, 102, 102));
+        p.add(l, BorderLayout.WEST);
+        return p;
+    }
+
+    private AtiLabeledComponent wrapField(String label, AtiTextField field) {
+        field.getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }
+        });
+        return new AtiLabeledComponent(label, field);
+    }
+
+    public void updateConfigVisibility() {
         if (configGrid == null) return;
         configGrid.removeAll();
-        String type = (String) fieldTypeCombo.getSelectedItem();
-        if (type == null) type = "";
+        String type = getFieldTypeText();
         boolean isNumeric = type.contains("INTEGER") || type.contains("LONG") || type.contains("DOUBLE");
         boolean isDate = type.contains("DATE");
         GridBagConstraints c = new GridBagConstraints();
@@ -180,119 +191,72 @@ public class FieldDetailView extends JPanel {
         configGrid.revalidate(); configGrid.repaint(); if (configSection != null) { configSection.revalidate(); configSection.repaint(); }
     }
 
-    private void clearConfigFields() { fieldFormatField.setText(""); decimalDelimiterField.setText(""); groupingDelimiterField.setText(""); languageField.setText(""); countryField.setText(""); timeZoneField.setText(""); }
-    private void updateExtractionLabel() { updateExtractionLabel(isOutput ? null : "XML"); }
+    public void clearConfigFields() {
+        fieldFormatField.setText(""); decimalDelimiterField.setText(""); groupingDelimiterField.setText("");
+        languageField.setText(""); countryField.setText(""); timeZoneField.setText("");
+    }
+
+    public void updateExtractionLabel() { updateExtractionLabel(isOutput ? null : "XML"); }
+
     public void updateExtractionLabel(String messageType) {
-        String selected = (String) extractionTypeCombo.getSelectedItem();
-        if (selected == null) return;
+        String selected = getExtractionTypeText();
         String labelText = selected + " *";
         if (!isOutput && !"Fixed Value".equals(selected)) {
             if ("XML".equals(messageType)) labelText = "XPath";
             else if ("JSON".equals(messageType)) labelText = "JSON Path";
             else if ("CSV".equals(messageType)) labelText = "Column Index";
         }
-        for (Component child : extractionWrapper.getComponents()) { if (child instanceof JLabel) { ((JLabel) child).setText(labelText); break; } }
-    }
-
-    // =================================================================================
-    // CARGAR Y GUARDAR DATOS (AQUÍ ESTÁ LA REFACTORIZACIÓN DEL OBJETO)
-    // =================================================================================
-
-    public void loadData(FieldData data) {
-        this.isPopulating = true;
-        try {
-            // Nombres actualizados para usar BaseField heredado y las nuevas propiedades
-            fieldNameField.setText(data.fieldName != null ? data.fieldName : "");
-            payloadPathField.setText(data.payloadPath != null ? data.payloadPath : "");
-            priorityField.setText(data.priority != null ? String.valueOf(data.priority) : "1");
-
-            fieldTypeCombo.setSelectedItem(data.type); // En tu excel es 'type', no 'fieldType'
-
-            // Lógica para mapear extracción (XPath, JSONPath, etc) a tu UI Combo
-            String extractionVal = "";
-            String comboVal = "";
-            if (data.xpath != null) { extractionVal = data.xpath; comboVal = "XPath"; }
-            else if (data.jsonPath != null) { extractionVal = data.jsonPath; comboVal = "JSON Path"; }
-            else if (data.outputMessageFixedValue != null) { extractionVal = data.outputMessageFixedValue; comboVal = "Fixed Value"; }
-            else if (data.outputMessagePath != null) { extractionVal = data.outputMessagePath; comboVal = "Payload Path"; }
-
-            extractionTypeCombo.setSelectedItem(comboVal);
-            extractionValueField.setText(extractionVal);
-
-            // Cargar de FormattingConfig
-            FormattingConfig format = data.formattingConfig;
-            if (format != null) {
-                fieldFormatField.setText(format.fieldFormat != null ? format.fieldFormat : "");
-                decimalDelimiterField.setText(format.decimalDelimiter != null ? format.decimalDelimiter : "");
-                groupingDelimiterField.setText(format.groupingDelimiter != null ? format.groupingDelimiter : "");
-                languageField.setText(format.language != null ? format.language : "");
-                countryField.setText(format.country != null ? format.country : "");
-                timeZoneField.setText(format.timeZone != null ? format.timeZone : "");
-                fieldLengthField.setText(format.fieldLength != null ? String.valueOf(format.fieldLength) : "");
-                regexField.setText(format.fieldRegex != null ? format.fieldRegex : "");
-            } else {
-                clearConfigFields();
-                fieldLengthField.setText("");
-                regexField.setText("");
-            }
-
-            // Nota: En FieldData del nuevo modelo no veo propiedad 'script',
-            // asegúrate de que exista si tu UI la requiere.
-            // scriptField.setText(data.script != null ? data.script : "");
-
-            updateConfigVisibility();
-        } finally {
-            this.isPopulating = false;
+        for (Component child : extractionWrapper.getComponents()) {
+            if (child instanceof JLabel) { ((JLabel) child).setText(labelText); break; }
         }
     }
 
-    public void saveData(FieldData data) {
-        data.fieldName = getNullIfEmpty(fieldNameField.getText().trim());
-        data.payloadPath = getNullIfEmpty(payloadPathField.getText().trim());
-        try { data.priority = Integer.parseInt(priorityField.getText().trim()); } catch (Exception e) { data.priority = 1; }
+    // --- Getters y Setters Simples (La "Vista Tonta") ---
 
-        String type = (String) fieldTypeCombo.getSelectedItem();
-        data.type = type;
+    public String getFieldNameText() { return fieldNameField.getText().trim(); }
+    public void setFieldNameText(String text) { fieldNameField.setText(text); }
 
-        // Limpiamos los valores de extracción primero
-        data.xpath = null; data.jsonPath = null; data.outputMessageFixedValue = null; data.outputMessagePath = null;
+    public String getPayloadPathText() { return payloadPathField.getText().trim(); }
+    public void setPayloadPathText(String text) { payloadPathField.setText(text); }
 
-        String extractionType = (String) extractionTypeCombo.getSelectedItem();
-        String extractionValue = getNullIfEmpty(extractionValueField.getText().trim());
+    public String getPriorityText() { return priorityField.getText().trim(); }
+    public void setPriorityText(String text) { priorityField.setText(text); }
 
-        if ("XPath".equals(extractionType)) data.xpath = extractionValue;
-        else if ("JSON Path".equals(extractionType)) data.jsonPath = extractionValue;
-        else if ("Fixed Value".equals(extractionType)) data.outputMessageFixedValue = extractionValue;
-        else if ("Payload Path".equals(extractionType)) data.outputMessagePath = extractionValue;
+    public String getFieldTypeText() { return fieldTypeCombo.getSelectedItem() != null ? (String) fieldTypeCombo.getSelectedItem() : ""; }
+    public void setFieldTypeSelection(String type) { fieldTypeCombo.setSelectedItem(type); }
 
-        // Gestionamos el objeto de formateo
-        if (data.formattingConfig == null) data.formattingConfig = new FormattingConfig();
-        FormattingConfig format = data.formattingConfig;
+    public String getExtractionTypeText() { return extractionTypeCombo.getSelectedItem() != null ? (String) extractionTypeCombo.getSelectedItem() : ""; }
+    public void setExtractionTypeSelection(String type) { extractionTypeCombo.setSelectedItem(type); }
 
-        try { format.fieldLength = Integer.parseInt(fieldLengthField.getText().trim()); }
-        catch (Exception e) { format.fieldLength = null; }
-        format.fieldRegex = getNullIfEmpty(regexField.getText().trim());
+    public String getExtractionValueText() { return extractionValueField.getText().trim(); }
+    public void setExtractionValueText(String text) { extractionValueField.setText(text); }
 
-        boolean isNumeric = type != null && (type.contains("INTEGER") || type.contains("LONG") || type.contains("DOUBLE"));
-        boolean isDate = type != null && type.contains("DATE");
+    public String getFieldLengthText() { return fieldLengthField.getText().trim(); }
+    public void setFieldLengthText(String text) { fieldLengthField.setText(text); }
 
-        format.fieldFormat = (isNumeric || isDate) ? getNullIfEmpty(fieldFormatField.getText().trim()) : null;
+    public String getRegexText() { return regexField.getText().trim(); }
+    public void setRegexText(String text) { regexField.setText(text); }
 
-        if (isNumeric) {
-            format.decimalDelimiter = getNullIfEmpty(decimalDelimiterField.getText().trim());
-            format.groupingDelimiter = getNullIfEmpty(groupingDelimiterField.getText().trim());
-        } else {
-            format.decimalDelimiter = null; format.groupingDelimiter = null;
-        }
+    public String getFieldFormatText() { return fieldFormatField.getText().trim(); }
+    public void setFieldFormatText(String text) { fieldFormatField.setText(text); }
 
-        if (isDate) {
-            format.language = getNullIfEmpty(languageField.getText().trim());
-            format.country = getNullIfEmpty(countryField.getText().trim());
-            format.timeZone = getNullIfEmpty(timeZoneField.getText().trim());
-        } else {
-            format.language = null; format.country = null; format.timeZone = null;
-        }
-    }
+    public String getDecimalDelimiterText() { return decimalDelimiterField.getText().trim(); }
+    public void setDecimalDelimiterText(String text) { decimalDelimiterField.setText(text); }
 
-    private String getNullIfEmpty(String text) { return (text == null || text.trim().isEmpty()) ? null : text; }
+    public String getGroupingDelimiterText() { return groupingDelimiterField.getText().trim(); }
+    public void setGroupingDelimiterText(String text) { groupingDelimiterField.setText(text); }
+
+    public String getLanguageText() { return languageField.getText().trim(); }
+    public void setLanguageText(String text) { languageField.setText(text); }
+
+    public String getCountryText() { return countryField.getText().trim(); }
+    public void setCountryText(String text) { countryField.setText(text); }
+
+    public String getTimeZoneText() { return timeZoneField.getText().trim(); }
+    public void setTimeZoneText(String text) { timeZoneField.setText(text); }
+
+    public String getScriptText() { return scriptField.getText().trim(); }
+    public void setScriptText(String text) { scriptField.setText(text); }
+
+    public boolean isOutput() { return isOutput; }
 }

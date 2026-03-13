@@ -6,7 +6,7 @@ import com.bbva.gkxj.atiframework.filetype.workflow.utils.WorkflowThemeUtils;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
-
+import com.bbva.gkxj.atiframework.filetype.component.editor.panels.tabs.FieldDetailController;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -19,13 +19,13 @@ public class AdapterTabView extends JPanel {
 
     private AtiComboBox jmsConnectionCombo;
     private AtiTextField queueNameField;
-    private JToggleButton isCriticalSwitch;
+    private CustomToggleSwitch isCriticalSwitch;
     private AtiTextField javaClassNameField;
     private AtiComboBox messageTypeCombo;
     private AtiTableSplitterPanel<FieldData> splitterPanel;
     private FieldDetailView detailView;
     private JPanel fieldsSectionContainer;
-
+    private  FieldDetailController detailController;
     private final String componentType;
     private final String subtype;
     private Runnable onFormChangedCallback;
@@ -95,7 +95,7 @@ public class AdapterTabView extends JPanel {
         Dimension hackSize = new Dimension(100, 500);
         detailView.setPreferredSize(hackSize);
         detailView.setMinimumSize(hackSize);
-
+        detailController = new FieldDetailController(detailView);
         // Actualizado a FieldData
         splitterPanel = new AtiTableSplitterPanel<>(
                 "Fields", "Fields",
@@ -112,7 +112,7 @@ public class AdapterTabView extends JPanel {
 
     private void initInternalListeners() {
         if (jmsConnectionCombo != null) jmsConnectionCombo.addActionListener(e -> notifyChange());
-        if (isCriticalSwitch != null) isCriticalSwitch.addActionListener(e -> notifyChange());
+        if (isCriticalSwitch != null) isCriticalSwitch.addChangeListener(e -> notifyChange());
         if (queueNameField != null) queueNameField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override protected void textChanged(@NotNull DocumentEvent e) { notifyChange(); }
         });
@@ -146,9 +146,12 @@ public class AdapterTabView extends JPanel {
 
     public FieldData getSelectedTableItem() { return splitterPanel != null ? splitterPanel.getCurrentSelection() : null; }
     public void updateSelectedRowName(String name) { if (splitterPanel != null) splitterPanel.updateSelectedRowName(name); }
-
-    public void loadDetailData(FieldData item) { if (detailView != null) detailView.loadData(item); }
-    public void saveDetailData(FieldData item) { if (detailView != null) detailView.saveData(item); }
+    public void loadDetailData(FieldData item) {
+        if (detailController != null) detailController.loadDataToView(item);
+    }
+    public void saveDetailData(FieldData item) {
+        if (detailController != null) detailController.saveViewToData(item);
+    }
     public void updateDetailExtractionLabel(String type) { if (detailView != null) detailView.updateExtractionLabel(type); }
 
     public void setOnFormChanged(Runnable callback) { this.onFormChangedCallback = callback; }
@@ -180,5 +183,5 @@ public class AdapterTabView extends JPanel {
         repaint();
     }
 
-    private JToggleButton createCustomSwitch() { return new JToggleButton(); }
+    private CustomToggleSwitch createCustomSwitch() { return new CustomToggleSwitch(); }
 }

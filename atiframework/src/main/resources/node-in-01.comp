@@ -1,14 +1,14 @@
 {
-  "componentCode": "JMS_Receiver_Main",
-  "description": "aaaaaaaaaaaaaaaaaaaaaaaaa",
-  "status": "dsgdsg",
-  "version": "dgg",
-  "nodeType": "Input Adapter",
-  "inputAdapterType": "JMS",
-  "jmsConnector": "Operation",
-  "queueName": "",
-  "critical": true,
-  "messageType": "JSON",
-  "asyncApiClassName": "",
-  "fieldDataList": []
+  "componentCode" : "JMS_Receiver_Main",
+  "description" : "aaaaaaaaaaaaaaaaaaaaaaaaa",
+  "status" : "dsgdsg",
+  "version" : "dgg",
+  "nodeType" : "Input Adapter",
+  "inputAdapterType" : "Async API",
+  "jmsConnector" : "",
+  "queueName" : "",
+  "messageType" : "JSON",
+  "asyncApiClassName" : "zxbcvb",
+  "fieldDataList" : [ ],
+  "isCritical" : false
 }
