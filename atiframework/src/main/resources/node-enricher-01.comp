@@ -1,65 +1,57 @@
 {
-  "componentCode": "Client_Data_Enricher",
-  "version": "",
-  "status": "",
-  "description": "Recupera datos del cliente de la BBDD.",
-  "type": "Enricher",
-  "subtype": "WorkStatement",
-  "workStatementConfig": {
-    "workStatements": [
-      {
-        "wsCode": "hola",
-        "description": "",
-        "shouldBeExecutedScript": "sgddfsg",
-        "dependencies": [],
-        "inputParameters": [
-          {
-            "inputValueType": "PAYLOAD_PATH",
-            "description": "",
-            "fieldName": "nuevo parametro",
-            "payloadPath": "aaa",
-            "fieldType": "DATE",
-            "extractionValue": "",
-            "fieldFormat": "aaa",
-            "language": "",
-            "country": "",
-            "timeZone": ""
-          },
-          {
-            "inputValueType": "PAYLOAD_PATH",
-            "description": "",
-            "fieldName": "",
-            "payloadPath": "",
-            "fieldType": "DATE",
-            "extractionValue": "",
-            "fieldFormat": "",
-            "language": "",
-            "country": "",
-            "timeZone": ""
-          }
-        ],
-        "wsType": "Script",
-        "scriptList": [
-          {
-            "fieldName": "aaa",
-            "description": "aaaa",
-            "payloadPath": "aaaa",
-            "script": "xsdvxcv xcv"
-          },
-          {
-            "fieldName": "nuevo",
-            "description": "",
-            "payloadPath": "",
-            "script": ""
-          },
-          {
-            "fieldName": "nuevo scrp",
-            "description": "aaaa",
-            "payloadPath": "aaaa",
-            "script": ""
-          }
-        ]
+  "componentCode" : "Client_Data_Enricher",
+  "description" : "Recupera datos del cliente e la BBDD.",
+  "status" : "qwqw",
+  "version" : "1.0",
+  "nodeType" : "Enricher",
+  "workStatementList" : [ {
+    "wsCode" : "hola",
+    "description" : "wedwaedawdasd",
+    "wsDependencyList" : [ ],
+    "shouldBeExecuted" : "sgddfsg",
+    "enrichInputParameters" : [ {
+      "fieldName" : "nuevo parametro",
+      "description" : "",
+      "payloadPath" : "aaa",
+      "type" : "DATE",
+      "fixedValue" : "",
+      "isMandatory" : false,
+      "fieldExtraConfig" : {
+        "fieldFormat" : "aaa",
+        "country" : "",
+        "language" : "",
+        "timeZone" : ""
       }
-    ]
-  }
+    }, {
+      "fieldName" : "",
+      "description" : "",
+      "payloadPath" : "",
+      "type" : "DATE",
+      "fixedValue" : "",
+      "isMandatory" : false,
+      "fieldExtraConfig" : {
+        "fieldFormat" : "",
+        "country" : "",
+        "language" : "",
+        "timeZone" : ""
+      }
+    } ],
+    "enrichScriptList" : [ {
+      "fieldName" : "aaa",
+      "description" : "aaaa",
+      "payloadPath" : "aaaa",
+      "script" : "xsdvxcv xcv"
+    }, {
+      "fieldName" : "nuevo",
+      "description" : "",
+      "payloadPath" : "",
+      "script" : ""
+    }, {
+      "fieldName" : "nuevo scrp",
+      "description" : "aaaa",
+      "payloadPath" : "aaaa",
+      "script" : ""
+    } ]
+  } ],
+  "isCritical" : false
 }
